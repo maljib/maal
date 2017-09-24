@@ -1153,7 +1153,7 @@ $(function() {
           }
   	    }
       }
-    }).position({my:lr+" top-"+$(to).offset().top, at:lr+" bottom-2", of:to});
+    }).position({my:lr+" top-"+$(to).offset().top, at:lr+" bottom-4", of:to});
 
     $(menu +","+ to).hover(function() {
       $(menu).show();
