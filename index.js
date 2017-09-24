@@ -1583,7 +1583,7 @@ $(function() {
         hideNoteForm();
       });
     } else {
-      $("#note").focus();
+      $("#subj").focus();
     }
   });
 
