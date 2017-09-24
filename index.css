@@ -74,11 +74,11 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #s0                           { margin-left:5px; }
 
 #m2 li,#m3 li,#m4 li,#m5 li,#m6 li { text-align:right; }
-#m2>:last-child li          { width:53px; }
+#m2>:last-child li                 { width:53px; }
 
 #m0 li li { text-align:left; }
-#m5 li li { width:55px; text-align:right; }
 #m2 li li { width:88px; }
+#m6 li li { width:55px; }
 
 #list,#note-form,#editors { border:1px solid #aaaaaa; max-width:100%; }
 
