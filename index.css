@@ -93,7 +93,7 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #list tbody td:not(:nth-child(4n+2)) { cursor:ns-resize; }
 
 #note-form div { padding:2px 0; text-align:center; }
-#atts          { list-style:none; margin:0; padding:2px 0 2px 5px; }
+#atts          { list-style:none; margin:0; padding:2px 0 2px 5px; font-size:90%; }
 #atts li       { cursor:alias; }
 #subj          { padding:0 5px; margin:0; }
 #note          { padding:0 5px; margin:0 0 -5px; }
