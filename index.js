@@ -885,16 +885,17 @@ $(function() {
           if (editor) sTell = "<span id='w-tell'>"+ sTell +"</span>";
         }
         var bar = "<div><span>"+ sNick +" <small>"+ t +"</small> "+ sTell +"</span>"+
-                  (h? h: "") +"<span class='a-cmd'><span class='a-edit b-"+
-                           (i === 1? "white": (editor? "yellow": "green")) +
-                                                 "'>&nbsp;손질&nbsp;</span>";
+                  (h? h: "") +"<span class='a-cmd'>";
         if (i === 0) {
-          bar += "<span class='a-view b-green'>&nbsp;보기&nbsp;</span>";
           if (editor) {
             bar += "<span class='a-accept b-yellow'>&nbsp;올림&nbsp;</span>";
           }
+          bar += "<span class='a-view b-green'>&nbsp;보기&nbsp;</span>";
         }
-        return bar +" &nbsp;</span></div><div><div class='a-data'>"+ data +"</div></div>";
+        return bar +"<span class='a-edit b-"+
+               (i === 1? "white": (editor? "yellow": "green")) +
+               "'>&nbsp;손질&nbsp;</span> &nbsp;</span></div><div><div class='a-data'>"+
+               data +"</div></div>";
       }
 
       function fills(o, i) {
@@ -1009,7 +1010,8 @@ $(function() {
   }
 
   function viewIt(t, nick, data, toTab) {
-    accordion($("#viewer"), "<div> "+ nick +" <small>"+ t +"</small></div>"+
+    accordion($("#viewer"), "<div> "+ nick +" <small>"+ t +
+      "</small><span class='a-cmd'>&#10006; &nbsp; </span></div>"+
       "<div><div class='a-data'>"+ (word == "?"? convertText: html)(data) +
       "</div></div>", false, 0);
     $("#t6").click();

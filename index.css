@@ -113,9 +113,9 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #x-ask   { cursor:pointer; position:absolute; top:4px; right:105px; font-weight:900;
    display:none; border-radius:15px; border:2px solid black; padding:0 4px 0 6px; }
 .x-close { cursor:pointer; position:absolute; top:2px; right:8px; }
-.a-head  { position:absolute; top:2px; right:0; text-align:left; font-size:90%;
+.a-head  { position:absolute; text-align:left; top:2px; right:0; font-size:90%;
            white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
-.a-cmd   { top:0.5px; right:0; display:none; }
+.a-cmd   { position:absolute; text-align:right; top:0.5px; right:0; display:none; }
 
 .a-view,.a-edit,.a-accept
    { cursor:pointer; border-radius:5px; border:1px solid #aaaaaa; margin-left:1px; }
