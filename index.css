@@ -1,5 +1,4 @@
 @charset "utf-8";
-@import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body { background-color:black; font-family:'Malgun Gothic';
        margin:0; overflow-x:hidden; overflow-y:hidden; visibility:hidden; }
@@ -8,15 +7,13 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
 .maal-word { font-weight:bold; }
 .maal-text { font-family:batang; }
 .maal-ps   { border:1px solid black; border-radius:4px;
-             padding:0 2px; margin:0 8px 0 10px; font:600 85% 'Nanum Gothic'; }
+             padding:0 2px; margin:0 8px 0 10px; font-weight:600; font-size:85%; }
 .maal-box  { border:1px solid black; border-radius:4px;
-             padding:0 5px; font:600 100% 'Nanum Gothic'; }
+             padding:0 5px; font-weight:600; }
 [data-l]   { cursor:pointer; text-decoration:underline; }
 
-li,#edit,.maal-word,#tab1,#tab2,#tab3,#tab4,#tab5 { font-family:'Nanum Gothic'; }
-
-#h1              { font-size:2em; font-weight:bold; color:#f1f3f1;
-                   margin:0 -7px 0 12px; cursor:pointer; }
+#h1 { font-size:2em; font-weight:bold; color:#f1f3f1;
+      margin:0 -7px 0 12px; cursor:pointer; }
 #count1,#count2,#count3,#count5 { cursor:pointer; margin-left:-2px; vertical-align:-2px; }
 #count4                         { cursor:pointer; }
 #arg-l,#arg-r    { position:absolute; display:none; cursor:pointer;

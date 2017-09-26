@@ -1134,7 +1134,7 @@ $(function() {
     e.click();
     document.body.removeChild(e);
   }
-
+  
   function attachMenu(menu, to, lr) {
     $(menu).menu({
       select: function(e, ui) {
@@ -1178,6 +1178,8 @@ $(function() {
   attachMenu("#m6", "#s6", "right");
   $("#menu>span[data-a]").click(function() { insert($(this)); });
 
+  $("#tabs").tabs();
+  
   function showIf(o, condition) {
     if (condition) {
       o.show();
@@ -1204,8 +1206,6 @@ $(function() {
   });
 
   $("#s6").mouseover(function() { showIf($("#box"), word === "?"); });
-
-  $("#tabs").tabs();
 
   function tx() { return eEdit.i? "#t3": (0 < eEdit.j? "#t2": "#t1"); }
 
