@@ -1,14 +1,13 @@
 <?php // updateData.php
-  require_once 'functions.php';
+require_once 'functions.php';
 
+if ($id = getPost('id')) {
   $set = '';
-  if (isset($_POST['a'])) {  // [0]=id [1]=user
-    $a = explode(',', $_POST['a']);
-    if (count($a) == 2) {
-      $set = $a[1] == '0'? "t=now()": "user=$a[1]";
-    } else if (isset($_POST['data'])) {
-      $set = "data='".escapeString($_POST['data'])."'";
-    }
+  if ($user = getPost('user')) {
+    $set = $user == '-'? "t=now()": "user=$user";
+  } else if ($data = getPost('data')) {
+    $set = "data='".escapeString($data)."'";
   }
-  $set and (print sqlUpdate('texts', $set, "id=$a[0]"));
+  $set and (print sqlUpdate('texts', $set, "id=$id"));
+}
 ?>

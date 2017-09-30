@@ -1,5 +1,6 @@
 <?php // update-e-addr.php
 require_once 'functions.php';
+
 $i = getGet('i');
 $e = getGet('e');
 if ($i && $e) {

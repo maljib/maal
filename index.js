@@ -356,6 +356,7 @@ $(function() {
 
   $("#ask .b-shade").click(function() {
     if (checkMail("#a-mail") && checkPhone()) {
+      var o = $(this).hide();
       var arg = $("#a-mail,#phone").serialize() +"&id="+ ask_uid;
       $.post("askMail.php", arg, function(rc) {
         if (!rc) {
@@ -365,6 +366,7 @@ $(function() {
         } else {
           info("askMail.php: "+ rc);
         }
+        o.show();
       });
     }
   });
@@ -411,19 +413,15 @@ $(function() {
 
   // 정상 로그인 후 입력 받은 값을 저장하고 팝업 창을 닫는다
   function enter() {
-    saveValues();                  // 입력 받은 값을 저장한다
+    saveValues();             // 입력 받은 값을 저장한다
     h1();
-    $("#enter,#msg").hide();       // [들어가기] 버튼을 숨기고
-    $("#exit_div").show();         // [(이름)]과 [나가기] 버튼을 보여준다
+    $("#enter,#msg").hide();  // [들어가기] 버튼을 숨기고
+    $("#exit_div").show();    // [(이름)]과 [나가기] 버튼을 보여준다
     $("#user_info").attr("title", nick);
-    $("#arg").show();              // 올림말 입력 창을 보여준다
+    $("#arg").show();         // 올림말 입력 창을 보여준다
     arrows();
-    closeDialog();        // 팝업 창을 닫는다
-    $.post("getCount1.php", function(n) { $("#count1").text(n).show(); });
-    $.post("getCount2.php", function(n) { $("#count2").text(n).show(); });
-    $.post("getCount3.php", function(n) { $("#count3").text(n).show(); });
-    $.post("getCount4.php", function(n) { $("#count4").text(n).show(); });
-    $.post("getCount5.php", function(n) { $("#count5").text(n).show(); });
+    closeDialog();            // 팝업 창을 닫는다
+    showCount([1, 2, 3, 4, 5]);
     $.post("ans.php", "id="+ uid, function(array) {
       var count = array.length;
       if (0 < count) {
@@ -433,11 +431,11 @@ $(function() {
           o.append("<tr><td>"+
                    "<input type='radio' name='a"+ a[0] +"'>o "+
                    "<input type='radio' name='a"+ a[0] +"'>x "+
-                   "<input type='radio' name='a"+ a[0] +
-                        "' checked>?<br><small>"+ a[1] +"</small></td><td>"+
+                   "<input type='radio' name='a"+ a[0] +"' checked>?<br>"+
+                         "<small>"+ a[1] +"</small></td><td>"+
                                     a[2] +"<br>"+ a[3] +"</td><td>"+
                                     a[4] +"<br>"+ a[5] +"</td></tr>");
-        }
+        }  // 0=askId_userId, 1=time, 2=아이디 이름, 3=신고 전화, 4=사용자 메일, 5=신고 메일
         $("#ans").show();
       }
     }, 'json').fail(function(xhr) {
@@ -463,6 +461,14 @@ $(function() {
     });
     $.post("isEditor.php", {id: uid}, function(rc) {
       is_editor = rc == '1';
+    });
+  }
+
+  function showCount(nArray) {
+    nArray.forEach(function(n) {
+      $.post("getCount"+ n +".php", function(count) {
+        $("#count"+ n).text(count).show();
+      });
     });
   }
 
@@ -658,27 +664,34 @@ $(function() {
 
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
-         + "</span><span class='maal-text'>"+
-      s.replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
-         return u.replace(/\s*(\(.+?\))\s*/g, " <i>$1</i> ")
-                 .replace(/(】)\s*/, "$1");
-       })
-       .replace(RE3, "$1<i>$2</i> ")
-       .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
-         return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
-                                                "$1<br><b>$2</b>: ");
-       })
-       .replace(/^\s*([^\u3014\u3010])/, "&nbsp;$1")
-       .replace(/(〔|【)/g, "<br>$1")
-       .replace(/\s*(¶|☛)\s*/g, " $1")
-       .replace(/{(.+?)}/g, "<b>$1</b>")
-       .replace(/((☛|=|\u2194|\u2248|\u2192|\[큰\]|\[작은\]|\[센\]|\[여린\]|\[높임\]|\[낮춤\]|\[갈래\])\s*)?(([-\uac00-\ud7a3]+)0*(\d*))/g,
-        function(s,s1,s2,s3,s4,s5) {
-         var refWord = s4;    // →|
-         if (s5) refWord += "<sup>"+ s5 +"</sup>";
-         if (s2) refWord = s1 +"<span data-l='"+ s3 +"'>"+ refWord +"</span>";
-         return refWord;
-       }).replace(/〔(.+?)〕/g, "<span class='maal-ps'>$1</span>") + "</span>";
+          +"</span><span class='maal-text'>"+
+    s.replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
+      return u.replace(/\s*(\(.+?\))\s*/g, " <i>$1</i> ")
+              .replace(/(】)\s*/, "$1");
+    })
+    .replace(RE3, "$1<i>$2</i> ")
+    .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
+      return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
+                                              "$1<br><b>$2</b>: ");
+    })
+    .replace(/^\s*([^\u3014\u3010])/, "&nbsp;$1")
+    .replace(/(〔|【)/g, "<br>$1")
+    .replace(/\s*(¶|☛)\s*/g, " $1")
+    .replace(/{(.+?)}/g, "<b>$1</b>")
+    .replace(/(☛|=|\u2194|\u2248|\u2192|\[큰\]|\[작은\]|\[센\]|\[여린\]|\[높임\]|\[낮춤\]|\[갈래\])\s*([-\uac00-\ud7a3|\d]+)(\s*,\s*([-\uac00-\ud7a3|\d]+))*/g, function(s, s1, s2) {
+      var t = s1 + "<span data-l='"+ s2 +"'>"+ s2 +"</span>"; 
+      s.split(",").forEach(function(x, i) {
+        if (0 < i) {
+          x = x.trim();
+          t += ", <span data-l='"+ x +"'>"+ x +"</span>";
+        }
+      });
+      return t;
+    })
+    .replace(/([-\uac00-\ud7a3]+)0*(\d+)(.?)/g, function(s, s1, s2, s3) {
+      return s3 === "'"? s: s1 +"<sup>"+ s2 +"</sup>"+ s3;
+    })
+    .replace(/〔(.+?)〕/g, "<span class='maal-ps'>$1</span>") + "</span>";  // 씨가름
   }
 
   function toText(s) {
@@ -1044,6 +1057,7 @@ $(function() {
         if (0 < id) {
           eEdit.j = 0;
           updateEdit();
+          showCount([1]);
         } else {
           info("addWord.php: "+ id);
         }
@@ -1079,12 +1093,13 @@ $(function() {
         $.post("addData.php", arg, function(id) {
           if ($.isNumeric(id)) {
             updateEdit();
+            showCount([1, 2, 3]);
           } else {
             info("addData.php: "+ id);
           }
         });
       } else {
-        arg = "a="+ expl[i][j].id + argData;  // 그곳에 업데이트한다
+        arg = "id="+ expl[i][j].id + argData;  // 그곳에 업데이트한다
         $.post("updateData.php", arg, function(count) {
           if ($.isNumeric(count)) {
             updateEdit();
@@ -1111,6 +1126,7 @@ $(function() {
           }
           findWord(word);
         }
+        showCount([1, 2, 3, 5]);
       } else {
         info("deleteData.php: "+ count);
       }
@@ -1328,9 +1344,10 @@ $(function() {
     var o = $(this);
     var e = expl[0][0];
     var t = (e.tell + 1) % 3;
-    $.post("updateTell.php", "wid="+ e.wid +"&tell="+ t, function(code) {
+    $.post("updateTell.php", {wid: e.wid, tell: t}, function(code) {
       if (code == '1') {
         o.html(tellName(e.tell = t));
+        showCount([4, 5]);
       } else {
         info("updateTell.php: "+ code);
       }
@@ -1448,8 +1465,8 @@ $(function() {
 
   function accept(j, isAccept) {
     var e = expl[0][j];
-    var userId = e.uid == uid || word == '?'? 0: uid;
-    $.post("updateData.php", "a="+ e.id +","+ userId, function(count) {
+    var userId = e.uid == uid || word == '?'? '-': uid;
+    $.post("updateData.php", {id: e.id, user: userId}, function(count) {
       if (count == '1') {
         if (isAccept) findWord(word, true);
       } else {
@@ -1689,14 +1706,14 @@ $(function() {
   $(window).resize(function() {
     fitHeaders($("#tab2"));
     fitHeaders($("#tab3"));
-    if ($("#exit").is(":visible")) h1();
+    $("#exit").is(":visible") && h1();
     var h = $(window).height();
     $("#tab1,#tab2,#tab3,#tab4,#viewer").height(h - 76);
     $("#edit").height(h - 109);
     $("#list tbody").css("max-height", h - 72);
     $("#editors tbody").css("max-height", h - 60);
     $(".ui-autocomplete").css("max-height", h - 40);
-    if ($("#note-form").is(":visible")) setNoteSize();
+    $("#note-form").is(":visible") && setNoteSize();
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
