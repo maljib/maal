@@ -4,10 +4,10 @@ require_once 'functions.php';
 $i    = getGet('i');                 // etc number
 $row  = selectEtc($i);               // [user number, data]
 $id   = $row[0] == '0'? '': $row[0]; // user number
-$data = explode(' ', $row[1]);       // data
+$data = explode("\t", $row[1]);      // data
 $nick = $data[0];
 $name = $id? '': $data[1];
-$mail = $id? '': $data[2];
+$mail = $id? '': mess($data[2]);
 $sure = $id? '': $data[3];
 echo <<<END_OF_TEXT
 <!DOCTYPE html>

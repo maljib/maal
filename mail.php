@@ -31,7 +31,6 @@ function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts =
   } else {
     $mail->addReplyTo($maljiba, $maljib);
   }
-  //$mail->addCC('maljib.org@gmail.com');
   if ($atts) {
     foreach ($atts as $att) {
       $mail->addStringAttachment(base64_decode($att['data']), $att['name']);
@@ -53,12 +52,6 @@ function sendMail4($nick, $mail, $subject, $text) {
 
 function sendMail3($id, $subject, $text) {
   $row = selectRow('nick,mail', 'users', "id=$id") or die("사용자 번호($id)가 없습니다.");
-  sendMail4($row[0], mess($row[1]), $subject, $text);
-}
-
-function sendToMaster($subject, $text) {
-  $row = selectRow('nick,mail', 'users u JOIN master m ON u.id = m.user', '1')
-            or die("관리자가 없습니다.");
   sendMail4($row[0], mess($row[1]), $subject, $text);
 }
 ?>

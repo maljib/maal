@@ -94,6 +94,7 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #atts li       { cursor:alias; }
 #subj          { padding:0 5px; margin:0; }
 #note          { padding:0 5px; margin:0 0 -5px; }
+#askt          { padding:0 5px; margin:3px 5px 5px 18px; width:89%; height:80px; }
 
 #editors thead td                 { padding:0; }
 #editors tbody        { overflow-x:hidden; overflow-y:auto; display:block; }
@@ -107,8 +108,8 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #toSure td:nth-child(4n+2), #toSure td:nth-child(4n) { text-align:right; }
 #toSure td, #ans td { padding:2px 5px 2px 5px; }
 
-#x-ask   { cursor:pointer; position:absolute; top:4px; right:105px; font-weight:900;
-   display:none; border-radius:15px; border:2px solid black; padding:0 4px 0 6px; }
+#x-ask   { cursor:pointer; position:absolute; top:2px; right:105px;
+      font-size:120%; font-weight:900; display:none; padding:0 0 0 6px; }
 .x-close { cursor:pointer; position:absolute; top:2px; right:8px; }
 .a-head  { position:absolute; text-align:left; top:2px; right:0; font-size:90%;
            white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }

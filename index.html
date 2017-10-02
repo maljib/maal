@@ -175,7 +175,7 @@
     <div id="user" class="padn">
       <div id="title"></div>
       <div>
-        <span id="x-ask" title="전자우편 못 받음">?</span>
+        <span id="x-ask" title="비밀번호를 모를 때 전자우편 주소 바꾸기">@</span>
         <span id="ok" class="b-shade">&nbsp;확인&nbsp;</span>
         <span class="x-close">&#10006;</span>
       </div>
@@ -219,27 +219,27 @@
     </div>
 
     <div id="ask" class="padn">
-      <div id="a-title">전자우편 못 받음</div>
+      <div id="a-title">전자우편 주소 바꾸기</div>
       <div>
         <span class="b-shade">&nbsp;확인&nbsp;</span>
         <span class="x-close">&#10006;</span>
       </div>
       <hr>
       <label>전자우편:</label>
-      <input type="email" name="a-mail" id="a-mail" required
-                   placeholder="전자우편 받을 주소"
-                          class="text ui-widget-content ui-corner-all">
+      <input type="email" name="a-mail" id="a-mail" required placeholder="새 전자우편 주소"
+            class="text ui-widget-content ui-corner-all">
       <label>전화번호:</label>
-      <input type="text" name="phone" id="phone" required
-                  placeholder="확인 전화 받을 번호"
-                        class="text ui-widget-content ui-corner-all">
+      <input type="text" name="phone" id="phone" placeholder="본인 확인 전화 번호"
+            class="text ui-widget-content ui-corner-all">
+      <textarea id="askt" name="askt" placeholder="전자우편 주소를 바꾸는 이유"
+             class="text ui-widget-content ui-corner-all"></textarea>
     </div>
 
     <table id="ans" class="padn">
       <thead>
         <tr>
           <td colspan="3">
-전자우편 살핌 &nbsp; <span class="b-shade">&nbsp;확인&nbsp;</span>
+전자우편 주소 바꾸기 &nbsp; <span class="b-shade">&nbsp;확인&nbsp;</span>
 <div class="x-close">&#10006;</div>
           </td>
         </tr>

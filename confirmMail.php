@@ -6,17 +6,21 @@ $nick = getPost('nick');
 $mail = getPost('mail');
 if ($nick && $mail) {
   $id = getPost('id');
-  if ($id && $id{0} == '-') {         // 비밀번호 변경
+  if ($id && $id{0} == '-') {          // 비밀번호 변경
     sendConfirm('비밀번호를 바꾸', 'index1', substr($id, 1), $nick);
+  } else if ($id && $id{0} == '@') {   // 본인 확인 후 이메일 변경
+    getMailUser($mail = getPost('a-mail')) and die('16');
+    $data = mess($mail)."\t".mess(getPost('phone'))."\t".getPost('askt');
+    sendConfirm("이 전자우편 주소로 바꾸", 'askMail', substr($id, 1), $data);  
   } else {
     getMailUser($mail) and die('16');
-    if ($id) {                        // 전자우편 주소 변경
-      sendConfirm('이 전자우편 주소를 쓰', 'updateMail', $id, $mail);
+    if ($id) {                         // 이메일 변경
+      sendConfirm("이 전자우편 주소로 바꾸", 'updateMail', $id, mess($mail));        
     } else {
       $name = getPost('name'); 
       $sure = getPost('sure');
-      setNickSure($nick, $sure, '');  // 새로 가입
-      sendConfirm('가입하', 'index1', '0', "$nick $name $mail $sure");
+      setNickSure($nick, $sure, '');   // 새로 가입
+      sendConfirm('가입하', 'index1', '0', "$nick\t$name\t".mess($mail)."\t$sure");
     }
   }
 }

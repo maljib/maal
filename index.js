@@ -5,7 +5,7 @@ $(function() {
 
   const MAX_MAIL_SIZE = 10 * 1024 * 1024;
 
-  var ask_uid, uid = "", nick, name, mail, sure; // 사용자: 번호,아이디,이름,이메일,보증인
+  var uid = "", nick, name, mail, sure; // 사용자: 번호,아이디,이름,이메일,보증인
   var logged_in = false;
   var is_editor = false;
   var word, expl = [];        // 낱말, [0]=풀이 [1]=적바림
@@ -69,8 +69,7 @@ $(function() {
   function checkName() { return checkEmpty("#name", "이름을"); }
   function checkSure() { return checkEmpty("#sure", "보증인 아이디를"); }
 
-  function checkMail(s) {
-    var o = $(s);
+  function checkMail(o) {
     return checkWhileVisible(o,
       /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/.test(o.val()),
       "전자우편 주소 형식이 맞지 않습니다.");
@@ -78,18 +77,18 @@ $(function() {
 
   function checkPhone() {
     var o = $("#phone");
-    return checkWhileVisible(o, /^\d+(-\d+)*$/.test(o.val()),
-                         "전화번호 형식이 맞지 않습니다.");
+    var v = o.val().trim();
+    return checkWhileVisible(o, v == '' || /^\d+(-\d+)*$/.test(v),
+                             "전화번호 형식이 맞지 않습니다.");
   }
 
   $("#name").change(function() { checkName(); });
 
-  $("#mail").change(function() {
-    if (checkMail("#mail") && $(this).val() != mail) {
-      $.post("checkMail.php", $(this), function(rc) {
-        if (rc) {
-          setError($("#mail"), rc == '1'? "이미 가입한 전자우편 주소입니다.": rc);
-        }
+  $("#mail,#a-mail").blur(function() {
+    var o = $(this);
+    if (checkMail(o) && o.val() != mail) {
+      $.post("checkMail.php", {mail: o.val()}, function(rc) {
+        rc && setError(o, rc == '1'? "이미 가입한 전자우편 주소입니다.": rc);
       });
     }
   });
@@ -111,7 +110,7 @@ $(function() {
     if (e.keyCode === $.ui.keyCode.SPACE) return false;
   });
 
-  $("#nick").val('');
+  $("#nick,#pass,#a-mail,#phone,#askt").val('');
 
   $("#nick").change(function() {
     var n = $(this).val();
@@ -231,7 +230,7 @@ $(function() {
   $("#ok").click(function() {
     if ($("#signin").is(":visible")) {
       checkPass();    // 로그인
-    } else if (checkName() && checkMail("#mail") && checkSure()) {
+    } else if (checkName() && checkMail($("#mail")) && checkSure()) {
       $(this).hide();
       if (uid) {      // 사용자 정보 변경
         var arg = serialize("#nick", nick) + serialize("#name", name);
@@ -264,17 +263,17 @@ $(function() {
       arg = $("#nick").serialize() +"&id="+ uid + arg;
       $.post("confirmMail.php", arg, function(rc) {
         showMsg(rc, "confirmMail.php");
-        if (rc == '0') exitCloseDialog();
+        rc == '0' && exitCloseDialog();
       });
     } else if (rc0 == '2') {
       exitCloseDialog();
     } else {
-      if (rc0 == '1') saveValues();
+      rc0 == '1' && saveValues();
       closeDialog();
     }
   }
 
-  function showMsg(rc, php) {
+  function showMsg(rc, php, oMail) {
     if (rc === "a" || rc === "0") {
       info("전자우편을 열고 확인을 누르시오.");  // 확인 메일을 보냈다
     } else if (rc === '2') {   // 보증인이 변경되었다
@@ -282,8 +281,9 @@ $(function() {
     } else if (rc !== '1') {   // 아이디 변경이 아니다 -- 에러
       $("#ok").show();
       if ($.isNumeric(rc)) {
+        if (!oMail) oMail = $("#mail");
         check($("#nick"), (rc &  4) === 0, "이미 가입한 아이디입니다.");
-        check($("#mail"), (rc & 16) === 0, "이미 가입한 전자우편 주소입니다.");
+        check(     oMail, (rc & 16) === 0, "이미 가입한 전자우편 주소입니다.");
         sureErrorIf(rc & 8);     // 보증인 아이디 에러
       } else {
         serverError(php, rc);  // 서버 에러
@@ -346,28 +346,30 @@ $(function() {
   $(  "#ask .x-close").click(function() { $(  "#ask").hide(); });
 
   $("#x-ask").click(function() {
-    ask_uid = uid;
-    doCancel();
+    $(this).hide(); 
     $("#ask").show();
   });
 
-  $("#a-mail").blur(function() { checkMail("#a-mail"); });
   $("#phone" ).blur(function() { checkPhone(); });
 
   $("#ask .b-shade").click(function() {
-    if (checkMail("#a-mail") && checkPhone()) {
-      var o = $(this).hide();
-      var arg = $("#a-mail,#phone").serialize() +"&id="+ ask_uid;
-      $.post("askMail.php", arg, function(rc) {
-        if (!rc) {
-          $("#exit").click();
-          $("#ask").hide();
-          info("살펴보고 전자우편으로 알려드리겠습니다.");
-        } else {
-          info("askMail.php: "+ rc);
-        }
-        o.show();
-      });
+    var oMail = $("#a-mail");
+    if (checkMail(oMail) && checkPhone()) {
+      if (oMail.val() === mail) {
+        $("#ask").hide();
+        $("#passx").click();
+      } else {
+        var o = $(this).hide();
+        var arg = $("#nick,#mail,#a-mail,#phone,#askt").serialize();
+        $.post("confirmMail.php", arg +"&id=@"+ uid, function(rc) {
+          showMsg(rc, "confirmMail.php", oMail);
+          if (rc === "0") {
+            $("#ask").hide();
+            exitCloseDialog();
+          }
+          o.show();
+        });
+      }
     }
   });
 
@@ -422,25 +424,25 @@ $(function() {
     arrows();
     closeDialog();            // 팝업 창을 닫는다
     showCount([1, 2, 3, 4, 5]);
-    $.post("ans.php", "id="+ uid, function(array) {
-      var count = array.length;
-      if (0 < count) {
-        var o = $("#ans tbody").empty();
-        for (var i = 0; i < count; i++) {
-          var a = array[i];
-          o.append("<tr><td>"+
-                   "<input type='radio' name='a"+ a[0] +"'>o "+
-                   "<input type='radio' name='a"+ a[0] +"'>x "+
-                   "<input type='radio' name='a"+ a[0] +"' checked>?<br>"+
-                         "<small>"+ a[1] +"</small></td><td>"+
-                                    a[2] +"<br>"+ a[3] +"</td><td>"+
-                                    a[4] +"<br>"+ a[5] +"</td></tr>");
-        }  // 0=askId_userId, 1=time, 2=아이디 이름, 3=신고 전화, 4=사용자 메일, 5=신고 메일
+
+    $.post("askData.php", {id: uid}, function(array) {
+      if (0 < array.length) {
+        var tbody = $("#ans tbody").empty();
+        array.forEach(function(a) {
+          tbody.append("<tr title='"+ a[6] +"'>"+
+                "<td><input type='radio' name='a"+ a[0] +"'>o "+
+                    "<input type='radio' name='a"+ a[0] +"'>x "+
+            "<input checked type='radio' name='a"+ a[0] +"'>?<br>"+
+                                        "<small>"+ a[3] +"</small></td>"+
+                      "<td>"+ a[1] +"<br>"+ (a[4]? a[4]: "&nbsp;") +"</td>"+
+                      "<td>"+ a[2] +"<br>"+        a[5] +"</td></tr>");
+        }); // askId_userId, 등록(아이디(이름), 메일), 입력(time, 전화, 메일, 알림글)
         $("#ans").show();
       }
     }, 'json').fail(function(xhr) {
-      serverError("ans.php", xhr.responseText);
+      serverError("askData.php", xhr.responseText);
     });
+
     $.post("toSure.php", {id: uid}, function(array) {
       var count = array.length;
       if (0 < count) {
@@ -459,6 +461,7 @@ $(function() {
     }, 'json').fail(function(xhr) {
       serverError("toSure.php", xhr.responseText);
     });
+
     $.post("isEditor.php", {id: uid}, function(rc) {
       is_editor = rc == '1';
     });
@@ -507,13 +510,13 @@ $(function() {
   $("#user .x-close").click(doCancel);
 
   $("#ans .b-shade").click(function() {
-    $("#ans tbody>tr").each(function(i) {
+    $("#ans tbody>tr").each(function(row) {
       var o = $(this).find(":checked");
       var index = o.index();
       if (index < 2) {
-        var arg = "id="+ index +"_"+ o.attr("name").substring(1);
-        $.post("resetUser.php", arg, function(rc) {
-          if (rc) info("에러["+ (i + 1) +"] resetUser.php: "+ rc);
+        var arg = index +"_"+ o.attr("name").substring(1);
+        $.post("resolveAsk.php", {a: arg}, function(rc) {
+          if (rc) info((row + 1) +"번째 줄 - resolveAsk.php: "+ rc);
         });
       }
     });
@@ -662,6 +665,8 @@ $(function() {
     return num(s);     
   }
 
+  var LINK = /(☛|=|>|<|\u2194|\u2248|\u2192|\[큰\]|\[작은\]|\[센\]|\[여린\]|\[높임\]|\[낮춤\]|\[갈래\])\s*([-\uac00-\ud7a3|\d]+)(\s*,\s*([-\uac00-\ud7a3|\d]+))*/g;
+
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
@@ -678,7 +683,7 @@ $(function() {
     .replace(/(〔|【)/g, "<br>$1")
     .replace(/\s*(¶|☛)\s*/g, " $1")
     .replace(/{(.+?)}/g, "<b>$1</b>")
-    .replace(/(☛|=|\u2194|\u2248|\u2192|\[큰\]|\[작은\]|\[센\]|\[여린\]|\[높임\]|\[낮춤\]|\[갈래\])\s*([-\uac00-\ud7a3|\d]+)(\s*,\s*([-\uac00-\ud7a3|\d]+))*/g, function(s, s1, s2) {
+    .replace(LINK, function(s, s1, s2) {
       var t = s1 + "<span data-l='"+ s2 +"'>"+ s2 +"</span>"; 
       s.split(",").forEach(function(x, i) {
         if (0 < i) {
@@ -1581,16 +1586,15 @@ $(function() {
   });
 
   $("#send-note").click(function() {
-    var subj0 = $("#subj").val().trim();
-    var note0 = $("#note").val().trim();
-    if (subj0 || note0) {
+    var subj = $("#subj").val().trim();         // 제목
+    var note = $("#note").val().trim();         // 본문
+    if (subj || note) {
       $(this).hide();
-      var  ids = $("#note-form").data()[0]();
-      var    m = nick +" 님이 알립니다";
-      var subj = subj0? subj0: m;
-      var note = subj0? "("+ m +".)\n\n"+ note0: note0;
-      var  arg = {ids:ids, subj:subj, note:note, re:nick, rea:mail, atts:''};
-      var atts = [];
+      var  arg = {re:nick, rea:mail, atts:''};  // 발신인, 발신인 주소, 첨부
+      arg.ids  = $("#note-form").data()[0]();   // 수신인 id 배열
+      arg.subj = subj? subj: nick +" 님이 알립니다";             // 새 제목
+      arg.note = "(글쓴이: "+ nick +" <"+ mail +">)\n\n"+ note;  // 새 본문
+      var atts = [];                            // 첨부 데이터 배열
       $("#atts li").each(function() {
         atts.push($(this).data());
       });
