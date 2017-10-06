@@ -670,20 +670,7 @@ $(function() {
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
-    s.replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
-      return u.replace(/\s*(\(.+?\))\s*/g, " <i>$1</i> ")
-              .replace(/(】)\s*/, "$1");
-    })
-    .replace(RE3, "$1<i>$2</i> ")
-    .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
-      return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
-                                              "$1<br><b>$2</b>: ");
-    })
-    .replace(/^\s*([^\u3014\u3010])/, "&nbsp;$1")
-    .replace(/(〔|【)/g, "<br>$1")
-    .replace(/\s*(¶|☛)\s*/g, " $1")
-    .replace(/{(.+?)}/g, "<b>$1</b>")
-    .replace(LINK, function(s, s1, s2) {
+    s.replace(LINK, function(s, s1, s2) {
       var t = s1 + "<span data-l='"+ s2 +"'>"+ s2 +"</span>"; 
       s.split(",").forEach(function(x, i) {
         if (0 < i) {
@@ -696,6 +683,19 @@ $(function() {
     .replace(/([-\uac00-\ud7a3]+)0*(\d+)(.?)/g, function(s, s1, s2, s3) {
       return s3 === "'"? s: s1 +"<sup>"+ s2 +"</sup>"+ s3;
     })
+    .replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
+      return u.replace(/\s*(\(.+?\))\s*/g, " <i>$1</i> ")
+              .replace(/(】)\s*/, "$1");
+    })
+    .replace(RE3, "$1<i>$2</i> ")
+    .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
+      return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
+                                              "$1<br><b>$2</b>: ");
+    })
+    .replace(/^\s*([^\u3014\u3010])/, "&nbsp;$1")
+    .replace(/(〔|【)/g, "<br>$1")
+    .replace(/\s*(¶|☛)\s*/g, " $1")
+    .replace(/{(.+?)}/g, "<b>$1</b>")
     .replace(/〔(.+?)〕/g, "<span class='maal-ps'>$1</span>") + "</span>";  // 씨가름
   }
 
