@@ -84,7 +84,7 @@ $(function() {
 
   $("#name").change(function() { checkName(); });
 
-  $("#mail,#a-mail").blur(function() {
+  $("#mail,#a-mail").change(function() {
     var o = $(this);
     if (checkMail(o) && o.val() != mail) {
       $.post("checkMail.php", {mail: o.val()}, function(rc) {
@@ -350,7 +350,7 @@ $(function() {
     $("#ask").show();
   });
 
-  $("#phone" ).blur(function() { checkPhone(); });
+  $("#phone").change(function() { checkPhone(); });
 
   $("#ask .b-shade").click(function() {
     var oMail = $("#a-mail");
