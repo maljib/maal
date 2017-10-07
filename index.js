@@ -665,7 +665,7 @@ $(function() {
     return num(s);     
   }
 
-  var LINK = /(☛|=|>|<|\u2194|\u2248|\u2192|\[큰\]|\[작은\]|\[센\]|\[여린\]|\[높임\]|\[낮춤\]|\[갈래\])\s*([-\uac00-\ud7a3|\d]+)(\s*,\s*([-\uac00-\ud7a3|\d]+))*/g;
+  var LINK = /([<>=≈↔→\]☛])\s*([-\uac00-\ud7a3\d]+)(\s*,\s*[-\uac00-\ud7a3\d]+)*/g;
 
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
@@ -702,17 +702,17 @@ $(function() {
   function toText(s) {
     return word +
       s.replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
-         return u.replace(/\s*(\(.+?\))\s*/g, " $1 ")
-                 .replace(/(】)\s*/, "$1");
-       })
-       .replace(RE3, "$1$2 ")
-       .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
-         return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g, "$1\r\n$2: ");
-       })
-       .replace(/^\s*([^\u3014\u3010])/, " $1")
-       .replace(/(〔|【)/g, "\r\n$1")
-       .replace(/\s*(¶|☛)\s*/g, " $1")
-       .replace(/{(.+?)}/g, "$1");
+        return u.replace(/\s*(\(.+?\))\s*/g, " $1 ")
+                .replace(/(】)\s*/, "$1");
+      })
+      .replace(RE3, "$1$2 ")
+      .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
+        return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g, "$1\r\n$2: ");
+      })
+      .replace(/^\s*([^\u3014\u3010])/, " $1")
+      .replace(/(〔|【)/g, "\r\n$1")
+      .replace(/\s*(¶|☛)\s*/g, " $1")
+      .replace(/{(.+?)}/g, "$1");
   }
 
   function toHelp(s) {
