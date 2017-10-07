@@ -581,16 +581,15 @@ $(function() {
     return String.fromCharCode(n);
   }
 
-  var RE1 = /[\u3011:\u3015\u2460-\u2473\u3251-\u325f\u32b1-\u32bf]/g;
-  var RE2 = /[-0-9A-Za-z\u3130-\u318f\uac00-\ud7a3]/;
-  var RE3 = /([\u3015\u2460-\u2473\u3251-\u325f\u32b1-\u32bf])\s*(\(.+?\))\s*/g;
+  var ALNUM = /[-0-9A-Za-z\u3130-\u318f가-힣]/;
   function bounded(s, i) {
-    return i === 0 || !RE2.test(s[i - 1]);
+    return i === 0 || !ALNUM.test(s[i - 1]);
   }
 
+  var CIRCLED = /[】:〕①-⑳㉑-㉟㊱-㊿]/g;
   function num(s) {
     var n = 0, maal = false;
-    return s.replace(RE1, function(u,i,s) {
+    return s.replace(CIRCLED, function(u,i,s) {
       switch (u) {
       case "〕": n = 0; maal = false; break;
       case "】": n = 0; maal = true;  break;
@@ -634,18 +633,18 @@ $(function() {
          .replace(/[「\[](접두사?|앞(가지)?)[\]」]/g, "〔앞〕")
          .replace(/[「\[](접요사?|속(가지)?)[\]」]/g, "〔속〕")
          .replace(/[「\[](접미사?|뒷(가지)?)[\]」]/g, "〔뒷〕")
-         .replace(/「(\d+)」|(^|[^-A-Za-z\u3130-\u318f\uac00-\ud7a3])(\d+)\./g,
+         .replace(/「(\d+)」|(^|[^-A-Za-z\u3130-\u318f가-힣])(\d+)\./g,
                  function(u,u1,u2,u3) {
                    return u1? circledNumber(parseInt(u1)):
                          u2 + circledNumber(parseInt(u3));
                  })
-         .replace(/[【\[](쓰임|보기)[】\]]|\u2225/g, "¶")  // ∥
+         .replace(/[【\[](쓰임|보기)[】\]]|\u2225/g, "¶")
          .replace(/\[(본(딧말)?|본디)\]/g, "<")
          .replace(/\[준(말)?\]/g, ">")
          .replace(/\[(동의어|한뜻말?|한)\]/g, "=")
-         .replace(/\[(유의어|비슷(한말)?|비)\]|≒/g, "\u2248")  // ≈
-         .replace(/\[(맞선말?|맞)\]/g, "\u2194")  // ↔
-         .replace(/⇒/g, "\u2192")
+         .replace(/\[(유의어|비슷(한말)?|비)\]|≒/g, "≈")
+         .replace(/\[(맞선말?|맞)\]/g, "↔")
+         .replace(/⇒/g, "→")
          .replace(/\[큰말\]/g, "[큰]")
          .replace(/\[작(은말)?\]/g, "[작은]")
          .replace(/\[센말\]/g, "[센]")
@@ -655,9 +654,9 @@ $(function() {
          .replace(/\[갈(래말)?\]/g, "[갈래]")
          .replace(/\[(끝바꿈|덧풀이|익은말|옛말)\]/g, "【$1】")
          .replace(/\s*(\[덧붙임\]|\*\*\*덧풀이\*\*\*)\s*/, "\n【덧풀이】")
-         .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
+         .replace(/말】(\s*[^【]+)+/g, function(u) {
            return u.replace(/;/g, ":");
-         }).replace(/[\u00b9\u00b2\u00b3\u2070\u2074-\u2079]/g, function(u) {
+         }).replace(/[⁰¹²³⁴-⁹]/g, function(u) {
            var c = u.charCodeAt(0);
            return c == 0xb9?
                   "1": String.fromCharCode(c - (c < 0x2070? 0x80: 0x2040));
@@ -665,8 +664,9 @@ $(function() {
     return num(s);     
   }
 
-  var LINK = /([<>=≈↔→\]☛])\s*([-\uac00-\ud7a3\d]+)(\s*,\s*[-\uac00-\ud7a3\d]+)*/g;
-
+  var  LINK = /([<>=≈↔→\]☛])\s*([-가-힣\d]+)(\s*,\s*[-가-힣\d]+)*/g;
+  var START = /([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/g;
+  
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
@@ -680,19 +680,19 @@ $(function() {
       });
       return t;
     })
-    .replace(/([-\uac00-\ud7a3]+)0*(\d+)(.?)/g, function(s, s1, s2, s3) {
+    .replace(/([-가-힣]+)0*(\d+)(.?)/g, function(s, s1, s2, s3) {
       return s3 === "'"? s: s1 +"<sup>"+ s2 +"</sup>"+ s3;
     })
-    .replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
+    .replace(/꿈】\s*[^【〔]+/, function(u) {
       return u.replace(/\s*(\(.+?\))\s*/g, " <i>$1</i> ")
               .replace(/(】)\s*/, "$1");
     })
-    .replace(RE3, "$1<i>$2</i> ")
-    .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
-      return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
+    .replace(START, "$1<i>$2</i> ")
+    .replace(/말】(\s*[^【]+)+/g, function(u) {
+      return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
                                               "$1<br><b>$2</b>: ");
     })
-    .replace(/^\s*([^\u3014\u3010])/, "&nbsp;$1")
+    .replace(/^\s*([^〔【])/, "&nbsp;$1")
     .replace(/(〔|【)/g, "<br>$1")
     .replace(/\s*(¶|☛)\s*/g, " $1")
     .replace(/{(.+?)}/g, "<b>$1</b>")
@@ -701,15 +701,15 @@ $(function() {
 
   function toText(s) {
     return word +
-      s.replace(/꿈】\s*[^\u3010\u3014]+/, function(u) {
+      s.replace(/꿈】\s*[^【〔]+/, function(u) {
         return u.replace(/\s*(\(.+?\))\s*/g, " $1 ")
                 .replace(/(】)\s*/, "$1");
       })
-      .replace(RE3, "$1$2 ")
-      .replace(/말】(\s*[^\u3010]+)+/g, function(u) {
-        return u.replace(/([\u3011.])\s*(([^.:]|\(.*?\))+)[:]\s*/g, "$1\r\n$2: ");
+      .replace(START, "$1$2 ")
+      .replace(/말】(\s*[^【]+)+/g, function(u) {
+        return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)[:]\s*/g, "$1\r\n$2: ");
       })
-      .replace(/^\s*([^\u3014\u3010])/, " $1")
+      .replace(/^\s*([^〔【])/, " $1")
       .replace(/(〔|【)/g, "\r\n$1")
       .replace(/\s*(¶|☛)\s*/g, " $1")
       .replace(/{(.+?)}/g, "$1");
@@ -997,7 +997,7 @@ $(function() {
         i--;
       } else if (d === "‘’" || d === "“”" || d === "《》" || d === "〈〉" || d === "［］") {
         i--;
-      } else if (d === "\u25ef") {
+      } else if (d === "◯") {
         var j = a - 1, n10, n = toNum(v, j);
         if (0 <= n && 0 <= (n10 = toNum(v, j - 1))) {
           n += n10 * 10;
@@ -1011,7 +1011,7 @@ $(function() {
           d = n;
           i = a--;
         } else if (isWord() && bounded(v, a)) {
-          d = "\u2460";
+          d = "①";
         }
       }
       v = v.substr(0, a) + d + v.substr(b);
@@ -1242,11 +1242,11 @@ $(function() {
     if (i && --i === 0) j++;
     $("#edit").attr("placeholder", i? "":
       "[소리] (한자/밑말)\n"+
-      "〔씨갈래〕(말본)\u2460풀이. ¶쓰임. [이웃]... ... \u2461 . . .\n"+
-      "〔씨갈래〕\u2460(말본)풀이. ¶쓰임. [이웃]... ... \u2461(말본) . . ."+
+      "〔씨갈래〕(말본)①풀이. ¶쓰임. [이웃]... ... \u2461 . . .\n"+
+      "〔씨갈래〕①(말본)풀이. ¶쓰임. [이웃]... ... \u2461(말본) . . ."+
       "\n   .  .  .\n"+
       "【덧풀이】\n   .  .  .\n【익은말】\n익은말: 풀이.\n"+
-      "【옛말】\n옛말: 풀이.\n옛말:\u2460풀이. \u2461풀이.\n"+
+      "【옛말】\n옛말: 풀이.\n옛말:①풀이. \u2461풀이.\n"+
       "【끝바꿈】(이음꼴/맞섬)... ... (딸림)... ... (도움)... ...\n   .  .  .\n");
     if (j < 0) {
       eEdit = { data:"", nick:nick, t:"" };
@@ -1310,7 +1310,8 @@ $(function() {
   });
 
   $("#t3").dblclick(function() {
-    $("#t3").click();
+    $("#tab3").click();
+    return false;
   }).contextmenu(function() {
     $(this).dblclick();
     return false;
