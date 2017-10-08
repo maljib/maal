@@ -45,5 +45,5 @@ if (isset($_POST['l'])) {
   }
 }
 echo json_encode(selectValues('DISTINCT w.word', "words w $j",
-                          "$w w.word <> '?' ORDER BY w.word$d LIMIT 1000"));
+                          "$w w.word <> '?' ORDER BY w.word$d LIMIT 200"));
 ?>
