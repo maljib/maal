@@ -664,7 +664,7 @@ $(function() {
     return num(s);     
   }
 
-  var  LINK = /([<>=≈↔→\]☛])\s*([-가-힣\d]+)((\s*[,. ]\s*[-가-힣\d]+)*)/g;
+  var  LINK = /([<>=≈↔→\]☛])\s*([-가-힣\d]+)((\s*[,.]\s*[-가-힣\d]+)*)/g;
   var START = /([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/g;
   
   function html(s) {
@@ -673,7 +673,7 @@ $(function() {
     s.replace(LINK, function(s, s1, s2, s3) {
       var t = s1 +" <span data-l='"+ s2 +"'>"+ s2 +"</span>";
       if (s3) {
-        s3.split(/\s*[,. ]\s*/).forEach(function(x) {
+        s3.split(/\s*[,.]\s*/).forEach(function(x) {
           x = x.trim();
           if (x) {
             t += ", <span data-l='"+ x +"'>"+ x +"</span>";              
