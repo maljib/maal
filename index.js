@@ -664,20 +664,22 @@ $(function() {
     return num(s);     
   }
 
-  var  LINK = /([<>=≈↔→\]☛])\s*([-가-힣\d]+)(\s*,\s*[-가-힣\d]+)*/g;
+  var  LINK = /([<>=≈↔→\]☛])\s*([-가-힣\d]+)((\s*[,. ]\s*[-가-힣\d]+)*)/g;
   var START = /([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/g;
   
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
-    s.replace(LINK, function(s, s1, s2) {
-      var t = s1 + "<span data-l='"+ s2 +"'>"+ s2 +"</span>"; 
-      s.split(",").forEach(function(x, i) {
-        if (0 < i) {
+    s.replace(LINK, function(s, s1, s2, s3) {
+      var t = s1 +" <span data-l='"+ s2 +"'>"+ s2 +"</span>";
+      if (s3) {
+        s3.split(/\s*[,. ]\s*/).forEach(function(x) {
           x = x.trim();
-          t += ", <span data-l='"+ x +"'>"+ x +"</span>";
-        }
-      });
+          if (x) {
+            t += ", <span data-l='"+ x +"'>"+ x +"</span>";              
+          }
+        });
+      }
       return t;
     })
     .replace(/([-가-힣]+)0*(\d+)(.?)/g, function(s, s1, s2, s3) {
@@ -801,6 +803,7 @@ $(function() {
   });
 
   $("#arg").autocomplete({
+    delay: 800,
     source: function(request, response) {
       var s = request.term;
       if (s == "!") {
