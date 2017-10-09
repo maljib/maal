@@ -10,7 +10,7 @@ if ($arg = getPost('arg')) {
                       $where.' ORDER BY t DESC');
   foreach ($rows as $row) {
     $a[] = array('uid'=>$row[0], 'nick'=>$row[1], 'id'=>$row[2],
-                   't'=>substr($row[3], 0, 16), 'data'=>$row[4]);
+                   't'=>substr($row[3], 2, 14), 'data'=>$row[4]);
   }
 }
 echo json_encode($a);

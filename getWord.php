@@ -9,6 +9,6 @@ $row = selectRow("u.id,nick,e.id, convert_tz(t,'+00:00','+09:00'), data,w.id,tel
                         ' JOIN users u ON u.id=e.user',
                     "w.word='$arg' AND i=0 ORDER BY t DESC LIMIT 1");
 echo json_encode(array('uid'=>$row[0], 'nick'=>$row[1], 'id'=>$row[2],
-                       't'=>substr($row[3],0,16),
+                       't'=>substr($row[3],2,14),
                        'data'=>$row[4], 'wid'=>$row[5], 'tell'=>$row[6]));
 ?>
