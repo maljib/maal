@@ -9,7 +9,7 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
 .maal-ps   { border:1px solid black; border-radius:4px;
              padding:0 2px; margin:0 8px 0 10px; font-weight:600; font-size:85%; }
 .maal-box  { border:1px solid black; border-radius:4px;
-             padding:0 5px; font-weight:600; }
+             padding:0 5px; font-weight:600; font-size:85%; }
 [data-l]   { cursor:pointer; text-decoration:underline; }
 
 #h1 { font-size:2em; font-weight:bold; color:#f1f3f1;
