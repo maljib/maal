@@ -771,12 +771,12 @@ $(function() {
     return "<i>"+ ["더살핌","올림","버림"][t] +"&nbsp;</i>";
   }
 
-  function accordion(o, data, collapse, n, isWord) {
+  function accordion(o, data, collapse, n, isWordComment) {
     o.empty().accordion({ animate: false, icons:false,
                       collapsible: collapse,
                       heightStyle: 'content' });
     o.append(data).accordion("refresh");
-    if (isWord) {
+    if (isWordComment) {
       o.accordion("option", "active", false);      
     } else {
       o.accordion("option", "active", n);
@@ -939,7 +939,7 @@ $(function() {
                 "<span class='a-head'>"+ a.data.trim().split('\n', 1)[0] +"</span>";
               data += fill(a.t, a.nick, "", i? convertText(a.data): diff(w.data, a.data), i, h);
             }
-            accordion(o, data, true, j < 0? 0: j, word == "?");
+            accordion(o, data, true, j < 0? 0: j, word == "?" && i == 1);
             fitHeaders(o);
             tx.html("<div style='margin:-1.5px 0'>"+ (i? t3Text(): "자취") +
                     "<sup>"+ array.length +"</sup></div>").show();
