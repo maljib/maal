@@ -343,7 +343,7 @@ $(function() {
   });
 
   $("#q-req .x-close").click(function() { $("#q-req").hide(); });
-  $(  "#ask .x-close").click(function() { $(  "#ask").hide(); });
+  $(  "#ask .x-close").click(function() {   $("#ask").hide(); });
 
   $("#x-ask").click(function() {
     $(this).hide(); 
@@ -763,9 +763,7 @@ $(function() {
     if (!a) a = " ";
     if (!b) b = " ";
     return $("<div>").append("<div class='diff'>").prettyTextDiff({
-      cleanup: true,
-      originalContent: a,
-      changedContent: b
+      cleanup: true, originalContent: a, changedContent: b
     }).children().html();
   }
 
@@ -773,13 +771,18 @@ $(function() {
     return "<i>"+ ["더살핌","올림","버림"][t] +"&nbsp;</i>";
   }
 
-  function accordion(o, data, collapse, n) {
+  function accordion(o, data, collapse, n, isWord) {
     o.empty().accordion({ animate: false, icons:false,
                       collapsible: collapse,
                       heightStyle: 'content' });
-    o.append(data).accordion("refresh").accordion("option", "active", n);
-    o.find(".a-cmd:eq("+ n +")").show();
-    o.find(".a-head:eq("+ n +")").hide();
+    o.append(data).accordion("refresh");
+    if (isWord) {
+      o.accordion("option", "active", false);      
+    } else {
+      o.accordion("option", "active", n);
+      o.find(".a-cmd:eq("+ n +")").show();
+      o.find(".a-head:eq("+ n +")").hide();  
+    }
   }
 
   function push(array, element) {
@@ -874,7 +877,7 @@ $(function() {
 
     $.post("getWord.php", "arg=" + encodeURIComponent(arg), function(w) {
       $("#t1").text(word = arg).show();
-      $("#t3").text("적바림");
+      $("#t3").text(t3Text());
       if (w.wid) {
         w.data = w.data.replace(/\r\n/g, "\n");
         expl   = [[w]];
@@ -932,12 +935,13 @@ $(function() {
               var a = array[index];
               if (j < 0 && isEdit && eEdit.data == a.data) j = index;
               a.data = a.data.replace(/\r\n/g, "\n");
-              var h = "<span class='a-head'>"+ a.data.trim().split('\n', 1)[0] +"</span>";
+              var h = word == "?" && i == 0? "":
+                "<span class='a-head'>"+ a.data.trim().split('\n', 1)[0] +"</span>";
               data += fill(a.t, a.nick, "", i? convertText(a.data): diff(w.data, a.data), i, h);
             }
-            accordion(o, data, true, j < 0? 0: j);
+            accordion(o, data, true, j < 0? 0: j, word == "?");
             fitHeaders(o);
-            tx.html("<div style='margin:-1.5px 0'>"+ (i? "적바림": "자취") +
+            tx.html("<div style='margin:-1.5px 0'>"+ (i? t3Text(): "자취") +
                     "<sup>"+ array.length +"</sup></div>").show();
             if (i === 0) {
               if (0 <= j) {
@@ -958,6 +962,10 @@ $(function() {
             tx.show();
           }
         }, "json");
+      }
+
+      function t3Text() {
+        return word == "?"? "알림판": "적바림"; 
       }
     }, "json");
   }
@@ -1243,7 +1251,8 @@ $(function() {
   function edit(i, j) {
     $("#s0").css("background-color", ["#ffa","#bfc","white"][i]);
     if (i && --i === 0) j++;
-    $("#edit").attr("placeholder", i? "":
+    $("#edit").attr("placeholder",
+      i? (word == "?"? "\n 제목\n\n알림글": "'"+ word +"' 적바림"):
       "[소리] (한자/밑말)\n"+
       "〔씨갈래〕(말본)①풀이. ¶쓰임. [이웃]... ... \u2461 . . .\n"+
       "〔씨갈래〕①(말본)풀이. ¶쓰임. [이웃]... ... \u2461(말본) . . ."+
@@ -1294,9 +1303,9 @@ $(function() {
   });
 
   $("#t1,#t2,#t3").click(function() {
-    $("#t1,#t2,#t3").removeAttr("title");
+    $(this).removeAttr("title");
   });
-  
+ 
   $("#t1").dblclick(function() {
     var oldWord = $(this).text();
     if (oldWord === "?") {
@@ -1319,7 +1328,7 @@ $(function() {
     $(this).dblclick();
     return false;
   });
-  
+ 
   $("#tab3").click(function() {
     if (uid) edit(2,-1);
   });
