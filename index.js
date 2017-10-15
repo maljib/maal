@@ -1245,7 +1245,7 @@ $(function() {
     eEdit.i = i;
     eEdit.j = j;
     $("#t1,#t2,#t3").removeAttr("title");
-    $(tx()).attr("title", eEdit.nick +" "+ eEdit.t);
+    // $(tx()).attr("title", eEdit.nick +" "+ eEdit.t);
   }
 
   function edit(i, j) {
