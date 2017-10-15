@@ -1264,8 +1264,8 @@ $(function() {
       eEdit = { data:"", nick:nick, t:"" };
     } else {
       eEdit = expl[i][j];
-      setEditTitle(i, j);
     }
+    setEditTitle(i, j);
     $("#t5").click();
     $("#edit").val(data1 = eEdit.data).focus().scrollTop(0);
   }
