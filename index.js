@@ -771,12 +771,12 @@ $(function() {
     return "<i>"+ ["더살핌","올림","버림"][t] +"&nbsp;</i>";
   }
 
-  function accordion(o, data, collapse, n, isWordComment) {
+  function accordion(o, data, collapse, n, isForum) {
     o.empty().accordion({ animate: false, icons:false,
                       collapsible: collapse,
                       heightStyle: 'content' });
     o.append(data).accordion("refresh");
-    if (isWordComment) {
+    if (isForum) {
       o.accordion("option", "active", false);      
     } else {
       o.accordion("option", "active", n);
@@ -877,7 +877,7 @@ $(function() {
 
     $.post("getWord.php", "arg=" + encodeURIComponent(arg), function(w) {
       $("#t1").text(word = arg).show();
-      $("#t3").text(t3Text());
+      $("#t3").text(word === "?"? "알림판": "적바림");
       if (w.wid) {
         w.data = w.data.replace(/\r\n/g, "\n");
         expl   = [[w]];
@@ -939,33 +939,33 @@ $(function() {
                 "<span class='a-head'>"+ a.data.trim().split('\n', 1)[0] +"</span>";
               data += fill(a.t, a.nick, "", i? convertText(a.data): diff(w.data, a.data), i, h);
             }
-            accordion(o, data, true, j < 0? 0: j, word == "?" && i == 1);
-            fitHeaders(o);
-            tx.html("<div style='margin:-1.5px 0'>"+ (i? t3Text(): "자취") +
-                    "<sup>"+ array.length +"</sup></div>").show();
-            if (i === 0) {
+            var isForum = i && word === "?";
+            accordion(o, data, true, j < 0? 0: j, isForum);
+            if (!isForum) {
+              tx.html("<div style='margin:-1.5px 0'>"+ (i? "적바림": "자취") +
+                      "<sup>"+ len +"</sup></div>");
+            }
+            if (i) {
+              o.append("<br><br>");  // 이곳을 클릭하면 새 적바림 쓰기 창이 열린다
+            } else {
               if (0 <= j) {
                 j++;
               } else if (eEdit.i === 0 && eEdit.data === w.data) {
                 j = 0;
               }
               array.unshift(w);
-            } else {
-              o.append("<br><br>");  // 이곳을 클릭하면 새 적바림 쓰기 창이 열린다
             }
             expl[i] = array;
             if (0 <= j) {
               eEdit = array[j];
               setEditTitle(i, j);
             }
+            fitHeaders(o);
+            tx.show();
           } else if (i) {
             tx.show();
           }
         }, "json");
-      }
-
-      function t3Text() {
-        return word == "?"? "알림판": "적바림"; 
       }
     }, "json");
   }
