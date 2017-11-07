@@ -64,5 +64,11 @@ CREATE TABLE texts (
   FOREIGN KEY(user) REFERENCES users(id) ON UPDATE CASCADE
 );
 
+CREATE VIEW wt0 AS SELECT w.id wid, e.id FROM words w JOIN texts e ON w.id=e.word
+WHERE w.word <> "?" AND e.i=0 AND w.tell < 2 AND (w.user=e.user OR w.tell=1 AND e.user IN (7,158));
+
+CREATE VIEW wt AS SELECT l.wid, l.id FROM wt0 l LEFT JOIN wt0 r
+ON l.wid=r.wid AND l.id < r.id WHERE r.id is NULL;
+
 -- mysql -h localhost -u scott -p <..\..\htdocs\maal\wordlist.sql
 -- mysqldump -h localhost -u scott -p --databases wordlist >wordlist_backup.sql

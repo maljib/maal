@@ -8,6 +8,9 @@ if ($id = getPost('id')) {
   } else if ($data = getPost('data')) {
     $set = "data='".escapeString($data)."'";
   }
-  $set and (print sqlUpdate('texts', $set, "id=$id"));
+  if ($set && is_numeric(sqlUpdate('texts', $set, "id=$id"))) {
+    getPost('i') == '0' and touchMaljib();
+    echo '1';
+  }
 }
 ?>

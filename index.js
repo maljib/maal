@@ -14,8 +14,8 @@ $(function() {
   var words = localStorage && localStorage.words && JSON?
                       JSON.parse(localStorage.words): [];
   var arg_words = [], arg_i = -1;
-  var downloadable = ("download" in document.createElement("a"));
-
+  showIf($("#download"), ("download" in document.createElement("a")));
+  
   function info(s) {
     $("#msg").html(s).draggable({ cursor:"move" }).show()
              .click(function() { $(this).hide(); });
@@ -552,6 +552,18 @@ $(function() {
     return false;
   });
 
+  $("#download").click(function() {
+    var o = $(this);
+    o.hide();
+    $.post("download.php", function(name) {
+      var link = document.createElement("a");
+      link.download = name;
+      link.href = "p/maljib.pdf";
+      link.click();
+      o.show();
+    });
+  });
+
   // [취소] 버튼 처리
   function doCancel() {
     if ($("#enter").is(":visible")) {  // 사용자 등록/로그인 중이었으면
@@ -670,7 +682,8 @@ $(function() {
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
-    s.replace(LINK, function(s, s1, s2, s3) {
+    s.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(LINK, function(s, s1, s2, s3) {
       var t = s1 +" <span data-l='"+ s2 +"'>"+ s2 +"</span>";
       if (s3) {
         s3.split(/\s*[,.]\s*/).forEach(function(x) {
@@ -699,46 +712,6 @@ $(function() {
     .replace(/\s*(¶|☛)\s*/g, " $1")
     .replace(/{(.+?)}/g, "<b>$1</b>")
     .replace(/〔(.+?)〕/g, "<span class='maal-ps'>$1</span>") + "</span>";  // 씨가름
-  }
-
-  function toText(s) {
-    return word +
-      s.replace(/꿈】\s*[^【〔]+/, function(u) {
-        return u.replace(/\s*(\(.+?\))\s*/g, " $1 ")
-                .replace(/(】)\s*/, "$1");
-      })
-      .replace(START, "$1$2 ")
-      .replace(/말】(\s*[^【]+)+/g, function(u) {
-        return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)[:]\s*/g, "$1\r\n$2: ");
-      })
-      .replace(/^\s*([^〔【])/, " $1")
-      .replace(/(〔|【)/g, "\r\n$1")
-      .replace(/\s*(¶|☛)\s*/g, " $1")
-      .replace(/{(.+?)}/g, "$1");
-  }
-
-  function toHelp(s) {
-    return s.replace(/\r/g, "").replace(/\n/g, "\r\n");
-  }
-
-  function toHtml(s) {
-    return "<!DOCTYPE html>\r\n"+
-'<html lang="ko">\r\n'+
-'<head>\r\n'+
-'\t<meta charset="utf-8">\r\n'+
-'\t<title>'+ word +'</title>\r\n'+
-'\t<meta name="viewport" content="width=device-width, initial-scale=1">\r\n'+
-'\t<style>\r\n'+
-".maal-word { font-family:'Malgun Gothic'; font-weight:bold; }\r\n"+
-".maal-text { font-family:batang; }\r\n"+
-".maal-ps { border:1.5px solid black; border-radius:4px; "+
-    "padding:0 2px; margin:0 8px 0 10px; font:600 85% 'Malgun Gothic'; }\r\n"+
-"[data-l] { cursor:pointer; text-decoration:underline; }\r\n"+
-'\t</style>\r\n'+
-'</head>\r\n'+
-'<body>\r\n'+ html(s) +
-'\r\n</body>\r\n'+
-'</html>\r\n';
   }
 
   function convertText(s) {
@@ -922,6 +895,10 @@ $(function() {
                data +"</div></div>";
       }
 
+      function bb(s) {
+        return s.replace('<', '⧼').replace('>', '⧽');
+      }
+
       function fills(o, i) {
         o.empty();
         var w_id = i === 0? ","+ w.id: "";
@@ -935,9 +912,11 @@ $(function() {
               var a = array[index];
               if (j < 0 && isEdit && eEdit.data == a.data) j = index;
               a.data = a.data.replace(/\r\n/g, "\n");
+              var b = bb(a.data);
               var h = word == "?" && i == 0? "":
-                "<span class='a-head'>"+ a.data.trim().split('\n', 1)[0] +"</span>";
-              data += fill(a.t, a.nick, "", i? convertText(a.data): diff(w.data, a.data), i, h);
+                "<span class='a-head'>"+ b.trim().split('\n', 1)[0] +"</span>";
+              data += fill(a.t, a.nick, "",
+                           i? convertText(a.data): diff(bb(w.data), b), i, h);
             }
             var isForum = i && word === "?";
             accordion(o, data, true, j < 0? 0: j, isForum);
@@ -1063,19 +1042,21 @@ $(function() {
   }
 
   function saveData() {
-    if (isWord()) $("#edit").val(data1 = data1.trim());
+    if (isWord()) {
+      $("#edit").val(data1 = data1.trim());
+    }
     var arg, argData = "&"+ $("#edit").serialize();
     var i = eEdit.i, j;
     if (i === 0 && eEdit.j < 0) {
       $("#arg").val(word);  // 새 낱말
       arg = "&"+ $("#arg").serialize() + argData;
-      $.post("addWord.php", "uid="+ uid + arg, function(id) {
-        if (0 < id) {
+      $.post("addWord.php", "uid="+ uid + arg, function(rc) {
+        if (rc == '1') {
           eEdit.j = 0;
           updateEdit();
           showCount([1]);
         } else {
-          info("addWord.php: "+ id);
+          info("addWord.php: "+ rc);
         }
       });
     } else {
@@ -1106,18 +1087,18 @@ $(function() {
       arg = "a="+ i +",";
       if (j < 0) {
         arg += expl[0][0].wid +","+ uid + argData;
-        $.post("addData.php", arg, function(id) {
-          if ($.isNumeric(id)) {
+        $.post("addData.php", arg, function(rc) {
+          if (rc == '1') {
             updateEdit();
             showCount([1, 2, 3]);
           } else {
-            info("addData.php: "+ id);
+            info("addData.php: "+ rc);
           }
         });
       } else {
-        arg = "id="+ expl[i][j].id + argData;  // 그곳에 업데이트한다
+        arg = "i="+ i +"&id="+ expl[i][j].id + argData;  // 그곳에 업데이트한다
         $.post("updateData.php", arg, function(count) {
-          if ($.isNumeric(count)) {
+          if (count == '1') {
             updateEdit();
           } else {
             info("updateData.php: "+ count);
@@ -1128,11 +1109,11 @@ $(function() {
   }
 
   function deleteData(isDelete) {
-    var arg = "a="+ eEdit.id;         
+    var arg = "i="+ eEdit.i +"&a="+ eEdit.id;         
     var deleteWord = isDelete && eEdit.i === 0 && eEdit.j === 0;
     if (deleteWord) arg += ","+ eEdit.wid;
-    $.post("deleteData.php", arg, function(count) {
-      if (count == "1") {
+    $.post("deleteData.php", arg, function(rc) {
+      if (rc == "1") {
         if (isDelete) {
           var i = eEdit.i;
           eEdit = { i:i, data:"" };
@@ -1144,7 +1125,7 @@ $(function() {
         }
         showCount([1, 2, 3, 5]);
       } else {
-        info("deleteData.php: "+ count);
+        info("deleteData.php: "+ rc);
       }
     });
   }
@@ -1153,18 +1134,6 @@ $(function() {
     var o = $("#edit");
     o.val(convert(o.val()));
     isSame();
-  }
-
-  function dlData(f, ext) {
-    var isHelp = word === "?";
-    var d = encodeURIComponent(f($("#edit").val()));
-    var e = document.createElement('a');
-    e.setAttribute('href', 'data:text/plain;charset=euc-kr,' + d);
-    e.setAttribute('download', (isHelp? "_도움말_": word) +"."+ ext);
-    e.style.display = 'none';
-    document.body.appendChild(e);
-    e.click();
-    document.body.removeChild(e);
   }
   
   function attachMenu(menu, to, lr) {
@@ -1181,8 +1150,6 @@ $(function() {
             case    "save":    saveData();     break;
             case  "delete":  deleteData(true); break;
             case "convert": convertData();     break;
-            case    "dl-t": dlData(word === "?"? toHelp: toText, "txt"); break;
-            case    "dl-h": dlData(toHtml, "html"); break;
             }
           }
   	    }
@@ -1233,8 +1200,6 @@ $(function() {
     showIf($("#save"),   word && !isSame() && data1.trim());
     showIf($("#delete"), isDeletable());
     showIf($("#convert"), eEdit.i === 0 && word != "?" && $("#edit").val().trim());
-    showIf($("#download"), downloadable && eEdit.i === 0 && $("#edit").val().trim());
-    showIf($("#dl-h"), downloadable && word !== "?");
   });
 
   $("#s6").mouseover(function() { showIf($("#box"), word === "?"); });
@@ -1362,12 +1327,12 @@ $(function() {
     var o = $(this);
     var e = expl[0][0];
     var t = (e.tell + 1) % 3;
-    $.post("updateTell.php", {wid: e.wid, tell: t}, function(code) {
-      if (code == '1') {
+    $.post("updateTell.php", {wid: e.wid, tell: t}, function(rc) {
+      if (rc == '1') {
         o.html(tellName(e.tell = t));
         showCount([4, 5]);
       } else {
-        info("updateTell.php: "+ code);
+        info("updateTell.php: "+ rc);
       }
     });
   });
@@ -1484,7 +1449,7 @@ $(function() {
   function accept(j, isAccept) {
     var e = expl[0][j];
     var userId = e.uid == uid || word == '?'? '-': uid;
-    $.post("updateData.php", {id: e.id, user: userId}, function(count) {
+    $.post("updateData.php", {i:0, id: e.id, user: userId}, function(count) {
       if (count == '1') {
         if (isAccept) findWord(word, true);
       } else {

@@ -126,4 +126,8 @@ function selectEtc($i) {
 function deleteEtc($i) {
   sqlDelete('etc', "id=$i") or die('etc 데이터를 지울 수 없습니다.');
 }
+
+function touchMaljib() {
+  touch('p/maljib.t');
+} 
 ?>

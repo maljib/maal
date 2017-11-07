@@ -8,6 +8,9 @@ if ($a = getPost('a')) {
     $rc = sqlDelete('words',
            "id=$a[1] AND NOT EXISTS (SELECT id FROM texts WHERE word=$a[1])");
   }
-  echo $rc;  // 반환 값이 1이면 정상이다
+  if ($rc == 1) {
+    getPost('i') == '0' and touchMaljib();
+    echo '1';
+  }
 }
 ?>
