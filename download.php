@@ -9,12 +9,11 @@ function toPdf() {
 \usepackage{multicol}
 \usepackage{relsize}
 
-\def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
-
 \setlength\parindent{2mm}
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
 \setlength{\fboxsep}{0.3mm}
+\def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
 
 \begin{document}
 {\centering\LARGE\bf배달말집\par}
@@ -50,13 +49,17 @@ function toPdf() {
 ' );
   fclose($fp);
   $cwd = getcwd();
-  exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");  
+  exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
+  rename("p/maljib.tex", "p/_maljib.tex");
 }
 
-$ft = filemtime('p/maljib.t');
-if (filemtime('p/maljib.pdf') < $ft) {
+while (file_exists('p/maljib.tex')) {
+  sleep(1);
+}
+$time = filemtime('p/maljib.t');
+if (filemtime('p/maljib.pdf') < $time) {
   toPdf();
 }
 date_default_timezone_set('Asia/Seoul');
-echo '말집-'.date("ymdHi", $ft);
+echo '말집-'.date("ymdHi", $time);
 ?>
