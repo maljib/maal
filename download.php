@@ -57,5 +57,6 @@ $ft = filemtime('p/maljib.t');
 if (filemtime('p/maljib.pdf') < $ft) {
   toPdf();
 }
+date_default_timezone_set('Asia/Seoul');
 echo 'maljib-'.date("ymdHi", $ft);
 ?>
