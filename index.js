@@ -704,8 +704,9 @@ $(function() {
     })
     .replace(START, "$1<i>$2</i> ")
     .replace(/말】(\s*[^【]+)+/g, function(u) {
-      return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)[:]\s*/g,
-                                              "$1<br><b>$2</b>: ");
+      return u.replace(/([】.])\s*([^.:]+?)\s*[:]\s*/g,
+   //   return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/g,
+      "$1<br><b>$2</b>: ");
     })
     .replace(/^\s*([^〔【])/, "&nbsp;$1")
     .replace(/(〔|【)/g, "<br>$1")
@@ -779,7 +780,7 @@ $(function() {
   });
 
   $("#arg").autocomplete({
-    delay: 800,
+    delay: 300,
     source: function(request, response) {
       var s = request.term;
       if (s == "!") {
