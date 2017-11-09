@@ -17,10 +17,10 @@ echo <<<END_OF_TEXT
   <title>배달말집</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css">
-  <link rel="stylesheet" href="index1.css">
+  <link rel="stylesheet" href="index1.css?v=1">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <script src="index1.js"></script>
+  <script src="index1.js?v=1"></script>
 </head>
 <body>
   <span id="h1">배달말집</span>

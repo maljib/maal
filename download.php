@@ -1,8 +1,12 @@
 <?php
 require_once 'functions.php';
 
+$tex = "p/maljib.tex";
+
 function toPdf() {
-  $fp = fopen("p/maljib.tex", "w") or die("Unable to open file!");
+  global $tex;
+  $fp = fopen($tex, "w");
+  if (!$fp) return;
   fwrite($fp, '\documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
 \usepackage{kotex}
@@ -19,7 +23,7 @@ function toPdf() {
 {\centering\LARGE\bf배달말집\par}
 \begin{multicols}{2}
 ' );
-  
+
   $rows = selectRows('w.word, e.data', 'words w, texts e, wt',
                      'w.id = wt.wid and e.id = wt.id ORDER BY w.word');
   foreach ($rows as $row) {
@@ -50,10 +54,10 @@ function toPdf() {
   fclose($fp);
   $cwd = getcwd();
   exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
-  rename("p/maljib.tex", "p/_maljib.tex");
+  rename($tex, "p/_maljib.tex");
 }
 
-while (file_exists('p/maljib.tex')) {
+while (file_exists($tex)) {
   sleep(1);
 }
 $time = filemtime('p/maljib.t');
