@@ -42,7 +42,7 @@ function toPdf() {
     $t = preg_replace_callback('/말】(\s*[^【]+)+/u', function($u) {
       return preg_replace('/([】.])\s*([^.:]+?)\s*[:]\s*/u',
       // return preg_replace('/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/u',
-      '$1\newline\textbf{$2}: ', $u[0]);
+      '$1\newline\textbf{$2}\hspace{.5mm}: ', $u[0]);
     }, $t);
     $t = preg_replace('/\s*(【)/u', '\newline$1', $t);  // 〔|
     $t = preg_replace('/\s*〔(.+?)〕\s*/', '\maalps{$1}', $t);
