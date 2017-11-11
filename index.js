@@ -1701,18 +1701,15 @@ $(function() {
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
 
-  function msie(f) {
-    var a = navigator.userAgent;
-    var i = a.indexOf('MSIE ');
-    if (0 < i && (i = parseInt(a.substring(i + 5))) < 11) f(i);
-  }
+  msie();
 
-  msie(function(i) {
-    info("인터넷익스플로러 "+ i +"에서는 안되는 기능이 더러 있습니다.<br>"+
-         "다른 브라우저를 써 보세요: "+
-    "<a href='https://www.google.com/chrome/' target='_blank'>크롬</a>, "+
-    "<a href='http://www.opera.com/ko' target='_blank'>오페라</a>, "+
-    "<a href='https://www.mozilla.org/firefox/new/' target='_blank'>파이어폭스</a>.");
+  function msie() {
+    if (navigator.userAgent.indexOf('Trident') < 0) return;
+
+    info("인터넷익스플로러에서는 안되는 기능이 더러 있습니다.<br>"+
+         "다른 브라우저를 써 보십시오: "+
+    "<a href='https://www.google.co.kr/chrome/browser/desktop/' target='_blank'>크롬</a>, "+
+    "<a href='http://www.opera.com/ko' target='_blank'>오페라</a>.");
     if (!Array.prototype.indexOf) {
       Array.prototype.indexOf = function(obj, start) {
         for (var i = (start || 0), j = this.length; i < j; i++) {
@@ -1726,5 +1723,5 @@ $(function() {
         return this.replace(/^\s+/, '').replace(/\s+$/, '');
       };
     }
-  });
+  }
 });
