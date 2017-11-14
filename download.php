@@ -26,6 +26,11 @@ function toPdf() {
 
   $rows = selectRows('w.word, e.data', 'words w, texts e, wt',
                      'w.id = wt.wid and e.id = wt.id ORDER BY w.word');
+  usort($rows, function($a, $b) {
+    $x = $a[0]; if ($x[0] == '-') $x = substr($x, 1);
+    $y = $b[0]; if ($y[0] == '-') $y = substr($y, 1);
+    return strcmp($x, $y);
+  });
   foreach ($rows as $row) {
     $s = preg_replace('/0*(\d+)$/', '\$^{$1}\$', $row[0]);
     $t = preg_replace('/{(.+?)}/', "\x01".'$1'."\x02", trim($row[1]));
