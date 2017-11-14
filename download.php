@@ -1,13 +1,14 @@
 <?php
 require_once 'functions.php';
 
-$tex = "p/maljib.tex";
+$tex = 'p/maljib.tex';
 
 function toPdf() {
   global $tex;
-  $fp = fopen($tex, "w");
+  $fp = fopen($tex, 'w');
   if (!$fp) return;
-  fwrite($fp, '\documentclass[a4paper,10pt]{article}
+  fwrite($fp, <<<'PREAMBLE'
+\documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
 \usepackage{kotex}
 \usepackage{multicol}
@@ -20,15 +21,17 @@ function toPdf() {
 \def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
 
 \begin{document}
-{\centering\LARGE\bf배달말집\par}
+{\centering\LARGE\bf배 달 말 집\par}
 \begin{multicols}{2}
-' );
+
+PREAMBLE
+  );
 
   $rows = selectRows('w.word, e.data', 'words w, texts e, wt',
                      'w.id = wt.wid and e.id = wt.id ORDER BY w.word');
   usort($rows, function($a, $b) {
-    $x = $a[0]; if ($x[0] == '-') $x = substr($x, 1);
-    $y = $b[0]; if ($y[0] == '-') $y = substr($y, 1);
+    $x = &$a[0]; if ($x[0] == '-') $x = substr($x, 1);
+    $y = &$b[0]; if ($y[0] == '-') $y = substr($y, 1);
     return strcmp($x, $y);
   });
   foreach ($rows as $row) {
@@ -47,20 +50,22 @@ function toPdf() {
     $t = preg_replace_callback('/말】(\s*[^【]+)+/u', function($u) {
       return preg_replace('/([】.])\s*([^.:]+?)\s*[:]\s*/u',
       // return preg_replace('/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/u',
-      '$1\newline\textbf{$2}\hspace{.5mm}: ', $u[0]);
+                          '$1\newline\textbf{$2}\hspace{.5mm}: ', $u[0]);
     }, $t);
     $t = preg_replace('/\s*(【)/u', '\newline$1', $t);  // 〔|
     $t = preg_replace('/\s*〔(.+?)〕\s*/', '\maalps{$1}', $t);
-    fwrite($fp, '\textbf{'.$s.'} '.$t."\n\n");
+    fwrite($fp, '\textbf{'."$s} $t\n\n");
   }
-  fwrite($fp, '
+  fwrite($fp, <<<'CLOSING'
 \end{multicols}
 \end{document}
-' );
+
+CLOSING
+  );
   fclose($fp);
   $cwd = getcwd();
   exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
-  rename($tex, "p/_maljib.tex");
+  rename($tex, 'p/_maljib.tex');
 }
 
 while (file_exists($tex)) {
