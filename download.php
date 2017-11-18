@@ -76,5 +76,5 @@ if (filemtime('p/maljib.pdf') < $time) {
   toPdf();
 }
 date_default_timezone_set('Asia/Seoul');
-echo '말집-'.date("ymdHi", $time);
+echo date("ymdHi", $time);
 ?>

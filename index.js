@@ -22,8 +22,13 @@ $(function() {
   }
 
   // 서버 에러 메시지를 출력한다 (서버 프로그램 이름, 메시지)
-  function serverError(serverProgramName, message) {
-    $("#tip").html("서버(" + serverProgramName + ") 에러: " + message).show();
+  function serverError(serverProgramName, message, isInfo) {
+    var msg = "서버(" + serverProgramName + ") 에러: " + message;
+    if (isInfo) {
+      info(msg);
+    } else {
+      $("#tip").html().show();      
+    }
   }
 
   // 입력 에러를 표시하고 에러 메시지를 출력한다 (객체, 메시지[, 출력 객체])
@@ -440,7 +445,7 @@ $(function() {
         $("#ans").show();
       }
     }, 'json').fail(function(xhr) {
-      serverError("askData.php", xhr.responseText);
+      serverError("askData.php", xhr.responseText, true);
     });
 
     $.post("toSure.php", {id: uid}, function(array) {
@@ -459,7 +464,7 @@ $(function() {
         $("#toSure").show();
       }
     }, 'json').fail(function(xhr) {
-      serverError("toSure.php", xhr.responseText);
+      serverError("toSure.php", xhr.responseText, true);
     });
 
     $.post("isEditor.php", {id: uid}, function(rc) {
@@ -555,12 +560,16 @@ $(function() {
   $("#download").click(function() {
     var o = $(this);
     o.hide();
-    $.post("download.php", function(name) {
-      var link = document.createElement("a");
-      link.download = name;
-      link.href = "p/maljib.pdf";
-      link.click();
-      o.show();
+    $.post("download.php", function(t) {
+      if (t.length === 10) {
+        var link = document.createElement("a");
+        link.download = "말집-"+ t;
+        link.href = "p/maljib.pdf";
+        link.click();
+      } else {
+        serverError("download.php", t, true);
+      }
+      o.show();  
     });
   });
 
