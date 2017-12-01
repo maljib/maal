@@ -44,6 +44,12 @@ if (isset($_POST['l'])) {
     }
   }
 }
-echo json_encode(selectValues('DISTINCT w.word', "words w $j",
-                          "$w w.word <> '?' ORDER BY w.word$d LIMIT 200"));
+$rows = selectValues('DISTINCT w.word', "words w $j",
+                     "$w w.word <> '?' ORDER BY w.word$d LIMIT 200");
+usort($rows, function($a, $b) {
+  $x = &$a; if ($x[0] == '-') $x = substr($x, 1);
+  $y = &$b; if ($y[0] == '-') $y = substr($y, 1);
+  return strcmp($x, $y);
+});
+echo json_encode($rows);
 ?>
