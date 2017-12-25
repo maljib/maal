@@ -15,7 +15,7 @@ $(function() {
                       JSON.parse(localStorage.words): [];
   var arg_words = [], arg_i = -1;
   showIf($("#download"), ("download" in document.createElement("a")));
-  
+
   function info(s) {
     $("#msg").html(s).draggable({ cursor:"move" }).show()
              .click(function() { $(this).hide(); });
@@ -27,7 +27,7 @@ $(function() {
     if (isInfo) {
       info(msg);
     } else {
-      $("#tip").html().show();      
+      $("#tip").html().show();
     }
   }
 
@@ -193,7 +193,7 @@ $(function() {
         } else {
           serverError("getSureId.php", rc);
         }
-      });      
+      });
     }
   });
 
@@ -228,6 +228,7 @@ $(function() {
     var arg = $("#nick,#mail").serialize() +"&id=-"+ uid;
     $.post("confirmMail.php", arg, function(rc) {
       showMsg(rc, "confirmMail.php");
+      if (rc == '0') doCancel();
     });
   });
 
@@ -243,7 +244,7 @@ $(function() {
         if (n !== s || nick !== sure) {
           arg += serialize("#sure", sure);
         }
-        if (arg) {    // 아이디, 이름, 보증인 변경 
+        if (arg) {    // 아이디, 이름, 보증인 변경
           $.post("updateUser.php", "id="+ uid + arg, function(rc) {
             showMsg(rc, "updateUser.php");
             if (rc == '1' || rc == '2') {
@@ -280,7 +281,7 @@ $(function() {
 
   function showMsg(rc, php, oMail) {
     if (rc === "a" || rc === "0") {
-      info("전자우편을 열고 확인을 누르시오.");  // 확인 메일을 보냈다
+      info("받은 전자우편에서 확인을 누르시오.");  // 확인 메일을 보냈다
     } else if (rc === '2') {   // 보증인이 변경되었다
       info($("#sure").val() +" 님이 보증하거나 거절하면 전자우편으로 알려드립니다.");
     } else if (rc !== '1') {   // 아이디 변경이 아니다 -- 에러
@@ -325,7 +326,7 @@ $(function() {
       if (rc == '2') {
         doCancel();
         $("#q-sure").text(sure);
-        $("#q-req").show();  
+        $("#q-req").show();
       } else if (rc == '1') {
         exitCloseDialog();
       } else {
@@ -351,7 +352,7 @@ $(function() {
   $(  "#ask .x-close").click(function() {   $("#ask").hide(); });
 
   $("#x-ask").click(function() {
-    $(this).hide(); 
+    $(this).hide();
     $("#ask").show();
   });
 
@@ -569,7 +570,7 @@ $(function() {
       } else {
         serverError("download.php", t, true);
       }
-      o.show();  
+      o.show();
     });
   });
 
@@ -682,12 +683,12 @@ $(function() {
            return c == 0xb9?
                   "1": String.fromCharCode(c - (c < 0x2070? 0x80: 0x2040));
          }); //.replace(new RegExp(w, "g"), "~");
-    return num(s);     
+    return num(s);
   }
 
   var  LINK = /([<>=≈↔→\]☞])\s*([-가-힣]+\d*)((\s*[,.]\s*[-가-힣]+\d*)*)/g;
   var START = /([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/g;
-  
+
   function html(s) {
     return "<span class='maal-word'>"+ word.replace(/0*(\d+)$/, "<sup>$1</sup>")
           +"</span><span class='maal-text'>"+
@@ -698,7 +699,7 @@ $(function() {
         s3.split(/\s*[,.]\s*/).forEach(function(x) {
           x = x.trim();
           if (x) {
-            t += ", <span data-l='"+ x +"'>"+ x +"</span>";              
+            t += ", <span data-l='"+ x +"'>"+ x +"</span>";
           }
         });
       }
@@ -760,11 +761,11 @@ $(function() {
                       heightStyle: 'content' });
     o.append(data).accordion("refresh");
     if (isForum) {
-      o.accordion("option", "active", false);      
+      o.accordion("option", "active", false);
     } else {
       o.accordion("option", "active", n);
       o.find(".a-cmd:eq("+ n +")").show();
-      o.find(".a-head:eq("+ n +")").hide();  
+      o.find(".a-head:eq("+ n +")").hide();
     }
   }
 
@@ -774,7 +775,7 @@ $(function() {
     array.unshift(element);
     return array;
   }
-    
+
   function arrows() {
     showIf($("#arg-l"), arg_i < arg_words.length - 1);
     showIf($("#arg-r"), arg_i > 0);
@@ -783,7 +784,7 @@ $(function() {
   $("#arg-l,#arg-r").click(function() {
       if (arg_words.length) {
         arg_i += $(this).attr("id") == "arg-l"? 1: -1;
-        $("#arg").val(arg_words[arg_i]).autocomplete("search");          
+        $("#arg").val(arg_words[arg_i]).autocomplete("search");
         arrows();
       }
   });
@@ -798,7 +799,7 @@ $(function() {
         $.post("recent.php", function(data) {
           var j = 1;
           for (var i = 1, len = data.length; i < len; i++) {
-            if (j <= data.indexOf(data[i])) data[j++] = data[i]; 
+            if (j <= data.indexOf(data[i])) data[j++] = data[i];
           }
           data.length = j;
           response(data);
@@ -1084,7 +1085,7 @@ $(function() {
           return;
         }
       }
-      if (i === 0) { // 풀이: 살피는이가 손본 것은 무조건 추가 
+      if (i === 0) { // 풀이: 살피는이가 손본 것은 무조건 추가
         if (word !== "?" && expl[0][0].uid == uid) {
           j = -1;
         } else {  // 풀이: 자기 자취가 있으면 그곳에 업데이트, 없으면 추가
@@ -1119,7 +1120,7 @@ $(function() {
   }
 
   function deleteData(isDelete) {
-    var arg = "i="+ eEdit.i +"&a="+ eEdit.id;         
+    var arg = "i="+ eEdit.i +"&a="+ eEdit.id;
     var deleteWord = isDelete && eEdit.i === 0 && eEdit.j === 0;
     if (deleteWord) arg += ","+ eEdit.wid;
     $.post("deleteData.php", arg, function(rc) {
@@ -1145,7 +1146,7 @@ $(function() {
     o.val(convert(o.val()));
     isSame();
   }
-  
+
   function attachMenu(menu, to, lr) {
     $(menu).menu({
       select: function(e, ui) {
@@ -1188,7 +1189,7 @@ $(function() {
   $("#menu>span[data-a]").click(function() { insert($(this)); });
 
   $("#tabs").tabs();
-  
+
   function showIf(o, condition) {
     if (condition) {
       o.show();
@@ -1280,11 +1281,11 @@ $(function() {
   $("#t1,#t2,#t3").click(function() {
     $(this).removeAttr("title");
   });
- 
+
   $("#t1").dblclick(function() {
     var oldWord = $(this).text();
     if (oldWord === "?") {
-      $("#t3").click();    
+      $("#t3").click();
     } else if (expl[0] && expl[0][0] && expl[0][0].uid == uid) {
       resetError($("#word input"));
       $("#word").draggable().show();
@@ -1303,7 +1304,7 @@ $(function() {
     $(this).dblclick();
     return false;
   });
- 
+
   $("#tab3").click(function() {
     if (uid) edit(2,-1);
   });
@@ -1357,7 +1358,7 @@ $(function() {
   });
 
   $("#tab2").on("click", ".a-view", function() {  // 보기
-    var o = $(this).parent().parent(); 
+    var o = $(this).parent().parent();
     var i = o.index()/2;
     var e = expl[0][i+1];
     viewIt(e.t, e.nick, e.data, "#t2");
@@ -1416,7 +1417,7 @@ $(function() {
     o.val(oVal);
     resetError(o);
     if (!oVal || oVal == word) {
-      if (isUpdate) o.parent().hide(); 
+      if (isUpdate) o.parent().hide();
     } else {
       var arg = o.serialize();
       if (isUpdate) arg += "&wid="+ expl[0][0].wid;
@@ -1548,7 +1549,7 @@ $(function() {
   }
 
   function hideNoteForm() {
-    $($("#note-form").hide().data()[1] + " .x-close").show();    
+    $($("#note-form").hide().data()[1] + " .x-close").show();
   }
 
   $("#open-note").click(function() {
@@ -1671,7 +1672,7 @@ $(function() {
         tbody.append(rows[r]);
       }
     }
-    
+
     function cmp(row1, row2) {
       var diff = cmpText(index);
       if (diff === 0) diff = cmpText(index == 2? 0: 2);
@@ -1680,7 +1681,7 @@ $(function() {
       function cmpText(columnIndex) {
         var a = text(row1), b = text(row2);
         return $.isNumeric(a) && $.isNumeric(b)? a - b: a.localeCompare(b);
-    
+
         function text(row) {
           return $(row).children("td").eq(columnIndex).text();
         }
