@@ -34,8 +34,8 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #t2,#t3                       { cursor:default; }
 #t4                           { cursor:pointer; }
 #t1,#t2,#t3,#t5,#t6,#exit_div { display:none; }
-#exit_div                  { position:absolute; top:4px; right:8px; }
-#enter                     { position:absolute; top:8px; right:12px; }
+#exit_div                  { position:absolute; top:4px; right:12px; }
+#enter                     { position:absolute; top:8px; right:20px; }
 
 #user,#q-req,#ask { width:330px; right:0; }
 #title,#q-title,#a-title { margin:5px 0 -5px 85px; }
@@ -136,7 +136,7 @@ table,th,td              { margin:0; border-collapse:collapse; }
 del,ins       { text-decoration:none; }
 
 #msg { position:fixed; background-color:white; border:1px solid #aaaaaa;
-       display:none; top:0; right:0; z-index:950;  
+       display:none; top:0; right:0; z-index:950;
        padding:10px; max-width:100%; }
 
 .x-close           { z-index:300; }
