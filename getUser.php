@@ -2,13 +2,13 @@
 require_once 'functions.php';
 
 $nick = getPost('nick');
-$column = 'nick';
+$column = 'nick';    // 아이디로 찾기
 if (preg_match('/@\w+\./', $nick)) {
   $nick = mess($nick);
-  $column = 'mail';
+  $column = 'mail';  // 전자우편 주소로 찾기
 }
 $row  = selectRow('u.id,u.name,u.mail,u.rank,s.nick,u.nick',
-                  'users u LEFT OUTER JOIN users s ON u.sure = s.id', 
+                  'users u LEFT OUTER JOIN users s ON u.sure = s.id',
                   "u.$column='".escapeString($nick)."'")
                or die($column == 'mail'? '{"id":"0"}': '{}');
 if ($row[3] < 0) {

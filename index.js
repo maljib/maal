@@ -224,11 +224,10 @@ $(function() {
   }
 
   $("#passx").click(function() {
-    $(this).hide();
     var arg = $("#nick,#mail").serialize() +"&id=-"+ uid;
+    doCancel();
     $.post("confirmMail.php", arg, function(rc) {
       showMsg(rc, "confirmMail.php");
-      if (rc == '0') doCancel();
     });
   });
 
