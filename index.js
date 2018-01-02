@@ -579,9 +579,9 @@ $(function() {
       eraseValues();                      // 입력한 것을 모두 지운다
     } else {                           // 사용자 정보 수정 중이었으면
       $("#nick").val(nick);               // 아이디(nick)와
-      $("#name").val(name);               // 이름을 되돌린다
+      $("#name").val(name);               // 이름과
       $("#mail").val(mail);               // 전자우편 주소와
-      $("#sure").val(sure);               // 전자우편 주소와
+      $("#sure").val(sure);               // 보증인 아이디를 되돌린다
     }
     closeDialog();                     // 팝업 창을 닫는다
   }

@@ -1,6 +1,6 @@
 test `uname` == "Darwin" && lib=Library/TeX || lib=usr
-PATH=/$lib/texbin:$PATH
-export PATH
-pdflatex -interaction=nonstopmode -output-directory=$2 $1
+#PATH=/$lib/texbin:$PATH
+#export PATH
+/$lib/texbin/pdflatex -interaction=nonstopmode -output-directory=$2 $1
 #gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${1}_.pdf $1.pdf
 #mv ${1}_.pdf $1.pdf
