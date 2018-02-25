@@ -792,9 +792,9 @@ $(function() {
     delay: 300,
     source: function(request, response) {
       var s = request.term;
-      if (s == "!") {
+      if (s == "!") {          // 열어본 올림맗 찾기
         response(words);
-      } else if (s == "!!") {
+      } else if (s == "!!") {  // 변경된 올림말 찾기
         $.post("recent.php", function(data) {
           var j = 1;
           for (var i = 1, len = data.length; i < len; i++) {
@@ -805,22 +805,24 @@ $(function() {
         }, "json");
       } else {
         var arg = "", a = s.match(/^\s*(.*?)([@#$^&*])(.*?)\s*$/);
-        if (a) {
-          if (a[2] != "*") { // @|#|$|^|&   -- nick : id
-            arg = a[3]? "n="+ encodeURIComponent(a[3]): "i="+ uid;
-            switch (a[2]) {
-            case "#": arg = "e"+ arg; break; // expls
-            case "$": arg = "m"+ arg; break; // memos
-            case "^": arg = "1"+ arg; break; // 올림
-            case "&": arg = "2"+ arg; break; // 버림
-            }
+        if (a) {              // [@#$^&*]이 있는가?
+          if (a[1]) {         // [@#$^&*] 앞에 무언가 있는가?
+            arg = "w="+ encodeURIComponent(a[1]);  // w부터 또는 w까지 찾는다
           }
-          if (a[1]) {
+          if (a[2] != "*") {  // [@#$^&] 인가?
             if (arg) arg += "&";
-            arg += "a="+ encodeURIComponent(a[1]);  // after
+            arg += "x=";
+            switch (a[2]) {
+            case "@": arg += "a"; break; // author
+            case "#": arg += "e"; break; // expls
+            case "$": arg += "m"; break; // memos
+            case "^": arg += "1"; break; // 올림
+            case "&": arg += "2"; break; // 버림
+            }
+            arg += encodeURIComponent(a[3]? a[3]: nick);  // 아이디
           }
         } else {
-          arg = "l="+ encodeURIComponent(s.trim());  // like
+          arg = "l="+ encodeURIComponent(s.trim());  // l이 들어있는 올림말 찾기
         }
         $.post("search.php", arg, function(data) {
           response(data);

@@ -1,55 +1,43 @@
 <?php // search.php
 require_once 'functions.php';
 
-$j = ''; $w = ''; $d = '';
-if (isset($_POST['l'])) {
-  $w = "w.word LIKE '%".escapeString($_POST['l'])."%' AND ";
+$c = 'DISTINCT w.word';     // selected columns
+$j = '';                    // join
+$o = 'ORDER BY w.word';     // order
+$d = '';                    // 역순인가?
+if ($w = getPost('l')) {    // l이 들어있는 올림말
+  $w = "w.word LIKE '%".escapeString($w)."%' AND ";
 } else {
-  if (isset($_POST['i'])) {
-    $w = 'w.user = '.$_POST['i'].' AND ';
-  } else if (isset($_POST['n'])) {
-    $j = 'JOIN users u ON w.user = u.id '.
-                     "AND u.nick = '".escapeString($_POST['n'])."'";
-  } else if (isset($_POST['ei'])) {
-    $j = 'JOIN texts e ON w.id = e.word AND w.user <> e.user AND e.i=0 '.
-                                       'AND e.user = '.$_POST['ei'];
-  } else if (isset($_POST['en'])) {
-    $j = 'JOIN texts e ON w.id = e.word AND w.user <> e.user AND e.i=0 '.
-         "JOIN users u ON u.id = e.user AND u.nick = '".
-                             escapeString($_POST['en'])."'";
-  } else if (isset($_POST['mi'])) {
-    $j = 'JOIN texts m ON w.id = m.word AND m.i=1 AND m.user = '.$_POST['mi'];
-  } else if (isset($_POST['mn'])) {
-    $j = 'JOIN texts m ON w.id = m.word AND m.i=1 '.
-         "JOIN users u ON u.id = m.user AND u.nick = '".
-                             escapeString($_POST['mn'])."'";
-  } else if (isset($_POST['1n'])) {
-    $j = 'JOIN users u ON w.user = u.id AND w.tell = 1 '.
-                     "AND u.nick = '".escapeString($_POST['1n'])."'";
-  } else if (isset($_POST['2n'])) {
-    $j = 'JOIN users u ON w.user = u.id AND w.tell = 2 '.
-                     "AND u.nick = '".escapeString($_POST['2n'])."'";
-  } else if (isset($_POST['1i'])) {
-    $j = ''; $w = 'w.user = '.$_POST['1i'].' AND w.tell = 1 AND';
-  } else if (isset($_POST['2i'])) {
-    $j = ''; $w = 'w.user = '.$_POST['2i'].' AND w.tell = 2 AND';
-  }
-  if (isset($_POST['a'])) {
-    $a = $_POST['a'];
-    if ($a{0} === '-') {
-      $d = ' DESC'; $a = substr($a, 1);
+  if ($w = getPost('w')) {  // w부터 또는 w까지
+    if ($w{0} === '-') {    // 역순인가?
+      $d = ' DESC';
+      $w = substr($w, 1);
     }
-    if ($a) {
-      $w .= 'w.word '.($d? '<': '>')."= '".escapeString($a)."' AND ";
+    if ($w) {
+      $w = 'w.word '.($d? '<': '>')."= '".escapeString($w)."' AND ";
+    }
+  }
+  if ($x = getPost('x')) {
+    $s = $x{0};              // @ # $ ^ & --> a e m 1 2
+    $j = " JOIN users u ON u.nick = '".escapeString(substr($x, 1))."' AND u.id = ";
+    if ($s == 'e' || $s == 'm') {
+      $j = 'JOIN texts e ON w.id = e.word AND e.i='.
+           ($s == 'e'? '0 AND w.user <> e.user': '1').$j.'e.user';
+    } else {
+      $j .= 'w.user';
+      if ($s != 'a') {
+        $j .= ' AND w.tell = '.$s;
+      }
+      if (!$w) {
+        $j .= ' JOIN texts e ON w.id = e.word AND e.i=0 AND e.user = w.user';
+      }
+    }
+    if (!$w) {
+      $c = 'w.word, max(e.t) tt';
+      $o = 'GROUP BY w.word ORDER BY tt';
+      $d = $d? '': ' DESC';
     }
   }
 }
-$rows = selectValues('DISTINCT w.word', "words w $j",
-                     "$w w.word <> '?' ORDER BY w.word$d LIMIT 200");
-usort($rows, function($a, $b) {
-  $x = &$a; if ($x[0] == '-') $x = substr($x, 1);
-  $y = &$b; if ($y[0] == '-') $y = substr($y, 1);
-  return strcmp($x, $y);
-});
-echo json_encode($rows);
+echo json_encode(selectValues($c, "words w $j", "$w w.word<>'?' $o$d LIMIT 200"));
 ?>
