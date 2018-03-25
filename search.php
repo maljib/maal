@@ -5,7 +5,7 @@ $s = 'DISTINCT w.word';     // selected columns
 $j = '';                    // join clauses
 $o = 'ORDER BY w.word';     // ordering instruction
 $d = '';                    // ' DESC' = 역순
-if ($w = getPost('l')) {    // where clause
+if ($w = getPost('v')) {    // where clause
   $w = "w.word LIKE '%".escapeString($w)."%' AND";  // l이 들어있는 올림말
 } else {
   if ($w = getPost('w')) {  // where clause

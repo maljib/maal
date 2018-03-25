@@ -822,7 +822,7 @@ $(function() {
             arg += encodeURIComponent(a[3]? a[3]: nick);  // 아이디
           }
         } else {
-          arg = "l="+ encodeURIComponent(s.trim());  // l이 들어있는 올림말 찾기
+          arg = "v="+ encodeURIComponent(s.trim());  // v가 들어있는 올림말 찾기
         }
         $.post("search.php", arg, function(data) {
           response(data);
