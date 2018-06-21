@@ -1582,8 +1582,8 @@ $(function() {
       $(this).hide();
       var  arg = {re:nick, rea:mail, atts:''};  // 발신인, 발신인 주소, 첨부
       arg.ids  = $("#note-form").data()[0]();   // 수신인 id 배열
-      arg.subj = subj? subj: nick +" 님이 알립니다";             // 새 제목
-      arg.note = "(글쓴이: "+ nick +" <"+ mail +">)\n\n"+ note;  // 새 본문
+      arg.subj = subj? subj: nick +" 님이 알립니다"; // 새 제목
+      arg.note = "(글쓴이: "+ nick +")\n\n"+ note;   // 새 본문
       var atts = [];                            // 첨부 데이터 배열
       $("#atts li").each(function() {
         atts.push($(this).data());
