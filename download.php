@@ -48,7 +48,7 @@ PREAMBLE
              preg_replace('/\s*(\(.+?\))\s*/', ' \textit{$1} ', $u[0]));
     }, $t);
     $t = preg_replace_callback('/말】(\s*[^【]+)+/u', function($u) {
-      return preg_replace('/([】.》〉])\s*([^.:]+?)\s*[:]\s*/u',
+      return preg_replace('/([】.》〉])\s*([^.》〉:]+?)\s*[:]\s*/u',
       // return preg_replace('/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/u',
                           '$1\newline\textbf{$2}\hspace{.5mm}: ', $u[0]);
     }, $t);
