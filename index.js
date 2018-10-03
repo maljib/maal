@@ -713,8 +713,8 @@ $(function() {
     })
     .replace(START, "$1<i>$2</i> ")
     .replace(/말】(\s*[^【]+)+/g, function(u) {
-      return u.replace(/([】.])\s*([^.:]+?)\s*[:]\s*/g,
-   //   return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/g,
+      return u.replace(/([】.》〉])\s*([^.:]+?)\s*[:]\s*/g,
+   // return u.replace(/([】.])\s*(([^.:]|\(.*?\))+)\s*[:]\s*/g,
       "$1<br><b>$2</b>&thinsp;: ");
     })
     .replace(/^\s*([^〔【])/, "&nbsp;$1")
