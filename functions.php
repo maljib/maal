@@ -8,18 +8,6 @@ $dbname  = 'wordlist';
 $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
 $connection->connect_error and die($connection->connect_error);
 
-function myOpen() {
-  global $connection;
-  $connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
-  $connection->connect_error and die($connection->connect_error);
-  return $connection;
-}
-
-function myClose() {
-  global $connection;
-  $connection->close();
-}
-
 // Sql을 실행한다
 function sql($query) {
   global $connection;

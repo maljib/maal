@@ -27,7 +27,7 @@ $(function() {
     if (isInfo) {
       info(msg);
     } else {
-      $("#tip").html().show();
+      $("#tip").show();
     }
   }
 
