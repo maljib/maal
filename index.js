@@ -1504,6 +1504,8 @@ $(function() {
         $("#editors").show()
                  .position({ my:"right top", at:"right+8 bottom+2", of:data.s });
   
+      } else {
+        $("#editors").hide();
       }
     }, 'json');
     return false;
