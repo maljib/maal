@@ -13,16 +13,16 @@
   <script src="https://kit.fontawesome.com/4e34d504b6.js"></script>
   <script src="diff_match_patch.js"></script>
   <script src="jquery.pretty-text-diff.min.js"></script>
-  <link rel="stylesheet" href="index.css?v=9.19">
-  <script src="index.js?v=9.026"></script>
+  <link rel="stylesheet" href="index.css?v=15">
+  <script src="index.js?v=15"></script>
 </head>
 <body>
   <span id="h1">배달말집</span>&nbsp;
-  <i id="count1" class="yellow" title="올림말"></i>
-  <i id="count2" class="green" title="자취"></i>
-  <i id="count3" class="white" title="적바림"></i>
-  <i id="count4" class="yellow" title="올림"></i>
-  <i id="count5" class="white" title="버림"></i>
+  <i id="count1" class="yellow"></i>
+  <i id="count2" class="green"></i>
+  <i id="count3" class="white"></i>
+  <i id="count4" class="yellow"></i>
+  <i id="count5" class="white"></i>
   <input name="arg" id="arg" placeholder="올림말" class="padn ui-widget ui-corner-all">
   <span id="arg-l">&#x25c0;</span>
   <span id="arg-r">&#x25b6;</span>
@@ -162,13 +162,6 @@
     </div>
     <div id="viewer"></div>
 
-    <!--img id="arrow" title="들어가기" src="glyphicons-387-log-in.png">
-    <img id="enter" title="들어가기" src="glyphicons-387-log-in.png">
-    <div id="exit_div">
-      <img id="download" title="내려받기" src="glyphicons-182-download-alt.png">&nbsp;
-      <img id="user_info" src="glyphicons-4-user.png">&nbsp;
-      <img id="exit" title="나가기" src="glyphicons-388-log-out.png">
-    </div-->
     <i id="enter" title="들어가기" class="fas fa-sign-in-alt fa-lg"></i>
     <i id="arrow" title="말다듬기" class="fas fa-arrow-circle-right fa-lg"></i>
     <div id="exit_div">
@@ -299,7 +292,7 @@
   <table id="editors">
     <thead>
       <tr>
-        <td colspan="2">&nbsp;<div class="x-close">&#10006;</div></td>
+        <td colspan="2"> &nbsp; <span></span><div class="x-close">&#10006;</div></td>
       </tr>
     </thead>
     <tbody></tbody>
@@ -320,10 +313,10 @@
   <div id="ex" class="b_grey">
     <div id="ex0">
       <span id="h1_e">말다듬기</span> &nbsp;
-      <i id="count1e" class="yellow" title="다듬은말"></i> &nbsp;
-      <i id="count2e" class="white" title="적바림"></i>
-      <i id="search" class="fas fa-search fa-lg" title="찾기"></i>
-      <i class="fas fa-lg fa-times" title="닫기"></i>
+      <i id="count1e" class="yellow"></i> &nbsp;
+      <i id="count2e" class="white"></i>
+      <i id="search" class="fas fa-search fa-lg"></i>
+      <i class="fas fa-lg fa-times"></i>
     </div>
 
     <div id="de"><span></span></div>
@@ -332,15 +325,15 @@
     <div id="al-v">
       <i class="fas fa-lg fa-arrow-down"></i> <input type="radio" value="0" name="r"> &nbsp;
       <i class="fas fa-lg fa-arrow-up"></i>   <input type="radio" value="1" name="r">
-      <i class="far fa-lg fa-hdd" title="갈무리"></i>
-      <i class="fas fa-lg fa-times" title="무르기"></i>
+      <i class="far fa-lg fa-hdd"></i>
+      <i class="fas fa-lg fa-times"></i>
       <div><input name="alv" id="alv" placeholder="넣을 말" class="ui-widget ui-corner-all"></div>
     </div>
 
     <div id="nt-v">
       <i class="fas fa-lg"></i>
-      <i class="far fa-lg fa-hdd" title="갈무리"></i>
-      <i class="fas fa-lg fa-times" title="무르기"></i>
+      <i class="far fa-lg fa-hdd"></i>
+      <i class="fas fa-lg fa-times"></i>
       <div class="al"><span></span></div>
       <textarea name="ntv" id="ntv" placeholder="적바림" class="ui-widget ui-corner-all"></textarea>
       <span data-n="“”" title="“큰따옴표”">“ ”</span> &nbsp;
@@ -358,7 +351,7 @@
     <input name="dev" id="dev" placeholder="찾는 말" class="ui-widget ui-corner-all">
     <div id="de-l">&#x25c0;</div>
     <div id="de-r">&#x25b6;</div>
-    <i class="fas fa-lg fa-times" title="무르기"></i>
+    <i class="fas fa-lg fa-times"></i>
   </div>
 </body>
 </html>

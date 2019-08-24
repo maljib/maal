@@ -1477,15 +1477,15 @@ $(function() {
 
   $("#edit").val(eEdit.data = "");
 
-  $("#count1").data({ s:"#count1", x:"@", a:"b-yellow" });
-  $("#count2").data({ s:"#count2", x:"#", a:"b-green" });
-  $("#count3").data({ s:"#count3", x:"$", a:"b-white" });
-  $("#count4").data({ s:"#count4", x:"^", a:"b-yellow" });
-  $("#count5").data({ s:"#count5", x:"&", a:"b-yellow" });
-  $("#count1e").data({ s:"#count1e", x:"@", a:"b-yellow" });
-  $("#count2e").data({ s:"#count2e", x:"$", a:"b-white" });
+  $("#count1").data({ s:"#count1", x:"@", a:"b-yellow", t:"올림말" });
+  $("#count2").data({ s:"#count2", x:"#", a:"b-green", t:"자취" });
+  $("#count3").data({ s:"#count3", x:"$", a:"b-white", t:"적바림" });
+  $("#count4").data({ s:"#count4", x:"^", a:"b-yellow", t:"올림" });
+  $("#count5").data({ s:"#count5", x:"&", a:"b-yellow", t:"버림" });
+  $("#count1e").data({ s:"#count1e", x:"@", a:"b-yellow", t:"다듬은말" });
+  $("#count2e").data({ s:"#count2e", x:"$", a:"b-white", t:"적바림" });
 
-  $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").click(function() {
+  $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").mouseenter(function() {
     var o = $(this), data = o.data();
     $.post("getC"+ data.s.substring(2) +"a.php", function(array) {
       var len = array.length;
@@ -1500,6 +1500,7 @@ $(function() {
         }
         o.text(sum);
         $("#editors thead td").removeClass().addClass(data.a);
+        $("#editors span").text(data.t);
         $("#editors").show()
                  .position({ my:"right top", at:"right+8 bottom+2", of:data.s });
   
@@ -1753,6 +1754,7 @@ $(function() {
   }
 
   $("#arrow").click(function() {
+    $("#editors").hide();
     search_arg = "#dev";
     showCount([1, 2], "e");
     $("#ex").show();
@@ -1761,7 +1763,7 @@ $(function() {
 
   $("#ex0 .fa-times").click(function() {
     search_arg = "#arg";
-    $("#ex,#de-v").hide();
+    $("#ex,#de-v,#editors").hide();
   });
 
   $("#search").click(function() {
@@ -1927,8 +1929,7 @@ $(function() {
   }
 
   function convertNote(s) {
-    return s? s.replace(/ /g, "&nbsp;")
-               .replace(/\r\n/g, "\n")
+    return s? s.replace(/\r\n/g, "\n")
                .replace(/\n/g, "<br>")
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
@@ -2113,13 +2114,12 @@ $(function() {
   });
 
   $("#nt-v > span").click(function() {
-    var d = $(this).attr("data-n");
     var t = $("#ntv");
     var a = t.prop("selectionStart");
     var b = t.prop("selectionEnd");
     var v = t.val();
     var i = a + 1;
-    v = v.substr(0, a) + d + v.substr(b);
+    v = v.substr(0, a) + $(this).attr("data-n") + v.substr(b);
     t.val(v).prop("selectionStart", i).prop("selectionEnd", i).focus();
   });
 
@@ -2161,5 +2161,4 @@ $(function() {
       return false;
     }
   });
-
 });
