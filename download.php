@@ -27,8 +27,13 @@ function toPdf() {
 PREAMBLE
   );
 
-  $rows = selectRows('w.word, e.data', 'words w, texts e, wt',
-                     'w.id = wt.wid and e.id = wt.id ORDER BY w.word');
+  $rows = selectRows(<<< SQL
+SELECT w.word, e.data
+  FROM words w, texts e, wt
+ WHERE w.id = wt.wid AND e.id = wt.id
+ ORDER BY w.word
+SQL
+  );
   usort($rows, function($a, $b) {
     $x = &$a[0]; if ($x[0] == '-') $x = substr($x, 1);
     $y = &$b[0]; if ($y[0] == '-') $y = substr($y, 1);

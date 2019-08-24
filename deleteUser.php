@@ -19,8 +19,8 @@ if ($a = getPost('id')) {
       echo sqlDelete('users', "id=$a[0]");            // 탈퇴 승낙
     }
   } else if (count($a) === 3) {
-    if (0 < selectValue('count(*)', 'words', "user=$a[0]") ||
-        0 < selectValue('count(*)', 'texts', "user=$a[0]")) {
+    if (0 < selectValue("SELECT count(*) FROM words WHERE user = $a[0]") ||
+        0 < selectValue("SELECT count(*) FROM texts WHERE user = $a[0]")) {
       echo '2';                // 내 글이 있으면 보증인의 승락이 맀어야 탈퇴할 수 맀다
     } else { 
       echo sqlDelete('users', "id=$a[0]");  // 내 글이 없으면 내 아이디를 없앤다

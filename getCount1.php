@@ -1,4 +1,4 @@
 <?php // getCount1.php
 require_once 'functions.php';
-echo selectValue('count(*)', 'words', '1') - 1;
+echo selectValue('SELECT count(*) FROM words') - 1;
 ?>

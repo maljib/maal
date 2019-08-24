@@ -3,8 +3,8 @@ require_once 'mail.php';
 
 if ($a = getPost('a')) {
   $a = explode('_', $a); // 0=(0=o 1=x) 1=askId 2=userId
-  $mail = mess($m = selectValue('mail', 'asks', 'id='.$a[1]));
-  $nick = selectValue('nick', 'users', 'id='.$a[2]);   // 아이디,이름
+  $mail = mess($m = selectValue("SELECT mail FROM asks WHERE id = $a[1]"));
+  $nick = selectValue("SELECT nick FROM users WHERE id = $a[2]");   // 아이디,이름
   if ($a[0] == '0') {  // 0=o 1=x
     sqlUpdate('users', "mail='".escapeString($m)."'", 'id='.$a[2])
       or die('전자우편 주소 업데이트 실패');

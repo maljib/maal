@@ -11,11 +11,16 @@ $(function() {
   var word, expl = [];        // 낱말, [0]=풀이 [1]=적바림
   var word0, data1;           // 지운 낱말, 편집 후 데이터
   var eEdit = {};
-  var words = localStorage && localStorage.words && JSON?
-                      JSON.parse(localStorage.words): [];
+  var words = localStorage && localStorage.words && JSON? JSON.parse(localStorage.words): [];
   var arg_words = [], arg_i = -1;
-  showIf($("#download"), ("download" in document.createElement("a")));
+  var search_arg = "#arg";
 
+  var de = [], al = [];
+  var deS = localStorage && localStorage.deS && JSON? JSON.parse(localStorage.deS): [];
+  var dev_args = [], dev_i = -1;
+
+  showIf($("#download"), ("download" in document.createElement("a")));
+ 
   function info(s) {
     $("#msg").html(s).draggable({ cursor:"move" }).show()
              .click(function() { $(this).hide(); });
@@ -317,6 +322,7 @@ $(function() {
     $("#t1,#t2,#t3,#exit_div,#arg,#arg-l,#arg-r").hide();
     $("#enter").show();            // [들어가기] 버튼을 보여준다
     eraseValues();                 // 입력 받은 값을 모두 지운다
+    eraseDeal();
     logged_in = false;
   });
 
@@ -414,6 +420,12 @@ $(function() {
     $("#t1").click();
   }
 
+  function eraseDeal() {
+    $("#als,#de-v,#al-v,#nt-v").hide();
+    setDes("");
+    de = al = [];
+  }
+
   function h1() {
     $("#h1").text($(window).width() > 400? "배달말집":"말집");
   }
@@ -429,6 +441,7 @@ $(function() {
     arrows();
     closeDialog();            // 팝업 창을 닫는다
     showCount([1, 2, 3, 4, 5]);
+    eraseDeal();
 
     $.post("askData.php", {id: uid}, function(array) {
       if (0 < array.length) {
@@ -459,7 +472,7 @@ $(function() {
                    "<input type='radio' name='s"+ a[0] +"'>x "+
                    "<input type='radio' name='s"+ a[0] +"' checked>?</td><td>"+
                                a[1] +"</td><td>"+ a[2] +"</td><td>"+
-                   "<img src='glyphicons-11-envelope.png'></td></tr>");
+                   "<i class='far fa-envelope fa-lg'></i></td></tr>");
         }
         $("#toSure").show();
       }
@@ -472,10 +485,11 @@ $(function() {
     });
   }
 
-  function showCount(nArray) {
+  function showCount(nArray, e) {
+    e = e? e: "";
     nArray.forEach(function(n) {
-      $.post("getCount"+ n +".php", function(count) {
-        $("#count"+ n).text(count).show();
+      $.post("getCount"+ n + e +".php", function(count) {
+        $("#count"+ n + e).text(count).show();
       });
     });
   }
@@ -545,7 +559,7 @@ $(function() {
     $("#toSure").hide();
   });
 
-  $("#toSure>tbody").on("click", "img", function() {
+  $("#toSure>tbody").on("click", "i", function() {
     var tr = $(this).parent().parent();
     var id = tr.find(":checked").attr("name").substr(1);
     $("#toSure .x-close").hide();
@@ -791,16 +805,11 @@ $(function() {
   $("#arg").autocomplete({
     delay: 300,
     source: function(request, response) {
-      var s = request.term;
+      var s = request.term.trim();
       if (s == "!") {          // 열어본 올림맗 찾기
         response(words);
       } else if (s == "!!") {  // 변경된 올림말 찾기
         $.post("recent.php", function(data) {
-          var j = 1;
-          for (var i = 1, len = data.length; i < len; i++) {
-            if (j <= data.indexOf(data[i])) data[j++] = data[i];
-          }
-          data.length = j;
           response(data);
         }, "json");
       } else {
@@ -837,14 +846,10 @@ $(function() {
     }
   }).keydown(function(e) {
     if (e.keyCode === $.ui.keyCode.ENTER) {
-      var arg = $(this).val().trim().replace(/\s+(0*\d+)$/, "$1");
+      var arg = $(this).val().trim().replace(/\s+0*(\d+)$/, "$1");
       $(this).val(arg);
-      if (arg) {
-        if (/[!@#$^&*]/.test(arg)) {
-          $("#arg").autocomplete("search");
-        } else {
-          findWord0(arg);
-        }
+      if (arg && !/[!@#$^&*]/.test(arg)) {
+        findWord0(arg);
       }
     }
   });
@@ -1477,25 +1482,32 @@ $(function() {
   $("#count3").data({ s:"#count3", x:"$", a:"b-white" });
   $("#count4").data({ s:"#count4", x:"^", a:"b-yellow" });
   $("#count5").data({ s:"#count5", x:"&", a:"b-yellow" });
+  $("#count1e").data({ s:"#count1e", x:"@", a:"b-yellow" });
+  $("#count2e").data({ s:"#count2e", x:"$", a:"b-white" });
 
-  $("#count1,#count2,#count3,#count4,#count5").click(function() {
+  $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").click(function() {
     var o = $(this), data = o.data();
     $.post("getC"+ data.s.substring(2) +"a.php", function(array) {
-      var tbody = $("#editors tbody").empty(), sum = 0;
-      for (var i = 0, len = array.length; i < len; i++) {
-        var a = array[i];
-        tbody.append($("<tr>").data([data.x + a[0]])
-             .append($("<td>"+ a[0] +"</td><td><i>"+ a[1] +"</i></td>")));
-        sum += parseInt(a[1]);
+      var len = array.length;
+      if (len) {
+        $("#de-v").hide();
+        var tbody = $("#editors tbody").empty(), sum = 0;
+        for (var i = 0; i < len; i++) {
+          var a = array[i];
+          tbody.append($("<tr>").data([data.x + a[0]])
+               .append($("<td>"+ a[0] +"</td><td><i>"+ a[1] +"</i></td>")));
+          sum += parseInt(a[1]);
+        }
+        o.text(sum);
+        $("#editors thead td").removeClass().addClass(data.a);
+        $("#editors").show()
+                 .position({ my:"right top", at:"right+8 bottom+2", of:data.s });
+  
       }
-      o.text(sum);
-      $("#editors thead td").removeClass().addClass(data.a);
-      $("#editors").show()
-               .position({ my:"right top", at:"right+8 bottom+2", of:data.s });
     }, 'json');
     return false;
   });
-
+  
   $("#h1").click(function() {
     if ($("#exit").is(":visible")) {
       $.post("getUsers.php", function(array) {
@@ -1522,7 +1534,10 @@ $(function() {
   $("#editors .x-close").click(function() { $("#editors").hide(); });
 
   $("#editors>tbody").on("click", "tr", function() {
-    $("#arg").val($(this).data()[0]).autocomplete("search");
+    if (search_arg == '#dev') {
+      showDev(true);
+    }
+    $(search_arg).val($(this).data()[0]).autocomplete("search");
   }).on("mouseenter", "tr", function() {
     this.classList.add("b_grey");
   }).on("mouseleave", "tr", function() {
@@ -1708,6 +1723,8 @@ $(function() {
     $("#editors tbody").css("max-height", h - 60);
     $(".ui-autocomplete").css("max-height", h - 40);
     $("#note-form").is(":visible") && setNoteSize();
+    $("#als").height(h - 90);
+    $("#ntv").height(h - 200);
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
@@ -1734,4 +1751,415 @@ $(function() {
       };
     }
   }
+
+  $("#arrow").click(function() {
+    search_arg = "#dev";
+    showCount([1, 2], "e");
+    $("#ex").show();
+    getDes() || showDev(true);
+  });
+
+  $("#ex0 .fa-times").click(function() {
+    search_arg = "#arg";
+    $("#ex,#de-v").hide();
+  });
+
+  $("#search").click(function() {
+    showDev(true);
+  });
+
+  function showDev(b) {
+    if (b || !getDes()) {
+      $("#dev").val(de[1]? de[1]: '');
+      $("#de-v").show();
+      $("#search").hide();  
+    } else {
+      $("#search").show();
+      $("#de-v").hide();  
+      b === undefined || $("#editors").hide();  
+    }
+  }
+
+  $("#de-v .fa-times").click(function() {
+    showDev();
+  });
+
+  function arrows_e() {
+    showIf($("#de-l"), dev_i < dev_args.length - 1);
+    showIf($("#de-r"), dev_i > 0);
+  }
+
+  $("#de-l,#de-r").click(function() {
+      if (dev_args.length) {
+        dev_i += $(this).attr("id") == "de-l"? 1: -1;
+        $("#dev").val(dev_args[dev_i]).autocomplete("search");
+        arrows_e();
+      }
+  });
+
+  function pushDeIntoExprs() {
+    if (deS.length == 0 || de[0] != deS[0][0]) {
+      for (let i in deS) {
+        if (deS[i][0] == de[0]) {
+          deS.splice(i, 1);
+          break;
+        }
+      }
+      deS.unshift(de);
+      if (JSON) {
+        localStorage.deS = JSON.stringify(deS);
+      }
+    }
+  }
+
+  function vl(a) { return { value: a[0], label: a[1] }; }
+
+  $("#dev").autocomplete({
+    delay: 300,
+    source: function(request, response) {
+      var s = request.term.trim();
+      if (s == "!") {          // 열어본 올림맗 찾기
+        response($.map(deS, vl));
+      } else if (s == "!!") {  // 변경된 올림말 찾기
+        $.post("recent_e.php", function(data) {
+          response($.map(data, vl));
+        }, "json");
+      } else {
+        var arg = "", a = s.match(/^\s*(.*?)([@$*])(.*?)\s*$/);
+        if (a) {              // [@$*]이 있는가?
+          if (a[1]) {         // [@$*] 앞에 무언가 있는가?
+            arg = "w="+ encodeURIComponent(a[1]);  // w부터 또는 w까지 찾는다
+          }
+          if (a[2] != "*") {  // [@$] 인가?
+            if (arg) arg += "&";
+            arg += "x=";
+            switch (a[2]) {
+            case "@": arg += "a"; break; // author
+            case "$": arg += "m"; break; // memos
+            }
+            arg += encodeURIComponent(a[3]? a[3]: nick);  // 아이디
+          }
+        } else {
+          arg = "v="+ encodeURIComponent(s.trim());  // v가 들어있는 올림말 찾기
+        }
+        $.post("search_e.php", arg, function(data) {
+          response($.map(data, vl));
+        }, "json");
+      }
+    },
+    select: function(e, ui) {
+      var arg = $("#dev").val();
+      findAl(ui.item.value, ui.item.label);
+      if (arg != "!") {
+        push(dev_args, arg);
+        dev_i = -1;
+        arrows_e();
+      }
+    }
+  }).keydown(function(e) {
+    if (e.keyCode === $.ui.keyCode.ENTER) {
+      var arg = $(this).val().trim();
+      $(this).val(arg);
+      if (arg && !/[!@$*]/.test(arg)) {
+        $.post('getExprIdIfAny.php', "arg="+ arg, function(id) {
+          if ($.isNumeric(id)) {
+            findAl(id, arg);
+          } else {
+            uid && showAlv(-1, arg);
+            showDev(false);
+          }
+        });
+      }
+    }
+  });
+
+  function setDes(s) {
+    var o = $("#de span");
+    if (s) {
+      o.text(s).show();
+    } else {
+      o.text("").hide();
+    }
+  }
+
+  function getDes() {
+    var o = $("#de span");
+    return o.is(":visible")? o.text(): "";
+  }
+
+  function xp(i, k) {
+    var b = al[i];
+    return uid && uid != b[4] && b[3][k].indexOf(+uid) < 0? " pointer": "";
+  }
+
+  function findBinary(arr, e) {
+    var a = 0, b = arr.length - 1, c, diff;
+    while (a <= b) {
+      if (0 < (diff = e - arr[c = (a + b) >> 1])) {
+        a = c + 1;
+      } else if (diff < 0) {
+        b = c - 1;
+      } else {
+        return c;
+      }
+    }
+    return -a - 1;
+  }
+
+  function wp(i,j) {
+    var v = al[i][3], k = findBinary(v[j], +uid);
+    if (0 <= k) v[j].splice(k, 1);
+    return k;
+  }
+
+  function yp(c) {
+    if (uid) {
+      for (let d of c) {
+        if (d[2] == uid) return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function faArrow(i) {
+    return al[i][1] == 0? 'fa-arrow-down': 'fa-arrow-up';
+  }
+
+  function convertNote(s) {
+    return s? s.replace(/ /g, "&nbsp;")
+               .replace(/\r\n/g, "\n")
+               .replace(/\n/g, "<br>")
+               .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
+  }
+
+  function findAl(id, s) {
+    $.post("getData_e.php", "a="+ id, function(a) {
+      if (a[0]) {
+        if (s) {
+          setDes(s);
+          de = [id, s];
+        }
+        al = a;
+        pushDeIntoExprs();
+        const o = $("#als").empty();
+        for (let i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
+          const b = a[i], c = b[7];
+          b[3] = b[3].split(' ').map(x => JSON.parse('['+ x +']'));
+          o.append($(`
+<li><div class="al0"></div>
+  <span class="b_grey">&nbsp;
+    <i class="fas fa-lg ${faArrow(i)}"></i> &nbsp;
+    <i class="far fa-sm fa-thumbs-up${xp(i,0)}"></i>
+    ${b[3][0].length} | ${-b[3][1].length}
+    <i class="far fa-sm fa-thumbs-down fa-flip-horizontal${xp(i,1)}"></i> &nbsp;
+    ${yp(c)? '<i class="far fa-sm fa-comment-alt" title="적바림 쓰기"></i> &nbsp;': ''}
+  </span>
+  <i class="al-u"><small>${b[6]}</small>
+   ${uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]}</i>
+  <div class="al"><span>${b[2]}</span></div>
+</li>`    ).data([i]));
+          for (let j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
+            const d = c[j];
+            o.append($(`
+<li><div class="aln">${convertNote(d[1])}</div>
+  &nbsp;<i class="al-u"><small>${d[4]}</small>
+  ${d[2] == uid? '&nbsp; <i class="far fa-sm fa-edit" title="고치거나 지우기"></i> &nbsp;': d[3]}</i>
+</li>`      ).data([i, j]));
+          }
+        }
+        if (uid) {
+          o.append(`
+<li><div class="al0"></div>&nbsp;
+  <i class="fas fa-lg ${faArrow(al.length - 1)}"></i> &nbsp;
+  <i class="far fa-sm fa-edit" title="새 말 넣기"></i>
+</li>`    );
+        }
+        $("#de,#als,#de-v .fa-times").show();
+      } else {
+        if (id == de[0]) {
+          de = al = [];
+          setDes("");
+          $("#als").empty();
+          $("#de-v .fa-times").hide();
+        }
+      }
+      $("#nt-v,#al-v").hide();
+      if (!a[0] && s && uid) {
+        showAlv(-1, s);
+      }
+      showDev(false);
+    }, "json").fail(function(xhr) {
+      serverError("getData_e.php", xhr.responseText);
+    });
+  }
+
+  $("#als").on("click", ".fa-edit", function() {
+    var o = $(this).parents("li").data();
+    var i = o[0], j = o[1];
+    if (0 <= j) {
+      showNtv(i, j);
+    } else {
+      showAlv(0 <= i? i: -1);
+    }
+  }).on("click", ".fa-comment-alt", function() {
+    showNtv($(this).parents("li").data()[0])
+  }).on("click", ".pointer", function() {
+    var i = $(this).parents("li").data()[0];
+    var b = al[i], v = b[3], k, l;
+    if ((k = wp(i,0)) < 0 && (l = wp(i,1)) < 0) {
+      var up = $(this).hasClass("fa-thumbs-up");
+      v[up? 0: 1].splice(-(up? k: l) - 1, 0, +uid);
+    }
+    var s = v.map(x => x.join(',')).join(' ');
+    $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
+      if (rc == '1') findAl(de[0]);
+    });
+  });
+
+  function alvTest(dei, des, i, rv, als) {
+    var b = al[i];
+    if (als == des) {
+      if (dei < 0) setDes(de[1]);
+      return 2;                    // close
+    }
+    if (als) {
+      for (let k in al) {          // add, update
+        if (als == al[k][2] && (i != k || rv == b[1])) return 2;
+      }
+    } else if (i < 0) {
+      $("#alv").focus();           // add & no al
+      return 1;                    // retry
+    } else if (0 < b[7].length) {
+      return 2;                    // delete & some notes
+    }
+    return 0;
+  }
+
+  $("#al-v .fa-hdd").click(function() {
+    var zzz = $("#al-v").data();
+    var dei = zzz[0], i = zzz[1]; // de index, al index
+    var des = getDes();
+    var  rv = $("#al-v :radio:checked").val();
+    var als = $("#alv").val().trim();
+    switch (alvTest(dei, des, i, rv, als)) {
+      case 2: $("#al-v").hide();
+      case 1: return;
+    }
+    if (dei < 0) {
+      $.post('getExprId.php', 's='+ encodeURIComponent(des), function(id) {
+        if ($.isNumeric(id)) addDeal(rv, id, als);
+      });
+    } else {
+      if (0 <= i) {
+        var a = 'a='+ al[i][0];
+        if (als) {
+          a += ','+ rv +','+ dei +'&s='+ encodeURIComponent(als);
+          $.post('updateDeal.php', a, function(rc) {
+            if (rc == '1') findAl(dei);
+          });
+        } else {
+          $.post('deleteDeal.php', a, function(rc) {
+            if (rc == '1') {
+              findAl(dei);
+              showCount([1], "e");
+            }
+          });
+        }
+      } else if (als) {
+        addDeal(rv, dei, als);
+      }
+    }
+  });
+
+  function addDeal(rv, id, als) {
+    als = encodeURIComponent(als);
+    $.post('addDeal.php', 'a='+ rv+','+id+','+uid +'&s='+ als, function(rc) {
+      if ($.isNumeric(rc)) {
+        findAl(id, getDes());
+        showCount([1], "e");
+      }
+    });
+  }
+
+  $("#nt-v .fa-hdd").click(function() {
+    var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
+    var s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
+    var b = al[i], c = b[7];
+    for (let d of c) {
+      if (s == d[1]) {
+        $("#nt-v").hide();
+        return;
+      }
+    }
+    s = encodeURIComponent(s);
+    if (0 <= j) {
+      $.post('updateNote.php', 'a='+ c[j][0] +'&s='+ s, function(rc) {
+        if (rc == '1') {
+          findAl(de[0]);
+          if (!s) showCount([2], "e");
+        }
+      });
+    } else if (s) {
+      $.post('addNote.php', 'a='+ b[0] +','+ uid +'&s='+ s, function(rc) {
+        if ($.isNumeric(rc)) {
+          findAl(de[0]);
+          showCount([2], "e");
+        }
+      });
+    } else {
+      $("#alv").focus();
+    }
+  });
+
+  $("#nt-v > span").click(function() {
+    var d = $(this).attr("data-n");
+    var t = $("#ntv");
+    var a = t.prop("selectionStart");
+    var b = t.prop("selectionEnd");
+    var v = t.val();
+    var i = a + 1;
+    v = v.substr(0, a) + d + v.substr(b);
+    t.val(v).prop("selectionStart", i).prop("selectionEnd", i).focus();
+  });
+
+  $("#al-v .fa-times").click(function() {
+    setDes(de[1]);
+    $("#al-v").hide();
+    showDev(false);
+  });
+
+  $("#nt-v .fa-times").click(function() {
+    $("#nt-v").hide();
+  });
+
+  function showAlv(i, des) {
+    var rv = des? '0': al[i < 0? al.length - 1: i][1];
+    $(`#al-v :radio[value='${rv}']`).prop('checked', true);
+    $("#alv").val(i < 0? '': al[i][2]);
+    $("#al-v").show().data([des? -1: de[0], i]);
+    if (des) setDes(des);
+  }
+
+  function showNtv(i, j) {
+    $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up").addClass(faArrow(i));
+    $("#nt-v > div > span").text(al[i][2]);
+    $("#ntv").val(j? al[i][7][j][1]: '');
+    $("#nt-v").show().data([i, j? j: -1]);
+  }
+
+  $("#al-v,#nt-v").keyup(function(e) {
+    if (e.keyCode === $.ui.keyCode.ESCAPE) {
+      $(this).find(".fa-times").click();
+      return false;
+    }
+  });
+
+  $("#al-v").keyup(function(e) {
+    if (e.keyCode === $.ui.keyCode.ENTER) {
+      $(this).find(".fa-hdd").click();
+      return false;
+    }
+  });
+
 });

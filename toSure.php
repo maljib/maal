@@ -1,5 +1,6 @@
 <?php // toSure.php
 require_once 'functions.php';
-echo json_encode(selectRows('id,nick,name,rank', 'users',
-                   'sure='.$_POST['id'].' AND rank < 1'));
+echo json_encode(selectRows(
+'SELECT id, nick, name, rank FROM users WHERE sure = '.
+                           $_POST['id'].' AND rank < 1'));
 ?>

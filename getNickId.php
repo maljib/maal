@@ -1,5 +1,6 @@
 <?php // getNickId.php
 require_once 'functions.php';
-$id = selectValue('id', 'users', "nick='".escapeString($_POST['nick'])."'");
+$nick = escapeString($_POST['nick']);
+$id   = selectValue("SELECT id FROM users WHERE nick = '$nick'");
 echo $id? $id: '0';
 ?>

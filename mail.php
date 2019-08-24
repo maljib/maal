@@ -44,14 +44,15 @@ function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts =
 
 function sendMail4($nick, $mail, $subject, $text) {
   if (!$mail) {
-    $mail = mess(selectValue('mail', 'users', "nick='".escapeString($nick)."'"))
+    $mail = mess(selectValue("SELECT mail FROM users WHERE nick='".escapeString($nick)."'"))
           or die("아이디($nick)가 없습니다.");
   }
   sendMail($nick, $mail, $subject, "$nick 님께,\n\n$text");
 }
 
 function sendMail3($id, $subject, $text) {
-  $row = selectRow('nick,mail', 'users', "id=$id") or die("사용자 번호($id)가 없습니다.");
+  $row = selectRow("SELECT nick, mail FROM users WHERE id = $id")
+            or die("사용자 번호($id)가 없습니다.");
   sendMail4($row[0], mess($row[1]), $subject, $text);
 }
 ?>

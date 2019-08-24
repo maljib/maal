@@ -1,11 +1,14 @@
 <?php // askData.php
 require_once 'functions.php';
 
-if (selectValue('user', 'master', '1') == getPost('id')) {
-  $rows = selectRows(
-    'a.id,u.id, nick,name, u.mail,'.
-    "convert_tz(a.t,'+00:00','+09:00'), phone, a.mail, askt",
-    'asks a JOIN users u ON a.user = u.id', '1 ORDER BY t');
+if (selectValue('SELECT user FROM master') == getPost('id')) {
+  $rows = selectRows(<<< SQL
+SELECT a.id,u.id, nick,name, u.mail,
+       convert_tz(a.t,'+00:00','+09:00'), phone, a.mail, askt
+  FROM asks a JOIN users u ON a.user = u.id
+ ORDER BY t
+SQL
+  );
   forEach ($rows as &$a) {
     $nickName = $a[2].($a[2] === $a[3]? '': '('.$a[3].')'); 
     $a = array($a[0].'_'.$a[1],   $nickName, mess($a[4]),

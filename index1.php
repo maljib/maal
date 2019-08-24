@@ -9,7 +9,7 @@ $nick = $data[0];
 $name = $id? '': $data[1];
 $mail = $id? '': mess($data[2]);
 $sure = $id? '': $data[3];
-echo <<<END_OF_TEXT
+echo <<< END_OF_TEXT
 <!DOCTYPE html>
 <html lang="ko">
 <head>

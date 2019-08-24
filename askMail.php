@@ -4,10 +4,10 @@ require_once 'mail.php';
 $i    = getGet('i');    // etc number
 $row  = selectEtc($i);  // [user number, data]
 $id   = $row[0];
-$nick = selectValue('nick', 'users', "id=$id")
+$nick = selectValue("SELECT nick FROM users WHERE id = $id")
   or die("사용자 번호($id)가 없습니다.");
 
-$mr = selectRow('nick,mail', 'users u JOIN master m ON u.id = m.user', '1')
+$mr = selectRow('SELECT nick, mail FROM users u JOIN master m ON u.id = m.user')
   or die("관리자가 없습니다.");
 
 $a = explode("\t", $row[1]);

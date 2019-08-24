@@ -1,7 +1,7 @@
 <?php
 require_once 'functions.php';
 
-$rows = selectRows('id, data', 'texts', "data like '%☛%' or data like '%㸃%'");
+$rows = selectRows("SELECT id, data FROM texts WHERE data like '%☛%' or data like '%㸃%'");
 foreach ($rows as $row) {
   $data = preg_replace('/☛/u', '☞', $row[1]);
   $data = escapeString(preg_replace('/㸃/u', '點', $data));

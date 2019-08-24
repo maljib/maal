@@ -5,15 +5,16 @@
   <title>배달말집</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <!--link rel="stylesheet" href="../lib/jquery-ui.min.css">
   <script src="../lib/jquery.min.js"></script>
   <script src="../lib/jquery-ui.min.js"></script-->
+  <script src="https://kit.fontawesome.com/4e34d504b6.js"></script>
   <script src="diff_match_patch.js"></script>
   <script src="jquery.pretty-text-diff.min.js"></script>
-  <link rel="stylesheet" href="index.css?v=2">
-  <script src="index.js?v=14"></script>
+  <link rel="stylesheet" href="index.css?v=9.19">
+  <script src="index.js?v=9.026"></script>
 </head>
 <body>
   <span id="h1">배달말집</span>&nbsp;
@@ -161,11 +162,19 @@
     </div>
     <div id="viewer"></div>
 
+    <!--img id="arrow" title="들어가기" src="glyphicons-387-log-in.png">
     <img id="enter" title="들어가기" src="glyphicons-387-log-in.png">
     <div id="exit_div">
       <img id="download" title="내려받기" src="glyphicons-182-download-alt.png">&nbsp;
       <img id="user_info" src="glyphicons-4-user.png">&nbsp;
       <img id="exit" title="나가기" src="glyphicons-388-log-out.png">
+    </div-->
+    <i id="enter" title="들어가기" class="fas fa-sign-in-alt fa-lg"></i>
+    <i id="arrow" title="말다듬기" class="fas fa-arrow-circle-right fa-lg"></i>
+    <div id="exit_div">
+      <i id="download" title="내려받기" class="fas fa-download fa-lg"></i>&nbsp;
+      <i id="user_info" class="fas fa-user-edit fa-lg"></i>&nbsp;
+      <i id="exit" title="나가기" class="fas fa-sign-out-alt fa-lg"></i>
     </div>
 
     <div id="user" class="padn">
@@ -261,7 +270,8 @@
           <td colspan="4">
 <i><b>겨<small>레말</small>살<small>리는</small>이<small>들</small></b>
 <sup></sup></i> &nbsp; 모두<input type="checkbox">&nbsp;
-<span id="open-note"><img src='glyphicons-11-envelope.png'><sup></sup></span> &nbsp;
+<!--span id="open-note"><img src='glyphicons-11-envelope.png'><sup></sup></span-->
+<i id="open-note" class='far fa-envelope fa-lg'><sup></sup></i> &nbsp;
 <div class="x-close">&#10006;</div>
           </td>
         </tr>
@@ -286,7 +296,7 @@
     <div class="x-close">&#10006;</div>
   </div>
 
-  <table id="editors" class="padn">
+  <table id="editors">
     <thead>
       <tr>
         <td colspan="2">&nbsp;<div class="x-close">&#10006;</div></td>
@@ -294,7 +304,7 @@
     </thead>
     <tbody></tbody>
   </table>
-
+  
   <div id="note-form" class="padn">
     <div>전자우편 &nbsp;
       <span id="send-note" class="b-shade">&nbsp;보내기&nbsp;</span>
@@ -306,5 +316,49 @@
   </div>
 
   <div id="msg"></div>
+
+  <div id="ex" class="b_grey">
+    <div id="ex0">
+      <span id="h1_e">말다듬기</span> &nbsp;
+      <i id="count1e" class="yellow" title="다듬은말"></i> &nbsp;
+      <i id="count2e" class="white" title="적바림"></i>
+      <i id="search" class="fas fa-search fa-lg" title="찾기"></i>
+      <i class="fas fa-lg fa-times" title="닫기"></i>
+    </div>
+
+    <div id="de"><span></span></div>
+    <ul id="als" type="none"></ul>
+
+    <div id="al-v">
+      <i class="fas fa-lg fa-arrow-down"></i> <input type="radio" value="0" name="r"> &nbsp;
+      <i class="fas fa-lg fa-arrow-up"></i>   <input type="radio" value="1" name="r">
+      <i class="far fa-lg fa-hdd" title="갈무리"></i>
+      <i class="fas fa-lg fa-times" title="무르기"></i>
+      <div><input name="alv" id="alv" placeholder="넣을 말" class="ui-widget ui-corner-all"></div>
+    </div>
+
+    <div id="nt-v">
+      <i class="fas fa-lg"></i>
+      <i class="far fa-lg fa-hdd" title="갈무리"></i>
+      <i class="fas fa-lg fa-times" title="무르기"></i>
+      <div class="al"><span></span></div>
+      <textarea name="ntv" id="ntv" placeholder="적바림" class="ui-widget ui-corner-all"></textarea>
+      <span data-n="“”" title="“큰따옴표”">“ ”</span> &nbsp;
+      <span data-n="‘’" title="‘작은따옴표’">‘ ’</span> &nbsp;
+      <span data-n="{}" title="{굵게}">{ }</span> &nbsp;
+      <span data-n="《》" title="출전 - 《책》">《》</span> &nbsp;
+      <span data-n="〈〉" title="출전 - 〈글〉">〈〉</span> &nbsp;
+      <span data-n="·" title="가운뎃점 · ">&nbsp;·&nbsp;</span> &nbsp;
+      <span data-n="―" title="줄표 ―">―</span> &nbsp;
+      <span data-n="…" title="줄임표 …">…</span> &nbsp;
+    </div>
+  </div>
+
+  <div id="de-v">
+    <input name="dev" id="dev" placeholder="찾는 말" class="ui-widget ui-corner-all">
+    <div id="de-l">&#x25c0;</div>
+    <div id="de-r">&#x25b6;</div>
+    <i class="fas fa-lg fa-times" title="무르기"></i>
+  </div>
 </body>
 </html>

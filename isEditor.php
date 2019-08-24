@@ -1,4 +1,4 @@
 <?php // isEditor.php
 require_once 'functions.php';
-echo selectValue('1', 'editor', 'user='.$_POST['id']);
+echo selectValue('Select 1 FROM editor WHERE user = '.$_POST['id']);
 ?>

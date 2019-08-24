@@ -15,29 +15,29 @@ function sql($query) {
   return $result;
 }
 
-function selectRows($select, $from, $where) {
-  $result = sql("SELECT $select FROM $from WHERE $where");
+function selectRows($s) {
+  $result = sql($s);
   for ($rows = array(); $row = $result->fetch_row(); $rows[] = $row);
   $result->close();
   return $rows;
 }
 
-function selectValues($select, $from, $where) {
-  $result = sql("SELECT $select FROM $from WHERE $where");
+function selectValues($s) {
+  $result = sql($s);
   for ($values = array(); $row = $result->fetch_row(); $values[] = $row[0]);
   $result->close();
   return $values;
 }
 
-function selectRow($select, $from, $where) {
-  $result = sql("SELECT $select FROM $from WHERE $where");
+function selectRow($s) {
+  $result = sql($s);
   $row = $result->fetch_row();
   $result->close();
   return $row;
 }
 
-function selectValue($select, $from, $where) {
-  $row = selectRow($select, $from, $where);
+function selectValue($s) {
+  $row = selectRow($s);
   return $row? $row[0]: '';
 }
 
@@ -82,6 +82,7 @@ function getGet($index) {
 
 // 비밀번호의 해시 값을 구한다 (비밀번호)
 function getHash($password) {
+  // $salt = random_bytes(16); 
   $salt = mcrypt_create_iv(16, MCRYPT_DEV_URANDOM);
   return hash_pbkdf2("sha256", $password, $salt, 1000, 16, true).$salt;
 }
@@ -107,7 +108,8 @@ function mess($s) {
 }
 
 function selectEtc($i) {
-  $row = selectRow('user,data', 'etc', "id=$i") or die('이미 확인되었습니다.');
+  $row = selectRow("SELECT user, data FROM etc WHERE id = $i")
+            or die('이미 확인되었습니다.');
   return $row;
 }
 

@@ -3,5 +3,5 @@ require_once 'functions.php';
 
 $term = getGet('term') or die('[]');
 $term = escapeString($term);
-echo json_encode(selectValues('nick', 'users', "nick like '%$term%'"));
+echo json_encode(selectValues("SELECT nick FROM users WHERE nick like '%$term%'"));
 ?>

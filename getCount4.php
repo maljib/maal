@@ -1,4 +1,4 @@
 <?php // getCount4.php
 require_once 'functions.php';
-echo selectValue('count(*)', 'words', "tell=1");
+echo selectValue('SELECT count(*) FROM words WHERE tell = 1');
 ?>

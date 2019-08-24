@@ -4,8 +4,8 @@ if (isset($_POST['nick']) && isset($_POST['pass']) &&
     isset($_POST['name']) && isset($_POST['mail']) && isset($_POST['sure'])) {
   $nk   = escapeString($nick = $_POST['nick']);
   $sure = escapeString($_POST['sure']);
-  selectValue('id', 'users', "nick='$nk'") and die('4');
-  $row  = selectRow('id,rank', 'users', "nick='$sure'");
+  selectValue("SELECT id FROM users WHERE nick = '$nk'") and die('4');
+  $row  = selectRow("SELECT id, rank FROM users WHERE nick = '$sure'");
   $row && 0 < $row[1] or die('8');
   $sid  = $row[0];
   $ps   = escapeString(getHash($_POST['pass']));

@@ -3,7 +3,7 @@ require_once 'functions.php';
 
 if ($nick = getPost('editor')) {
   $nick = escapeString($nick);
-  $set = selectValue('id', 'users', "nick='$nick'") or die('2');
+  $set = selectValue("SELECT id FROM users WHERE nick = '$nick'") or die('2');
   $set = "user=$set";
   ($uid = getPost('uid')) && ($wid = getPost('wid')) or die('3');
   sqlUpdate('texts', $set, "word=$wid AND i=0 AND user=$uid") and

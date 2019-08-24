@@ -7,10 +7,13 @@ if (preg_match('/@\w+\./', $nick)) {
   $nick = mess($nick);
   $column = 'mail';  // 전자우편 주소로 찾기
 }
-$row  = selectRow('u.id,u.name,u.mail,u.rank,s.nick,u.nick',
-                  'users u LEFT OUTER JOIN users s ON u.sure = s.id',
-                  "u.$column='".escapeString($nick)."'")
-               or die($column == 'mail'? '{"id":"0"}': '{}');
+$nick = escapeString($nick);
+$row  = selectRow(<<< SQL
+SELECT u.id, u.name, u.mail, u.rank, s.nick, u.nick
+  FROM users u LEFT OUTER JOIN users s ON u.sure = s.id
+ WHERE u.$column = '$nick'
+SQL
+) or die($column == 'mail'? '{"id":"0"}': '{}');
 if ($row[3] < 0) {
   sqlUpdate('users', 'rank=1', "id=$row[0]");
   $row[3] = '1';
