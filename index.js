@@ -2020,7 +2020,7 @@ $(function() {
     });
   });
 
-  function alvTest(dei, des, i, rv, als) {
+  function alvTest(dei, des, i, als, dir) {
     var b = al[i];
     if (als == des) {
       if (dei < 0) setDes(de[1]);
@@ -2028,7 +2028,7 @@ $(function() {
     }
     if (als) {
       for (let k in al) {          // add, update
-        if (als == al[k][2] && (i != k || rv == b[1])) return 2;
+        if (als == al[k][2] && (i != k || dir == b[1])) return 2;
       }
     } else if (i < 0) {
       $("#alv").focus();           // add & no al
@@ -2041,45 +2041,42 @@ $(function() {
 
   $("#al-v .fa-hdd").click(function() {
     var zzz = $("#al-v").data();
-    var dei = zzz[0], i = zzz[1]; // de index, al index
-    var des = getDes();
-    var  rv = $("#al-v :radio:checked").val();
-    var als = $("#alv").val().trim();
-    switch (alvTest(dei, des, i, rv, als)) {
+    var dei = zzz[0], des = getDes();                // de expr index, de expr
+    var   i = zzz[1], als = $("#alv").val().trim();  // al index, al expr
+    var dir = $("#al-v :radio:checked").val();       // de/al direction = 0/1
+    switch (alvTest(dei, des, i, als, dir)) {
       case 2: $("#al-v").hide();
       case 1: return;
     }
     if (dei < 0) {
-      $.post('getExprId.php', 's='+ encodeURIComponent(des), function(id) {
-        if ($.isNumeric(id)) addDeal(rv, id, als);
+      $.post('getExprId.php', 's='+ encodeURIComponent(des), function(desi) {
+        if ($.isNumeric(desi)) addDeal(dir, desi, als);
       });
+    } else if (i < 0) {
+      addDeal(dir, dei, als);
     } else {
-      if (0 <= i) {
-        var a = 'a='+ al[i][0];
-        if (als) {
-          a += ','+ rv +','+ dei +'&s='+ encodeURIComponent(als);
-          $.post('updateDeal.php', a, function(rc) {
-            if (rc == '1') findAl(dei);
-          });
-        } else {
-          $.post('deleteDeal.php', a, function(rc) {
-            if (rc == '1') {
-              findAl(dei);
-              showCount([1], "e");
-            }
-          });
-        }
-      } else if (als) {
-        addDeal(rv, dei, als);
+      var a = 'a='+ al[i][0];
+      if (als) {
+        a += ','+ dir +','+ dei +'&s='+ encodeURIComponent(als);
+        $.post('updateDeal.php', a, function(rc) {
+          if (rc == '1') findAl(dei);
+        });
+      } else {
+        $.post('deleteDeal.php', a, function(rc) {
+          if (rc == '1') {
+            findAl(dei);
+            showCount([1], "e");
+          }
+        });
       }
     }
   });
 
-  function addDeal(rv, id, als) {
-    als = encodeURIComponent(als);
-    $.post('addDeal.php', 'a='+ rv+','+id+','+uid +'&s='+ als, function(rc) {
+  function addDeal(dir, dei, als) {
+    var a = 'a='+ dir +','+ dei +','+ uid +'&s='+ encodeURIComponent(als);
+    $.post('addDeal.php', a, function(rc) {
       if ($.isNumeric(rc)) {
-        findAl(id, getDes());
+        findAl(dei, getDes());
         showCount([1], "e");
       }
     });
@@ -2087,8 +2084,8 @@ $(function() {
 
   $("#nt-v .fa-hdd").click(function() {
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
-    var s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
-    var b = al[i], c = b[7];
+    var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
+    var  b = al[i], c = b[7];
     for (let d of c) {
       if (s == d[1]) {
         $("#nt-v").hide();
@@ -2111,7 +2108,7 @@ $(function() {
         }
       });
     } else {
-      $("#alv").focus();
+      $("#ntv").focus();
     }
   });
 
@@ -2121,7 +2118,7 @@ $(function() {
     var b = t.prop("selectionEnd");
     var v = t.val();
     var i = a + 1;
-    v = v.substr(0, a) + $(this).attr("data-n") + v.substr(b);
+    v = v.substr(0, a) + $(this).text().replace(/\s/g,'') + v.substr(b);
     t.val(v).prop("selectionStart", i).prop("selectionEnd", i).focus();
   });
 
@@ -2136,18 +2133,20 @@ $(function() {
   });
 
   function showAlv(i, des) {
-    var rv = des? '0': al[i < 0? al.length - 1: i][1];
-    $(`#al-v :radio[value='${rv}']`).prop('checked', true);
-    $("#alv").val(i < 0? '': al[i][2]);
+    var dir = des? '0': al[i < 0? al.length - 1: i][1];
+    $(`#al-v :radio[value='${dir}']`).prop('checked', true);
     $("#al-v").show().data([des? -1: de[0], i]);
+    $("#alv").val(i < 0? '': al[i][2]).focus();
     if (des) setDes(des);
   }
 
   function showNtv(i, j) {
-    $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up").addClass(faArrow(i));
+    $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up")
+                            .addClass(faArrow(i));
     $("#nt-v > div > span").text(al[i][2]);
-    $("#ntv").val(j? al[i][7][j][1]: '');
     $("#nt-v").show().data([i, j? j: -1]);
+    $("#ntv").val(j? al[i][7][j][1]: '').scrollTop(0)
+             .prop("selectionStart", 0).prop("selectionEnd", 0).focus();
   }
 
   $("#al-v,#nt-v").keyup(function(e) {
