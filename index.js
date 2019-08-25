@@ -1967,7 +1967,7 @@ $(function() {
             o.append($(`
 <li><div class="aln">${convertNote(d[1])}</div>
   &nbsp;<i class="al-u"><small>${d[4]}</small>
-  ${d[2] == uid? '&nbsp; <i class="far fa-sm fa-edit" title="고치거나 지우기"></i> &nbsp;': d[3]}</i>
+  ${d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': d[3]}</i>
 </li>`      ).data([i, j]));
           }
         }
@@ -2113,13 +2113,28 @@ $(function() {
   });
 
   $("#nt-v > span").click(function() {
-    var t = $("#ntv");
-    var a = t.prop("selectionStart");
-    var b = t.prop("selectionEnd");
-    var v = t.val();
+    var c = $(this).text().replace(/\s/g,'');
+    var o = $("#ntv");
+    var a = o.prop("selectionStart");
+    var b = o.prop("selectionEnd");
+    var s = o.val();
+    if (c === "◯") {
+      var j = a - 1, n, n10;
+      if (0 <= (n = toNum(s, j)) && 0 <= (n10 = toNum(s, j - 1))) {
+        n += n10 * 10;
+        j--;
+      }
+      if (1 <= n && n <= 50) {
+        c = circledNumber(n);
+        a = j;
+      } else if (0 < a && (n = circled(s[a - 1]))) {
+        c = n;
+        a--;
+      }
+    }
     var i = a + 1;
-    v = v.substr(0, a) + $(this).text().replace(/\s/g,'') + v.substr(b);
-    t.val(v).prop("selectionStart", i).prop("selectionEnd", i).focus();
+    o.val(s.substr(0, a) + c + s.substr(b)).prop("selectionStart", i)
+                                           .prop("selectionEnd", i).focus();
   });
 
   $("#al-v .fa-times").click(function() {

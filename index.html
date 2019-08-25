@@ -14,7 +14,7 @@
   <script src="diff_match_patch.js"></script>
   <script src="jquery.pretty-text-diff.min.js"></script>
   <link rel="stylesheet" href="index.css?v=15">
-  <script src="index.js?v=17"></script>
+  <script src="index.js?v=18"></script>
 </head>
 <body>
   <span id="h1">배달말집</span>&nbsp;
@@ -163,7 +163,7 @@
     <div id="viewer"></div>
 
     <i id="enter" title="들어가기" class="fas fa-sign-in-alt fa-lg"></i>
-    <i id="arrow" title="말다듬기" class="fas fa-arrow-circle-right fa-lg"></i>
+    <i id="arrow" title="말다듬기" class="fas fa-arrow-circle-left fa-lg"></i>
     <div id="exit_div">
       <i id="download" title="내려받기" class="fas fa-download fa-lg"></i>&nbsp;
       <i id="user_info" class="fas fa-user-edit fa-lg"></i>&nbsp;
@@ -336,21 +336,18 @@
       <i class="fas fa-lg fa-times"></i>
       <div class="al"><span></span></div>
       <textarea name="ntv" id="ntv" placeholder="적바림" class="ui-widget ui-corner-all"></textarea>
-      <span>“ ”</span>&nbsp;
-      <span>‘ ’</span>&nbsp;
-      <span>{ }</span>&nbsp;
-      <span>《》</span>&nbsp;
-      <span>〈〉</span>&nbsp;
-      <span>&nbsp;·&nbsp;</span>&nbsp;
-      <span>―</span>&nbsp;
-      <span>…</span>&nbsp;
+      <span>“ ”</span>
+      <span>‘ ’</span>
+      <span>{ }</span>
+      <span>《》</span>
+      <span>〈〉</span>
+      <span>◯</span>
+      <span>&nbsp;·&nbsp;</span>
+      <span>―</span>
+      <span>…</span>
     </div>
   </div>
-<!--
- data-n="“”" data-n="‘’" data-n="{}" data-n="《》" data-n="〈〉" data-n="·" data-n="―" data-n="…"
- title="“큰따옴표”"  title="‘작은따옴표’" title="{굵게}"
- title="출전 - 《책》" title="출전 - 〈글〉" title="가운뎃점 · " title="줄표 ―" title="줄임표 …"
--->
+
   <div id="de-v">
     <input name="dev" id="dev" placeholder="찾는 말" class="ui-widget ui-corner-all">
     <div id="de-l">&#x25c0;</div>
