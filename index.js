@@ -1726,8 +1726,8 @@ $(function() {
     $("#editors tbody").css("max-height", h - 60);
     $(".ui-autocomplete").css("max-height", h - 40);
     $("#note-form").is(":visible") && setNoteSize();
-    $("#als").height(h - 90);
-    $("#ntv").height(h - 200);
+    $("#als").height(h - 76);
+    $("#ntv").height(h - 167);
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
@@ -2115,26 +2115,27 @@ $(function() {
   $("#nt-v > span").click(function() {
     var c = $(this).text().replace(/\s/g,'');
     var o = $("#ntv");
-    var a = o.prop("selectionStart");
-    var b = o.prop("selectionEnd");
     var s = o.val();
+    var i = o.prop("selectionStart");
+    var j = o.prop("selectionEnd");
     if (c === "◯") {
-      var j = a - 1, n, n10;
-      if (0 <= (n = toNum(s, j)) && 0 <= (n10 = toNum(s, j - 1))) {
-        n += n10 * 10;
-        j--;
-      }
-      if (1 <= n && n <= 50) {
-        c = circledNumber(n);
-        a = j;
-      } else if (0 < a && (n = circled(s[a - 1]))) {
+      var k = i - 1, n, n10;
+      if (0 < i && (n = circled(s[k]))) {
         c = n;
-        a--;
+        i--;
+      } else {
+        if (0 <= (n = toNum(s, k)) && 0 <= (n10 = toNum(s, k - 1))) {
+          n += n10 * 10;
+          k--;
+        }
+        if (1 <= n && n <= 50) {
+          c = circledNumber(n);
+          i = k;
+        }
       }
     }
-    var i = a + 1;
-    o.val(s.substr(0, a) + c + s.substr(b)).prop("selectionStart", i)
-                                           .prop("selectionEnd", i).focus();
+    o.val(s.substr(0, i) + c + s.substr(j))
+     .prop("selectionStart", i + 1).prop("selectionEnd", i + 1).focus();
   });
 
   $("#al-v .fa-times").click(function() {
