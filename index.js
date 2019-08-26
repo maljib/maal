@@ -1502,7 +1502,7 @@ $(function() {
         $("#editors thead td").removeClass().addClass(data.a);
         $("#editors span").text(data.t);
         $("#editors").show()
-                 .position({ my:"right top", at:"right+8 bottom+2", of:data.s });
+                 .position({ my:"right top", at:"right+8 bottom+4", of:data.s });
   
       } else {
         $("#editors").hide();
@@ -1726,8 +1726,8 @@ $(function() {
     $("#editors tbody").css("max-height", h - 60);
     $(".ui-autocomplete").css("max-height", h - 40);
     $("#note-form").is(":visible") && setNoteSize();
-    $("#als").height(h - 76);
-    $("#ntv").height(h - 167);
+    $("#als").height(h - 84);
+    $("#ntv").height(h - 175);
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
@@ -1738,8 +1738,7 @@ $(function() {
     if (navigator.userAgent.indexOf('Trident') < 0) return;
 
     info("인터넷익스플로러에서는 안되는 기능이 더러 있습니다. 다른 브라우저를 써 보십시오: "+
-    "<a href='https://www.google.co.kr/chrome/browser/desktop/' target='_blank'>크롬</a>, "+
-    "<a href='http://www.opera.com/ko' target='_blank'>오페라</a>.");
+    "<a href='https://www.google.co.kr/chrome/browser/desktop/' target='_blank'>크롬</a>. ");
     if (!Array.prototype.indexOf) {
       Array.prototype.indexOf = function(obj, start) {
         for (var i = (start || 0), j = this.length; i < j; i++) {

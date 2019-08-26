@@ -1,4 +1,5 @@
 @charset "utf-8";
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
 
 body { background-color:black; font-family:'Malgun Gothic';
        margin:0; overflow-x:hidden; overflow-y:hidden; visibility:hidden; }
@@ -12,8 +13,7 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
              padding:0 5px; font-weight:600; font-size:85%; }
 [data-l]   { cursor:pointer; text-decoration:underline; }
 
-#h1 { font-size:2em; font-weight:bold; color:#f1f3f1;
-      margin:0 -7px 0 12px; cursor:pointer; }
+#h1 { margin:0 -7px 0 12px; cursor:pointer; }
 #count1,#count2,#count3,#count5 { cursor:pointer; margin-left:-2px; vertical-align:-2px; }
 #count4,#count1e,#count2e       { cursor:pointer; }
 #arg-l,#arg-r    { position:absolute; display:none; cursor:pointer;
@@ -161,17 +161,19 @@ small             { font-size:70%; }
 #ex, #de-v, #de-l, #de-r, #nt-v, #al-v   { position:absolute; display:none; }
 #search, #als, .al-u, .fa-hdd, .fa-times { position:absolute; }
 
-#ex { z-index:901; top:0; bottom:0; left:0; right:0; }
-#ex0 { background:black; margin:0; height:38.5px; padding:0 0 0 20px; }
-#h1_e { color:white; font-size:2em; font-weight:bold; display:inline-block; margin-top:-2px; }
+#ex { z-index:902; top:0; bottom:0; left:0; right:0; }
+#ex0 { background:black; margin:0; height:46.5px; padding:0 0 0 20px; }
 #search { z-index:902; top:10px; right:80px; color:white;}
 #ex0 .fa-times { z-index:902; top:10px; right: 40px; color:white; }
 
-#de  { margin:10px 20px 0 15px; }
-#de span { display:none; }
+#h1, #h1_e { font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
+             font-size:2em; font-weight:bold; color:#f1f3f1; }
 
-#als { top:58px; left:15px; right:20px; overflow:auto; }
-#als li { margin:5px 0 0 -40px; }
+#de  { z-index:902; margin:5px 20px 0 15px; }
+#de span, .al span { display:inline-block; }
+
+#als { top:81px; left:15px; right:20px; margin:0; overflow:auto; }
+#als li { margin:0 0 0 -40px; }
 .al0    { margin-top:10px; }
 .fa-thumbs-up   { color: blue; }
 .fa-thumbs-down { color: red; }
@@ -179,10 +181,10 @@ small             { font-size:70%; }
 .al     { margin-top:4px; }
 #de>span, .al>span, .aln { border: 1px solid #aaaaaa; border-radius: 4px;
                            background:white; padding:4px; }
-.aln { margin-bottom: -3px; }
+.aln { margin-bottom: -2px; }
 #de-v,#al-v,#nt-v { left:0; right:0; background-image: linear-gradient(white, #cccccc); }
-#de-v           { top:40px; padding:5px 40px 5px 15px; }
-#al-v,#nt-v     { top:75px; padding:5px 25px 5px 15px; }
+#de-v           { top:48px; padding:5px 40px 5px 15px; }
+#al-v,#nt-v     { top:81px; padding:5px 25px 5px 15px; }
 
 #de-l,#de-r { top:10px; cursor:pointer; font-size:110%; }
 #de-r    { right:40px; }
@@ -192,7 +194,7 @@ small             { font-size:70%; }
 #al-v .fa-hdd,   #nt-v .fa-hdd    { right:60px; }
 
 #dev,#alv  { width:100%; text-align:center; }
-#ntv       { width:100%; margin-top:10px; overflow:auto; }
+#ntv       { width:100%; overflow:auto; }
 
 #nt-v > span { display:inline-block; text-align:center; width:20px;
    padding:2px; margin:-3px 0 0 0; font-weight: bold;
