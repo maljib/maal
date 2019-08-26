@@ -1737,7 +1737,7 @@ $(function() {
   function msie() {
     if (navigator.userAgent.indexOf('Trident') < 0) return;
 
-    info("인터넷익스플로러에서는 안되는 기능이 더러 있습니다.<br>다른 브라우저를 써 보십시오: "+
+    info("인터넷익스플로러에서는 안되는 기능이 더러 있습니다. 다른 브라우저를 써 보십시오: "+
     "<a href='https://www.google.co.kr/chrome/browser/desktop/' target='_blank'>크롬</a>, "+
     "<a href='http://www.opera.com/ko' target='_blank'>오페라</a>.");
     if (!Array.prototype.indexOf) {
