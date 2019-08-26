@@ -162,7 +162,7 @@ small             { font-size:70%; }
 #search, #als, .al-u, .fa-hdd, .fa-times { position:absolute; }
 
 #ex { z-index:901; top:0; bottom:0; left:0; right:0; }
-#ex0 { background:black; margin:0; height:38.5px; padding:0 0 0 20px; }
+#ex0 { background:black; margin:0; height:35.5px; padding:0 0 3px 20px; }
 #h1_e { color:white; font-size:2em; font-weight:bold; }
 #search { z-index:902; top:10px; right:80px; color:white;}
 #ex0 .fa-times { z-index:902; top:10px; right: 40px; color:white; }

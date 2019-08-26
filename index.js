@@ -3,7 +3,7 @@
 $(function() {
   "use strict";
 
-  const MAX_MAIL_SIZE = 10 * 1024 * 1024;
+  var MAX_MAIL_SIZE = 10 * 1024 * 1024;
 
   var uid = "", nick, name, mail, sure; // 사용자: 번호,아이디,이름,이메일,보증인
   var logged_in = false;
@@ -1951,34 +1951,34 @@ $(function() {
           // b[3] = b[3].split(' ').map(x => JSON.parse('['+ x +']'));
           var v = b[3].split(' ');
           b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
-          o.append($(`
-<li><div class="al0"></div>
-  <span class="b_grey">&nbsp;
-    <i class="fas fa-lg ${faArrow(i)}"></i> &nbsp;
-    <i class="far fa-sm fa-thumbs-up${xp(i,0)}"></i>
-    ${b[3][0].length} | ${-b[3][1].length}
-    <i class="far fa-sm fa-thumbs-down fa-flip-horizontal${xp(i,1)}"></i> &nbsp;
-    ${yp(c)? '<i class="far fa-sm fa-comment-alt" title="적바림 쓰기"></i> &nbsp;': ''}
-  </span>
-  <i class="al-u"><small>${b[6]}</small>
-   ${uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]}</i>
-  <div class="al"><span>${b[2]}</span></div>
-</li>`    ).data([i]));
+          o.append($(
+'<li><div class="al0"></div>'+
+'  <span class="b_grey">&nbsp;'+
+'    <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp;'+
+'    <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i>'+
+'    '+ b[3][0].length +' | '+ -b[3][1].length +
+'    <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp;'+
+'    '+ (yp(c)? '<i class="far fa-sm fa-comment-alt" title="적바림 쓰기"></i> &nbsp;': '')+
+'  </span>'+
+'  <i class="al-u"><small>'+ b[6] +'</small>'+
+'   '+ (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]) +'</i>'+
+'  <div class="al"><span>'+ b[2] +'</span></div>'+
+'</li>'   ).data([i]));
           for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
             var d = c[j];
-            o.append($(`
-<li><div class="aln">${convertNote(d[1])}</div>
-  &nbsp;<i class="al-u"><small>${d[4]}</small>
-  ${d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': d[3]}</i>
-</li>`      ).data([i, j]));
+            o.append($(
+'<li><div class="aln">'+ convertNote(d[1]) +'</div>'+
+'  &nbsp;<i class="al-u"><small>'+ d[4] +'</small>'+
+'  '+ (d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': d[3]) +'</i>'+
+'</li>'     ).data([i, j]));
           }
         }
         if (uid) {
-          o.append(`
-<li><div class="al0"></div>&nbsp;
-  <i class="fas fa-lg ${faArrow(al.length - 1)}"></i> &nbsp;
-  <i class="far fa-sm fa-edit" title="새 말 넣기"></i>
-</li>`    );
+          o.append(
+'<li><div class="al0"></div>&nbsp;'+
+'  <i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp;'+
+'  <i class="far fa-sm fa-edit" title="새 말 넣기"></i>'+
+'</li>'   );
         }
         $("#de,#als,#de-v .fa-times").show();
       } else {
