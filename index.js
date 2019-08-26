@@ -2153,7 +2153,7 @@ $(function() {
 
   function showAlv(i, des) {
     var dir = des? '0': al[i < 0? al.length - 1: i][1];
-    $(`#al-v :radio[value='${dir}']`).prop('checked', true);
+    $("#al-v :radio[value='"+ dir +"']").prop('checked', true);
     $("#al-v").show().data([des? -1: de[0], i]);
     $("#alv").val(i < 0? '': al[i][2]).focus();
     if (des) setDes(des);
