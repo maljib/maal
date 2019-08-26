@@ -1803,7 +1803,7 @@ $(function() {
 
   function pushDeIntoExprs() {
     if (deS.length == 0 || de[0] != deS[0][0]) {
-      for (let i in deS) {
+      for (var i in deS) {
         if (deS[i][0] == de[0]) {
           deS.splice(i, 1);
           break;
@@ -1918,8 +1918,8 @@ $(function() {
 
   function yp(c) {
     if (uid) {
-      for (let d of c) {
-        if (d[2] == uid) return false;
+      for (var i in c) {
+        if (c[i][2] == uid) return false;
       }
       return true;
     }
@@ -1945,10 +1945,12 @@ $(function() {
         }
         al = a;
         pushDeIntoExprs();
-        const o = $("#als").empty();
-        for (let i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
-          const b = a[i], c = b[7];
-          b[3] = b[3].split(' ').map(x => JSON.parse('['+ x +']'));
+        var o = $("#als").empty();
+        for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
+          var b = a[i], c = b[7];
+          // b[3] = b[3].split(' ').map(x => JSON.parse('['+ x +']'));
+          var v = b[3].split(' ');
+          b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
           o.append($(`
 <li><div class="al0"></div>
   <span class="b_grey">&nbsp;
@@ -1962,8 +1964,8 @@ $(function() {
    ${uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]}</i>
   <div class="al"><span>${b[2]}</span></div>
 </li>`    ).data([i]));
-          for (let j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
-            const d = c[j];
+          for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
+            var d = c[j];
             o.append($(`
 <li><div class="aln">${convertNote(d[1])}</div>
   &nbsp;<i class="al-u"><small>${d[4]}</small>
@@ -2014,7 +2016,8 @@ $(function() {
       var up = $(this).hasClass("fa-thumbs-up");
       v[up? 0: 1].splice(-(up? k: l) - 1, 0, +uid);
     }
-    var s = v.map(x => x.join(',')).join(' ');
+    // var s = v.map(x => x.join(',')).join(' ');
+    var s = v[0].join(',') +' '+ v[1].join(',');
     $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
       if (rc == '1') findAl(de[0]);
     });
@@ -2027,7 +2030,7 @@ $(function() {
       return 2;                    // close
     }
     if (als) {
-      for (let k in al) {          // add, update
+      for (var k in al) {          // add, update
         if (als == al[k][2] && (i != k || dir == b[1])) return 2;
       }
     } else if (i < 0) {
@@ -2086,8 +2089,8 @@ $(function() {
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
     var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
     var  b = al[i], c = b[7];
-    for (let d of c) {
-      if (s == d[1]) {
+    for (var k in c) {
+      if (s == c[k][1]) {
         $("#nt-v").hide();
         return;
       }
