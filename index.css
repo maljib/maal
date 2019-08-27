@@ -1,7 +1,7 @@
 @charset "utf-8";
 @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
 
-body { background-color:black; font-family:'Malgun Gothic';
+body { background-color:black; font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
        margin:0; overflow-x:hidden; overflow-y:hidden; visibility:hidden; }
 img  { border:none; vertical-align:middle; cursor:pointer; }
 
@@ -16,6 +16,7 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
 #h1 { margin:0 -7px 0 12px; cursor:pointer; }
 #count1,#count2,#count3,#count5 { cursor:pointer; margin-left:-2px; vertical-align:-2px; }
 #count4,#count1e,#count2e       { cursor:pointer; }
+#count1e,#count2e               { vertical-align:-2px; }
 #arg-l,#arg-r    { position:absolute; display:none; cursor:pointer;
                    background-color:transparent; top:12px; z-index:250; }
 #arg-l           { right:153px; }
@@ -166,25 +167,24 @@ small             { font-size:70%; }
 #search { z-index:902; top:10px; right:80px; color:white;}
 #ex0 .fa-times { z-index:902; top:10px; right: 40px; color:white; }
 
-#h1, #h1_e { font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', 'Sans-serif';
-             font-size:2em; font-weight:bold; color:#f1f3f1; }
+#h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; }
 
 #de  { z-index:902; margin:5px 20px 0 15px; }
 #de span, .al span { display:inline-block; }
 
 #als { top:81px; left:15px; right:20px; margin:0; overflow:auto; }
 #als li { margin:0 0 0 -40px; }
-.al0    { margin-top:10px; }
+.al0    { margin-top:2px; }
 .fa-thumbs-up   { color: blue; }
 .fa-thumbs-down { color: red; }
 .al-u   { right:5px; /* z-index:-1; */  }
-.al     { margin-top:4px; }
+.al     { margin-top:-1px; }
 #de>span, .al>span, .aln { border: 1px solid #aaaaaa; border-radius: 4px;
-                           background:white; padding:4px; }
-.aln { margin-bottom: -2px; }
+                           background:white; padding:0 4px 2px 4px; }
+.aln { margin-bottom: -4.5px; }
 #de-v,#al-v,#nt-v { left:0; right:0; background-image: linear-gradient(white, #cccccc); }
 #de-v           { top:48px; padding:5px 40px 5px 15px; }
-#al-v,#nt-v     { top:81px; padding:5px 25px 5px 15px; }
+#al-v,#nt-v     { top:81px; padding:2px 25px 5px 15px; }
 
 #de-l,#de-r { top:10px; cursor:pointer; font-size:110%; }
 #de-r    { right:40px; }
@@ -194,12 +194,12 @@ small             { font-size:70%; }
 #al-v .fa-hdd,   #nt-v .fa-hdd    { right:60px; }
 
 #dev,#alv  { width:100%; text-align:center; }
-#ntv       { width:100%; overflow:auto; }
+#ntv       { width:100%; overflow:auto; margin-bottom:-5px; }
 
 #nt-v > span { display:inline-block; text-align:center; width:20px;
-   padding:2px; margin:-3px 0 0 0; font-weight: bold;
+   padding:0 2px 0 2px; font-weight: bold;
    border: 1px solid #aaaaaa; border-radius: 10px;
-   background:white; cursor:pointer; }
+   background:#f0f0f0; cursor:pointer; }
 
 .fa-edit,.fa-times,.fa-hdd,.fa-comment-alt,.fa-search { cursor:pointer; }
 

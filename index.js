@@ -303,7 +303,7 @@ $(function() {
 
   // [들어가기] 버튼 클릭  -- 로그인, 사용자 등록
   $("#enter").click(function() {
-    $("#name_mail_sure,#quit,#x-ask,#passx").hide();
+    $("#name_mail_sure,#quit,#x-ask,#passx,#msg").hide();
     $("#signin").show();  // 로그인 다이얼로그
     openDialog("들어가기");
   });
@@ -1502,7 +1502,7 @@ $(function() {
         $("#editors thead td").removeClass().addClass(data.a);
         $("#editors span").text(data.t);
         $("#editors").show()
-                 .position({ my:"right top", at:"right+8 bottom+4", of:data.s });
+                 .position({ my:"right top", at:"right+8 bottom+1.5", of:data.s });
   
       } else {
         $("#editors").hide();
@@ -1723,11 +1723,11 @@ $(function() {
     $("#tab1,#tab2,#tab3,#tab4,#viewer").height(h - 76);
     $("#edit").height(h - 109);
     $("#list tbody").css("max-height", h - 72);
-    $("#editors tbody").css("max-height", h - 60);
+    $("#editors tbody").css("max-height", h - 70);
     $(".ui-autocomplete").css("max-height", h - 40);
     $("#note-form").is(":visible") && setNoteSize();
-    $("#als").height(h - 84);
-    $("#ntv").height(h - 175);
+    $("#als").height(h - 82);
+    $("#ntv").height(h - 170);
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
@@ -1755,7 +1755,7 @@ $(function() {
   }
 
   $("#arrow").click(function() {
-    $("#editors").hide();
+    $("#editors,#msg").hide();
     search_arg = "#dev";
     showCount([1, 2], "e");
     $("#ex").show();
@@ -1951,7 +1951,7 @@ $(function() {
           var v = b[3].split(' ');
           b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
           o.append($(
-'<li><div class="al0"></div>'+
+'<li><div class="al0">'+
 '  <span class="b_grey">&nbsp;'+
 '    <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp;'+
 '    <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i>'+
@@ -1960,7 +1960,7 @@ $(function() {
 '    '+ (yp(c)? '<i class="far fa-sm fa-comment-alt" title="적바림 쓰기"></i> &nbsp;': '')+
 '  </span>'+
 '  <i class="al-u"><small>'+ b[6] +'</small>'+
-'   '+ (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]) +'</i>'+
+'   '+ (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]) +'</i></div>'+
 '  <div class="al"><span>'+ b[2] +'</span></div>'+
 '</li>'   ).data([i]));
           for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
@@ -1974,9 +1974,9 @@ $(function() {
         }
         if (uid) {
           o.append(
-'<li><div class="al0"></div>&nbsp;'+
+'<li><div class="al0">&nbsp;'+
 '  <i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp;'+
-'  <i class="far fa-sm fa-edit" title="새 말 넣기"></i>'+
+'  <i class="far fa-sm fa-edit" title="새 말 넣기"></i></div>'+
 '</li>'   );
         }
         $("#de,#als,#de-v .fa-times").show();
