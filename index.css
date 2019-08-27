@@ -164,8 +164,8 @@ small             { font-size:70%; }
 
 #ex { z-index:902; top:0; bottom:0; left:0; right:0; }
 #ex0 { background:black; margin:0; height:46.5px; padding:0 0 0 20px; }
-#search { z-index:902; top:10px; right:80px; color:white;}
-#ex0 .fa-times { z-index:902; top:10px; right: 40px; color:white; }
+#search { z-index:902; top:16px; right:80px; color:white;}
+#ex0 .fa-times { z-index:902; top:16px; right: 40px; color:white; }
 
 #h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; }
 
@@ -186,7 +186,7 @@ small             { font-size:70%; }
 #de-v           { top:48px; padding:5px 40px 5px 15px; }
 #al-v,#nt-v     { top:81px; padding:2px 25px 5px 15px; }
 
-#de-l,#de-r { top:10px; cursor:pointer; font-size:110%; }
+#de-l,#de-r { top:6px; cursor:pointer; font-size:110%; }
 #de-r    { right:40px; }
 
 #de-v .fa-times         { top:10px; right:10px; display:none; }

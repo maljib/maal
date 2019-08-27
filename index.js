@@ -1775,7 +1775,7 @@ $(function() {
     if (b || !getDes()) {
       $("#dev").val(de[1]? de[1]: '');
       $("#de-v").show();
-      $("#search").hide();  
+      $("#search,#al-v,#nt-v").hide();  
     } else {
       $("#search").show();
       $("#de-v").hide();  
@@ -2151,6 +2151,7 @@ $(function() {
   });
 
   function showAlv(i, des) {
+    showDev(false);
     var dir = des? '0': al[i < 0? al.length - 1: i][1];
     $("#al-v :radio[value='"+ dir +"']").prop('checked', true);
     $("#al-v").show().data([des? -1: de[0], i]);
@@ -2159,6 +2160,8 @@ $(function() {
   }
 
   function showNtv(i, j) {
+    showDev(false);
+    $("#al-v").hide();
     $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up")
                             .addClass(faArrow(i));
     $("#nt-v > div > span").text(al[i][2]);
