@@ -1534,7 +1534,12 @@ $(function() {
   $("#ans     .x-close").click(function() { $("#ans").hide(); });
   $("#toSure  .x-close").click(function() { $("#toSure").hide(); });
   $("#list    .x-close").click(function() { $("#list").hide(); });
-  $("#editors .x-close").click(function() { $("#editors").hide(); });
+  $("#editors .x-close").click(function() { 
+    $("#editors").hide();
+    if ($("#ex").is(":visible") && !$("#de-v").is(":visible")) {
+      showDev(false);
+    }
+  });
 
   $("#editors>tbody").on("click", "tr", function() {
     if (search_arg == '#dev') {
@@ -1759,7 +1764,7 @@ $(function() {
     search_arg = "#dev";
     showCount([1, 2], "e");
     $("#ex").show();
-    getDes() || showDev(true);
+    showDev(false);
   });
 
   $("#ex0 .fa-times").click(function() {
@@ -1976,7 +1981,7 @@ $(function() {
           o.append(
 '<li><div class="al0">&nbsp;'+
 '  <i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp;'+
-'  <i class="far fa-sm fa-edit" title="새 말 넣기"></i></div>'+
+'  <i class="far fa-sm fa-edit" title="더 넣기"></i></div>'+
 '</li>'   );
         }
         $("#de,#als,#de-v .fa-times").show();
