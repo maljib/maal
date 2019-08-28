@@ -699,7 +699,7 @@ $(function() {
     return num(s);
   }
 
-  var  LINK = /([<>=≈↔→\]☞])\s*([-가-힣]+\d*)((\s*[,.]\s*[-가-힣]+\d*)*)/g;
+  var  LINK = /([<>=≈↔→\]\u261e])\s*([-가-힣]+\d*)((\s*[,.]\s*[-가-힣]+\d*)*)/g;
   var START = /([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/g;
 
   function html(s) {
@@ -1869,17 +1869,21 @@ $(function() {
       var arg = $(this).val().trim();
       $(this).val(arg);
       if (arg && !/[!@$*]/.test(arg)) {
-        $.post('getExprIdIfAny.php', "arg="+ arg, function(id) {
-          if ($.isNumeric(id)) {
-            findAl(id, arg);
-          } else {
-            uid && showAlv(-1, arg);
-            showDev(false);
-          }
-        });
+        findDes(arg);
       }
     }
   });
+
+  function findDes(des) {
+    $.post('getExprIdIfAny.php', "s="+ encodeURIComponent(des), function(dei) {
+      if ($.isNumeric(dei)) {
+        findAl(dei, des);
+      } else {
+        uid && showAlv(-1, des);
+        showDev(false);
+      }
+    });
+  }
 
   function setDes(s) {
     var o = $("#de span");
@@ -1936,6 +1940,13 @@ $(function() {
 
   function convertNote(s) {
     return s? s.replace(/\r\n/g, "\n")
+               .replace(/\u261e\s*([^\/]+)\s*\/?/g, function(s, s1) {
+                 var x = '';
+                 s1.split(/\s*,\s*/).forEach(function(e) {
+                   x += ', <span class="link">'+ e +'</span>';
+                 });
+                 return '&#x261e'+ x.substr(2);
+               })
                .replace(/\n/g, "<br>")
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
@@ -1966,7 +1977,7 @@ $(function() {
 '  </span>'+
 '  <i class="al-u"><small>'+ b[6] +'</small>'+
 '   '+ (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]) +'</i></div>'+
-'  <div class="al"><span>'+ b[2] +'</span></div>'+
+'  <div class="al"><span class="link">'+ b[2] +'</span></div>'+
 '</li>'   ).data([i]));
           for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
             var d = c[j];
@@ -2025,6 +2036,8 @@ $(function() {
     $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
       if (rc == '1') findAl(de[0]);
     });
+  }).on("click", ".link", function() {
+    findDes($(this).text());
   });
 
   function alvTest(dei, des, i, als, dir) {
@@ -2140,6 +2153,8 @@ $(function() {
           i = k;
         }
       }
+    } else if (c === "\u261e") {
+      c += "/";
     }
     o.val(s.substr(0, i) + c + s.substr(j))
      .prop("selectionStart", i + 1).prop("selectionEnd", i + 1).focus();

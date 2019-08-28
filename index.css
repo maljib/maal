@@ -178,8 +178,10 @@ small             { font-size:70%; }
 .al0    { margin-top:2px; }
 .fa-thumbs-up   { color: blue; }
 .fa-thumbs-down { color: red; }
-.al-u   { right:5px; /* z-index:-1; */  }
-.al     { margin-top:-1px; }
+.al-u                    { right:5px; /* z-index:-1; */  }
+.al                      { margin-top:-1px; }
+.link                    { cursor:pointer; }
+.aln .link               { text-decoration:underline; }
 #de>span, .al>span, .aln { border: 1px solid #aaaaaa; border-radius: 4px;
                            background:white; padding:0 4px 2px 4px; }
 .aln { margin-bottom: -4.5px; }
