@@ -2134,7 +2134,7 @@ $(function() {
     }
   });
 
-  $("#nt-v > span").click(function() {
+  $("#chars span").click(function() {
     var c = $(this).text().replace(/\s/g,'');
     var o = $("#ntv");
     var s = o.val();
@@ -2186,7 +2186,7 @@ $(function() {
     $("#al-v").hide();
     $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up")
                             .addClass(faArrow(i));
-    $("#nt-v > div > span").text(al[i][2]);
+    $("#nt-v .al span").text(al[i][2]);
     $("#nt-v").show().data([i, j? j: -1]);
     $("#ntv").val(j? al[i][7][j][1]: '').scrollTop(0)
              .prop("selectionStart", 0).prop("selectionEnd", 0).focus();

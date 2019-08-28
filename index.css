@@ -199,7 +199,8 @@ small             { font-size:70%; }
 #dev,#alv  { width:100%; text-align:center; }
 #ntv       { width:100%; overflow:auto; margin-bottom:-5px; }
 
-#nt-v > span { display:inline-block; text-align:center; width:20px;
+#chars { font-size:0; }
+#chars span { font-size:16px; display:inline-block; text-align:center; width:20px;
    padding:0 2px 0 2px; font-weight: bold;
    border: 1px solid #aaaaaa; border-radius: 10px;
    background:#f0f0f0; cursor:pointer; }
