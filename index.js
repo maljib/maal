@@ -1940,12 +1940,14 @@ $(function() {
 
   function convertNote(s) {
     return s? s.replace(/\r\n/g, "\n")
-               .replace(/\u261e\s*([^\/]+)\s*\/?/g, function(s, s1) {
+               .replace(/([\u261e\`])\s*([^.\`]+)\s*([.\`]?)/g, function(s, s1, s2, s3) {
                  var x = '';
-                 s1.split(/\s*,\s*/).forEach(function(e) {
+                 s2.split(/\s*,\s*/).forEach(function(e) {
                    x += ', <span class="link">'+ e +'</span>';
                  });
-                 return '&#x261e'+ x.substr(2);
+                 if (s1 == '\`') s1 = '';
+                 if (s3 == '\`') s3 = '';
+                 return s1 + x.substr(2) + s3;
                })
                .replace(/\n/g, "<br>")
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
@@ -2154,7 +2156,7 @@ $(function() {
         }
       }
     } else if (c === "\u261e") {
-      c += "/";
+      c += ".";
     }
     o.val(s.substr(0, i) + c + s.substr(j))
      .prop("selectionStart", i + 1).prop("selectionEnd", i + 1).focus();
