@@ -2024,10 +2024,10 @@ $(function() {
 
   function alvTest(dei, des, i, als, dir) {
     var b = al[i];
-    if (als == des) {
-      if (dei < 0) setDes(de[1]);
-      return 2;                    // close
-    }
+    // if (als == des) {
+    //   if (dei < 0) setDes(de[1]);
+    //   return 2;                    // close
+    // }
     if (als) {
       for (var k in al) {          // add, update
         if (als == al[k][2] && (i != k || dir == b[1])) return 2;
