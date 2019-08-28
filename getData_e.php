@@ -15,7 +15,7 @@ SELECT d.id, 1 dir, f.expr, d.vote, u.id, u.nick,
   FROM deals d JOIN exprs e ON e.id = d.al
                JOIN exprs f ON f.id = d.de
                JOIN users u ON u.id = d.user
- WHERE e.id = $de
+ WHERE e.id = $de AND d.al <> d.de
  ORDER BY dir, c;
 SQL
   );
