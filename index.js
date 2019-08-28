@@ -1485,7 +1485,7 @@ $(function() {
   $("#count1e").data({ s:"#count1e", x:"@", a:"b-yellow", t:"다듬은말" });
   $("#count2e").data({ s:"#count2e", x:"$", a:"b-white", t:"적바림" });
 
-  $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").mouseenter(function() {
+  $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").click(function() {
     var o = $(this), data = o.data();
     $.post("getC"+ data.s.substring(2) +"a.php", function(array) {
       var len = array.length;
