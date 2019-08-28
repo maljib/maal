@@ -14,9 +14,9 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
 [data-l]   { cursor:pointer; text-decoration:underline; }
 
 #h1 { margin:0 -7px 0 12px; cursor:pointer; }
-#count1,#count2,#count3,#count5 { cursor:pointer; margin-left:-2px; vertical-align:-2px; }
-#count4,#count1e,#count2e       { cursor:pointer; }
+#count1,#count2,#count3,#count5 { vertical-align:-2px; margin-left:-2px; }
 #count1e,#count2e               { vertical-align:-2px; }
+#help                           { vertical-align:-2px; cursor:pointer; }
 #arg-l,#arg-r    { position:absolute; display:none; cursor:pointer;
                    background-color:transparent; top:12px; z-index:250; }
 #arg-l           { right:153px; }
