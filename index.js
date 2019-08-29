@@ -1732,7 +1732,8 @@ $(function() {
     $(".ui-autocomplete").css("max-height", h - 40);
     $("#note-form").is(":visible") && setNoteSize();
     $("#als").height(h - 82);
-    $("#ntv").height(h - 170);
+    // $("#ntv").height(h - 170);
+    $("#ntv").css("max-height", h - 170);
   }).resize();
 
   $("body").css("visibility", "visible").tooltip({ show:false, hide:false });
@@ -1953,53 +1954,53 @@ $(function() {
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
 
-  function findAl(id, s) {
-    $.post("getData_e.php", "a="+ id, function(a) {
+  function findAl(dei, des) {
+    $.post("getData_e.php", "a="+ dei, function(a) {
       if (a[0]) {
-        if (s) {
-          setDes(s);
-          de = [id, s];
+        if (des) {
+          setDes(des);
+          de = [dei, des];
         }
         al = a;
         pushDeIntoExprs();
-        var o = $("#als").empty();
+        var s = '';
         for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
           var b = a[i], c = b[7];
-          // b[3] = b[3].split(' ').map(x => JSON.parse('['+ x +']'));
           var v = b[3].split(' ');
           b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
-          o.append($(
-'<li><div class="al0">'+
-'  <span class="b_grey">&nbsp;'+
-'    <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp;'+
-'    <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i>'+
-'    '+ b[3][0].length +' | '+ -b[3][1].length +
-'    <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp;'+
-'    '+ (yp(c)? '<i class="far fa-sm fa-comment-alt" title="적바림 쓰기"></i> &nbsp;': '')+
-'  </span>'+
-'  <i class="al-u"><small>'+ b[6] +'</small>'+
-'   '+ (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': b[5]) +'</i></div>'+
-'  <div class="al"><span class="link">'+ b[2] +'</span></div>'+
-'</li>'   ).data([i]));
+          s += '<div>'+ 
+'<div class="al0">'+
+  '<span>&nbsp; '+
+    '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
+    '<i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i> '+
+     b[3][0].length +' | '+ -b[3][1].length +
+   ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp; '+
+     (yp(c)? '<i class="far fa-sm fa-comment-alt"></i> &nbsp;': '')+
+  '</span>'+
+  '<i class="al-u"><small>'+ b[6] +'</small> '+
+   (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[5]) +'</i>'+
+'</div>'+
+'<div class="al"><span class="link">'+ b[2] +'</span></div>';
           for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
             var d = c[j];
-            o.append($(
-'<li><div class="aln">'+ convertNote(d[1]) +'</div>'+
-'  &nbsp;<i class="al-u"><small>'+ d[4] +'</small>'+
-'  '+ (d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit" title="고치거나 지우기"></i>': d[3]) +'</i>'+
-'</li>'     ).data([i, j]));
+            s += '<div>'+
+'<div class="aln">'+ convertNote(d[1]) +'</div>'+
+' &nbsp;<i class="al-u"><small>'+ d[4] +'</small> '+
+(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3]) +'</i></div>';
           }
+          s += '</div>'
         }
         if (uid) {
-          o.append(
-'<li><div class="al0">&nbsp;'+
-'  <i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp;'+
-'  <i class="far fa-sm fa-edit" title="더 넣기"></i></div>'+
-'</li>'   );
+          s +=
+'<div class="al0">&nbsp; '+
+  '<i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp; '+
+  '<i class="far fa-sm fa-edit"></i>'+
+'</div>';
         }
+        $("#als").empty().append(s);
         $("#de,#als,#de-v .fa-times").show();
       } else {
-        if (id == de[0]) {
+        if (dei == de[0]) {
           de = al = [];
           setDes("");
           $("#als").empty();
@@ -2007,8 +2008,8 @@ $(function() {
         }
       }
       $("#nt-v,#al-v").hide();
-      if (!a[0] && s && uid) {
-        showAlv(-1, s);
+      if (!a[0] && des && uid) {
+        showAlv(-1, des);
       }
       showDev(false);
     }, "json").fail(function(xhr) {
@@ -2017,23 +2018,23 @@ $(function() {
   }
 
   $("#als").on("click", ".fa-edit", function() {
-    var o = $(this).parents("li").data();
-    var i = o[0], j = o[1];
-    if (0 <= j) {
-      showNtv(i, j);
+    var i = $(this).parents("#als>div").index();
+    var j = $(this).parents("#als>div>div").index() - 2;
+    if (j < 0) {
+      showAlv(i < al.length? i: -1);
     } else {
-      showAlv(0 <= i? i: -1);
+      showNtv(i, j);
     }
   }).on("click", ".fa-comment-alt", function() {
-    showNtv($(this).parents("li").data()[0])
+    var i = $(this).parents("#als>div").index();
+    showNtv(i, -1);
   }).on("click", ".pointer", function() {
-    var i = $(this).parents("li").data()[0];
+    var i = $(this).parents("#als>div").index();
     var b = al[i], v = b[3], k, l;
     if ((k = wp(i,0)) < 0 && (l = wp(i,1)) < 0) {
       var up = $(this).hasClass("fa-thumbs-up");
       v[up? 0: 1].splice(-(up? k: l) - 1, 0, +uid);
     }
-    // var s = v.map(x => x.join(',')).join(' ');
     var s = v[0].join(',') +' '+ v[1].join(',');
     $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
       if (rc == '1') findAl(de[0]);
@@ -2187,8 +2188,8 @@ $(function() {
     $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up")
                             .addClass(faArrow(i));
     $("#nt-v .al span").text(al[i][2]);
-    $("#nt-v").show().data([i, j? j: -1]);
-    $("#ntv").val(j? al[i][7][j][1]: '').scrollTop(0)
+    $("#nt-v").show().data([i, j]);
+    $("#ntv").val(j < 0? '': al[i][7][j][1]).scrollTop(0)
              .prop("selectionStart", 0).prop("selectionEnd", 0).focus();
   }
 
