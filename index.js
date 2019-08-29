@@ -1729,7 +1729,8 @@ $(function() {
     $("#edit").height(h - 109);
     $("#list tbody").css("max-height", h - 72);
     $("#editors tbody").css("max-height", h - 70);
-    $(".ui-autocomplete").css("max-height", h - 40);
+    $("#ui-id-1.ui-autocomplete").css("max-height", h - 40);
+    $("#ui-id-7.ui-autocomplete").css("max-height", h - 80);
     $("#note-form").is(":visible") && setNoteSize();
     $("#als").height(h - 82);
     // $("#ntv").height(h - 170);
@@ -1983,10 +1984,11 @@ $(function() {
 '<div class="al"><span class="link">'+ b[2] +'</span></div>';
           for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
             var d = c[j];
-            s += '<div>'+
-'<div class="aln">'+ convertNote(d[1]) +'</div>'+
-' &nbsp;<i class="al-u"><small>'+ d[4] +'</small> '+
-(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3]) +'</i></div>';
+            s += '<div class="aln">'+
+'<div>'+ convertNote(d[1]) +'</div>'+
+' &nbsp;<i class="al-n"><small>'+ d[4] +'</small> '+
+(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3])
+            +'</i></div>';
           }
           s += '</div>'
         }
@@ -2019,7 +2021,7 @@ $(function() {
 
   $("#als").on("click", ".fa-edit", function() {
     var i = $(this).parents("#als>div").index();
-    var j = $(this).parents("#als>div>div").index() - 2;
+    var j = $(this).parents(".aln").index() - 2;
     if (j < 0) {
       showAlv(i < al.length? i: -1);
     } else {
