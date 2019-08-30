@@ -1780,8 +1780,8 @@ $(function() {
 
   function showDev(b) {
     if (b || !getDes()) {
-      $("#dev").val(de[1]? de[1]: '');
       $("#de-v").show();
+      $("#dev").val(de[1]? de[1]: '').focus();
       $("#search,#al-v,#nt-v").hide();  
     } else {
       $("#search").show();
@@ -1874,6 +1874,8 @@ $(function() {
         findDes(arg);
       }
     }
+  }).focus(function() {
+    this.select();
   });
 
   function findDes(des) {
