@@ -1953,6 +1953,17 @@ $(function() {
                  if (s3 == '\`') s3 = '';
                  return s1 + x.substr(2) + s3;
                })
+               .replace(/#\((.+?)(\|(.+?))?\)/g, function(s,s1,s2,s3) {
+                 var a;
+                 if (s1[0] === "#") {
+                   var c = s1.substring(1);
+                   a = s1 + (s3? "' id='"+ c +"_": "_' id='"+ c);
+                   s1 = "&#x21E7;";
+                 } else {
+                   a = s1 +"' target='_blank";
+                 }
+                 return "<a href='"+ a +"'>"+ (s3? s3: s1) +"</a>";
+               })
                .replace(/\n/g, "<br>")
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
@@ -2143,13 +2154,13 @@ $(function() {
     var c = $(this).text().replace(/\s/g,'');
     var o = $("#ntv");
     var s = o.val();
-    var i = o.prop("selectionStart");
-    var j = o.prop("selectionEnd");
+    var a = o.prop("selectionStart"), b = o.prop("selectionEnd");
+    var i = 1;
     if (c === "◯") {
-      var k = i - 1, n, n10;
-      if (0 < i && (n = circled(s[k]))) {
+      var k = a - 1, n, n10;
+      if (0 < a && (n = circled(s[k]))) {
         c = n;
-        i--;
+        a--;
       } else {
         if (0 <= (n = toNum(s, k)) && 0 <= (n10 = toNum(s, k - 1))) {
           n += n10 * 10;
@@ -2157,14 +2168,18 @@ $(function() {
         }
         if (1 <= n && n <= 50) {
           c = circledNumber(n);
-          i = k;
+          a = k;
         }
       }
     } else if (c === "\u261e") {
       c += ".";
+    } else if (c === "#(") {
+      c += "|)";
+      i = 2;
     }
-    o.val(s.substr(0, i) + c + s.substr(j))
-     .prop("selectionStart", i + 1).prop("selectionEnd", i + 1).focus();
+    i += a;
+    o.val(s.substr(0, a) + c + s.substr(b))
+     .prop("selectionStart", i).prop("selectionEnd", i).focus();
   });
 
   $("#al-v .fa-times").click(function() {
