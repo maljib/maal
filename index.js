@@ -2151,10 +2151,10 @@ $(function() {
   });
 
   $("#chars span").click(function() {
-    var c = $(this).text().replace(/\s/g,'');
     var o = $("#ntv");
     var s = o.val();
     var a = o.prop("selectionStart"), b = o.prop("selectionEnd");
+    var c = $(this).text().replace(/\s/g,'');
     var i = 1;
     if (c === "◯") {
       var k = a - 1, n, n10;
