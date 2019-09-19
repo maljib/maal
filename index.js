@@ -1980,7 +1980,7 @@ $(function() {
         var s = '';
         for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
           var b = a[i], c = b[7];
-          var v = b[3].split(' ');
+          var v = (b[3]? b[3]: ' ').split(' ');
           b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
           s += '<div>'+ 
 '<div class="al0">'+
