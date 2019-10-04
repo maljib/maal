@@ -2078,6 +2078,7 @@ $(function() {
   }
 
   $("#al-v .fa-hdd").click(function() {
+    $("#al-v").hide();
     var zzz = $("#al-v").data();
     var dei = zzz[0], des = getDes();                // de expr index, de expr
     var   i = zzz[1], als = $("#alv").val().trim();  // al index, al expr
@@ -2121,6 +2122,7 @@ $(function() {
   }
 
   $("#nt-v .fa-hdd").click(function() {
+    $("#nt-v").hide();
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
     var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
     var  b = al[i], c = b[7];
