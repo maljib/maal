@@ -2078,7 +2078,6 @@ $(function() {
   }
 
   $("#al-v .fa-hdd").click(function() {
-    $("#al-v").hide();
     var zzz = $("#al-v").data();
     var dei = zzz[0], des = getDes();                // de expr index, de expr
     var   i = zzz[1], als = $("#alv").val().trim();  // al index, al expr
@@ -2087,6 +2086,7 @@ $(function() {
       case 2: $("#al-v").hide();
       case 1: return;
     }
+    $("#al-v").hide();
     if (dei < 0) {
       $.post('getExprId.php', 's='+ encodeURIComponent(des), function(desi) {
         if ($.isNumeric(desi)) addDeal(dir, desi, als);
@@ -2122,7 +2122,6 @@ $(function() {
   }
 
   $("#nt-v .fa-hdd").click(function() {
-    $("#nt-v").hide();
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
     var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
     var  b = al[i], c = b[7];
@@ -2134,6 +2133,7 @@ $(function() {
     }
     s = encodeURIComponent(s);
     if (0 <= j) {
+      $("#nt-v").hide();
       $.post('updateNote.php', 'a='+ c[j][0] +'&s='+ s, function(rc) {
         if (rc == '1') {
           findAl(de[0]);
@@ -2141,6 +2141,7 @@ $(function() {
         }
       });
     } else if (s) {
+      $("#nt-v").hide();
       $.post('addNote.php', 'a='+ b[0] +','+ uid +'&s='+ s, function(rc) {
         if ($.isNumeric(rc)) {
           findAl(de[0]);
