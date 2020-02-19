@@ -1,18 +1,24 @@
 <?php // mail.php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require_once 'functions.php';
 require_once '../vendor/autoload.php';
 
 function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts = false, $isHTML = false) {
   $isHTML = $isHTML || preg_match('/^.*<html.*<\/html>\s*$/s', $body);
-  $mail = new PHPMailer\PHPMailer\PHPMailer;
-  //$mail->SMTPDebug = 3;
+  // $mail = new PHPMailer\PHPMailer\PHPMailer;
+  $mail = new PHPMailer(true);
+  // $mail->SMTPDebug = 3;
   $mail->CharSet = 'UTF-8';
   $mail->Host = 'smtp.gmail.com';
   $mail->Port = 587;
   $mail->isSMTP();
-  $mail->SMTPSecure = 'tls';
+  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+  // $mail->SMTPSecure = 'tls';
   $mail->SMTPAuth = true;
-  $mail->Username = 'maljib.org';
+  $mail->Username = 'maljib.org@gmail.com';
   $mail->Password = 'rlatjddms';
 
   $maljib  = '배달말집';

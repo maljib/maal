@@ -1,11 +1,19 @@
 <?php // updateDeal.php
 require_once 'functions2.php';
 
-$a  = explode(',', $_POST['a']);  // [0]=id, [1]=0/1, [2]=de/al
-$al = getExprId($_POST['s']);     // al
-is_numeric($al) or die($al);
-
-$set = $a[1] == '0'? "de=$a[2],al=$al":
-                     "al=$a[2],de=$al";
-echo sqlUpdate('deals', $set, "id=$a[0]");
+$id  = $_POST['id'];
+$dir = $_POST['dir']; 
+$de  = $_POST['de'];
+$al0 = $_POST['al'];
+$al  = getExprId($_POST['als']);
+if ($de == '0') {
+    $de  = 'NULL';
+    $set = '';
+} else {
+    $uid = $_POST['uid'];
+    $set = "user=$uid,";
+}
+$set .= $dir == '0'?  "de=$de,al=$al": "de=$al,al=$de";
+echo sqlUpdate('deals', $set, "id=$id");
+deleteUnusedExpr($al0)
 ?>

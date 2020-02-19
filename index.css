@@ -48,7 +48,6 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #user label,#ask label { display:inline-block; width:85px; text-align:right; }
 #user input,#ask input { margin-bottom:3px; width:225px; padding:3px; }
 
-#tip         { border:0; padding:0; margin-left:5px; }
 #quit,#passx { font-size:80%; display:block; text-align:center; }
 #passx       { margin:0 10px 0 210px; }
 #quit        { margin:0 10px 0 280px; }
@@ -180,7 +179,7 @@ small             { font-size:70%; }
 .al-u, .al-n             { position:absolute; right:20px; /* z-index:-1; */  }
 .al-n small              { vertical-align:4px; }
 .al                      { margin-top:-1px; }
-.link                    { cursor:pointer; }
+.link, .al-link          { cursor:pointer; }
 .aln .link               { text-decoration:underline; }
 #de>span, .al>span, .aln>div { border: 1px solid #aaaaaa; border-radius: 4px;
                            background:white; padding:0 4px 2px 4px; }

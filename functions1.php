@@ -40,6 +40,18 @@ function getMailUser($mail) {
   return selectValue("SELECT id FROM users WHERE mail='$mail' LIMIT 1");
 }
 
+function hasWork($id) {
+  return selectValue(<<< SQL
+SELECT 1 from DUAL where 
+  EXISTS (SELECT * FROM words WHERE user = $id) OR
+  EXISTS (SELECT * FROM texts WHERE user = $id) OR
+  EXISTS (SELECT * FROM deals WHERE user = $id) OR
+  EXISTS (SELECT * FROM notes WHERE user = $id) OR
+  EXISTS (SELECT * FROM  asks WHERE user = $id)
+SQL
+  );
+}
+
 function isQuittable($id) {
   // 내가 다른 사람의 보증인이면 탈퇴할 수 없다
   if (0 < selectValue("SELECT count(*) FROM users WHERE sure = $id")) return false;
@@ -47,7 +59,6 @@ function isQuittable($id) {
   $row = selectRow("SELECT rank, sure FROM users WHERE id = $id");
   if ($row[0] == '1' && $row[1]) return true;
   // 내가 쓴 글이 없으면 탈퇴할 수 있다
-  return selectValue("SELECT count(*) FROM words WHERE user = $id") == 0 &&
-         selectValue("SELECT count(*) FROM texts WHERE user =$id") == 0;
+  return !hasWork($id);
 }
 ?>

@@ -27,13 +27,8 @@ $(function() {
   }
 
   // 서버 에러 메시지를 출력한다 (서버 프로그램 이름, 메시지)
-  function serverError(serverProgramName, message, isInfo) {
-    var msg = "서버(" + serverProgramName + ") 에러: " + message;
-    if (isInfo) {
-      info(msg);
-    } else {
-      $("#tip").show();
-    }
+  function serverError(serverProgramName, message) {
+    info("서버(" + serverProgramName + ") 에러: " + message);
   }
 
   // 입력 에러를 표시하고 에러 메시지를 출력한다 (객체, 메시지[, 출력 객체])
@@ -126,7 +121,6 @@ $(function() {
     var n = $(this).val();
     if (!logged_in) {
       resetError($("#pass,#name,#mail,#sure").val("")); // 그것 빼고 모두 지운다
-      $("#tip").hide();
       uid = "";
       $.post("getUser.php", $(this), function(user) {
         uid  = user.id;
@@ -327,11 +321,11 @@ $(function() {
   });
 
   $("#quit").click(function() {
-    $.post("deleteUser.php", "id="+ uid +",0,0", function(rc) {
+    $.post("deleteUser.php", "id="+ uid, function(rc) {
       if (rc == '2') {
         doCancel();
         $("#q-sure").text(sure);
-        $("#q-req").show();
+        $("#q-req,#q-req .b-shade").show();
       } else if (rc == '1') {
         exitCloseDialog();
       } else {
@@ -341,6 +335,7 @@ $(function() {
   });
 
   $("#q-req .b-shade").click(function() {
+    $(this).hide();
     $.post("askQuit.php", $("#nick,#sure").serialize() +"&id="+ uid, function(rc) {
       if (!rc) {
         var sure1 = sure;
@@ -458,7 +453,7 @@ $(function() {
         $("#ans").show();
       }
     }, 'json').fail(function(xhr) {
-      serverError("askData.php", xhr.responseText, true);
+      serverError("askData.php", xhr.responseText);
     });
 
     $.post("toSure.php", {id: uid}, function(array) {
@@ -470,14 +465,14 @@ $(function() {
           o.append("<tr><td>"+ (a[3] == '0'? "보증": "탈퇴") +": "+
                    "<input type='radio' name='s"+ a[0] +"'>o "+
                    "<input type='radio' name='s"+ a[0] +"'>x "+
-                   "<input type='radio' name='s"+ a[0] +"' checked>?</td><td>"+
-                               a[1] +"</td><td>"+ a[2] +"</td><td>"+
+                   "<input type='radio' name='s"+ a[0] +
+                   "' checked>?</td><td>"+ a[1] +"</td><td>"+ a[2] +"</td><td>"+
                    "<i class='far fa-envelope fa-lg'></i></td></tr>");
         }
-        $("#toSure").show();
+        $("#toSure,#toSure .b-shade").show();
       }
     }, 'json').fail(function(xhr) {
-      serverError("toSure.php", xhr.responseText, true);
+      serverError("toSure.php", xhr.responseText);
     });
 
     $.post("isEditor.php", {id: uid}, function(rc) {
@@ -514,7 +509,6 @@ $(function() {
   function closeDialog() {
     $("#user").hide();
     $("#pass").val("");                // 비밀번호를 지운다
-    $("#tip").hide();                  // 서버 에러 표시를 제거한다
     resetError($("#user input"));      // 에러 표시를 모두 제거한다
     if ($("#enter").is(":visible")) {
       logged_in = false;
@@ -543,16 +537,20 @@ $(function() {
   });
 
   $("#toSure .b-shade").click(function() {
+    $(this).hide();
     $("#toSure tbody>tr").each(function(i) {
       var o = $(this).find(":checked");
-      var index = o.index();
+      var index = o.index();  // 0=승낙 1=거절 2=보류
       if (index < 2) {
-        var  op = o.parent().text().substring(0,2) == "보증"? 0: 1;
-        var php = op + index === 0? "upRank.php": "deleteUser.php";
-        var arg = "id="+ o.attr("name").substring(1);
-        if (op === 1) arg += ","+ (index === 0? uid: "0");
+        var isUpRank = o.parent().text().substring(0,2) == "보증";
+        var php = isUpRank? "upRank.php": "deleteUser.php";  // 보증, 탈퇴
+        var arg = "id="+ o.attr("name").substring(1);        // 신청자id
+        if (index === 0) arg += ","+ uid;                    // 승낙이면 승인자id 추가
         $.post(php, arg +"&nick="+ encodeURIComponent(nick), function(rc) {
-          if (rc != '1') info("에러["+ (i + 1) +"] "+ rc);
+          if (rc != '1') {
+            serverError(php,"["+ (i + 1) +"] "+ rc);
+            $("#toSure").show();
+          }
         });
       }
     });
@@ -581,7 +579,7 @@ $(function() {
         link.href = "p/maljib.pdf";
         link.click();
       } else {
-        serverError("download.php", t, true);
+        serverError("download.php", t);
       }
       o.show();
     });
@@ -1465,7 +1463,7 @@ $(function() {
 
   function accept(j, isAccept) {
     var e = expl[0][j];
-    var userId = e.uid == uid || word == '?'? '-': uid;
+    var userId = e.uid == uid || word == "?"? '-': uid;
     $.post("updateData.php", {i:0, id: e.id, user: userId}, function(count) {
       if (count == '1') {
         if (isAccept) findWord(word, true);
@@ -1767,6 +1765,7 @@ $(function() {
     showCount([1, 2], "e");
     $("#ex").show();
     showDev(false);
+    $("#alv").prop("readonly", !uid);
   });
 
   $("#ex0 .fa-times").click(function() {
@@ -1871,8 +1870,14 @@ $(function() {
       var arg = $(this).val().trim();
       $(this).val(arg);
       if (arg && !/[!@$*]/.test(arg)) {
-        findDes(arg);
+        if (arg == "?") {
+          findQ();
+        } else {
+          findDes(arg);
+        }
       }
+    } else if (e.keyCode === $.ui.keyCode.ESCAPE) {
+      $("#de-v .fa-times").click();
     }
   }).focus(function() {
     this.select();
@@ -1883,7 +1888,8 @@ $(function() {
       if ($.isNumeric(dei)) {
         findAl(dei, des);
       } else {
-        uid && showAlv(-1, des);
+        // uid && showAlv(-1, des);
+        showAlv(-1, des);
         showDev(false);
       }
     });
@@ -1905,7 +1911,7 @@ $(function() {
 
   function xp(i, k) {
     var b = al[i];
-    return uid && uid != b[4] && b[3][k].indexOf(+uid) < 0? " pointer": "";
+    return uid && uid != b[6] && b[5][k].indexOf(+uid) < 0? " pointer": "";
   }
 
   function findBinary(arr, e) {
@@ -1923,7 +1929,7 @@ $(function() {
   }
 
   function wp(i,j) {
-    var v = al[i][3], k = findBinary(v[j], +uid);
+    var v = al[i][5], k = findBinary(v[j], +uid);
     if (0 <= k) v[j].splice(k, 1);
     return k;
   }
@@ -1968,59 +1974,97 @@ $(function() {
                .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
 
+  function findQ() {
+    $.post('getData_q.php', function(a) {
+      if (a[0]) {
+        $("#de span").html("&nbsp; ? &nbsp;").show();
+        de = [0,"?"];
+        al = a;
+        var s = '';
+        for (var i in a) { // 0=id, 1=0/1, 2=t, 3=al, 4=als, 5=vote, 6=uid, 7=nick, 8=[] // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
+          a[i][6] = a[i][3];
+          s += 
+'<div><div class="al0">'+
+  '<span>&nbsp; <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; </span>'+
+  '<i class="al-u"><small>'+ a[i][2] +'</small> &nbsp;<i class="far fa-sm fa-edit"></i></i>'+
+'</div>'+
+'<div class="al"><span class="al-link">'+ a[i][4] +'</span></div></div>';
+        }
+        $("#als").empty().append(s);
+        $("#de,#als,#de-v .fa-times").show();
+      } else if (de[0] == 0) {
+        de = al = [];
+        setDes("");
+        $("#als").empty();
+        $("#de-v .fa-times").hide();
+      }
+      $("#nt-v,#al-v").hide();
+      showDev(false);
+    }, "json").fail(function(xhr) {
+      serverError("getData_q.php", xhr.responseText);
+    });
+  }
+
   function findAl(dei, des) {
     $.post("getData_e.php", "a="+ dei, function(a) {
-      if (a[0]) {
+      if (a[0]) { 
         if (des) {
           setDes(des);
           de = [dei, des];
         }
         al = a;
-        pushDeIntoExprs();
-        var s = '';
-        for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
-          var b = a[i], c = b[7];
-          var v = (b[3]? b[3]: ' ').split(' ');
-          b[3] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
-          s += '<div>'+ 
+        if (a[0].length == 4) {
+          s =
+'<div><div class="al0">'+
+  '<span>&nbsp; <i class="fas fa-lg '+ faArrow(0) +'"></i> &nbsp; </span>'+
+  '<i class="al-u"><small>'+ a[0][2] +'</small> &nbsp;'+
+  (uid? '<i class="far fa-sm fa-edit"></i>': ' &nbsp; &nbsp;') +'</i>'+
+'</div><div class="al"><span class="al-link">&nbsp; ? &nbsp;</span></div></div>';
+        } else {
+          pushDeIntoExprs();
+          var s = ''; // 0=id, 1=0/1, 2=t, 3=al, 4=als, 5=vote, 6=uid, 7=nick, 8=[]
+          for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
+            var b = a[i], c = b[8];
+            var v = (b[5]? b[5]: ' ').split(' ');
+            b[5] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
+            s += '<div>'+ 
 '<div class="al0">'+
   '<span>&nbsp; '+
     '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
     '<i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i> '+
-     b[3][0].length +' | '+ -b[3][1].length +
+     b[5][0].length +' | '+ -b[5][1].length +
    ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp; '+
      (yp(c)? '<i class="far fa-sm fa-comment-alt"></i> &nbsp;': '')+
   '</span>'+
-  '<i class="al-u"><small>'+ b[6] +'</small> '+
-   (uid == b[4]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[5]) +'</i>'+
+  '<i class="al-u"><small>'+ b[2] +'</small> '+
+   (uid == b[6]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[7]) +'</i>'+
 '</div>'+
-'<div class="al"><span class="link">'+ b[2] +'</span></div>';
-          for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
-            var d = c[j];
-            s += '<div class="aln">'+
+'<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
+            for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
+              var d = c[j];
+              s += '<div class="aln">'+
 '<div>'+ convertNote(d[1]) +'</div>'+
 ' &nbsp;<i class="al-n"><small>'+ d[4] +'</small> '+
 (d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3])
             +'</i></div>';
+            }
+            s += '</div>';
           }
-          s += '</div>'
-        }
-        if (uid) {
-          s +=
+          if (uid) {
+            s +=
 '<div class="al0">&nbsp; '+
   '<i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp; '+
   '<i class="far fa-sm fa-edit"></i>'+
 '</div>';
+          }
         }
         $("#als").empty().append(s);
         $("#de,#als,#de-v .fa-times").show();
-      } else {
-        if (dei == de[0]) {
-          de = al = [];
-          setDes("");
-          $("#als").empty();
-          $("#de-v .fa-times").hide();
-        }
+      } else if (dei == de[0]) {
+        de = al = [];
+        setDes("");
+        $("#als").empty();
+        $("#de-v .fa-times").hide();
       }
       $("#nt-v,#al-v").hide();
       if (!a[0] && des && uid) {
@@ -2036,7 +2080,7 @@ $(function() {
     var i = $(this).parents("#als>div").index();
     var j = $(this).parents(".aln").index() - 2;
     if (j < 0) {
-      showAlv(i < al.length? i: -1);
+      showAlv(i);
     } else {
       showNtv(i, j);
     }
@@ -2045,7 +2089,7 @@ $(function() {
     showNtv(i, -1);
   }).on("click", ".pointer", function() {
     var i = $(this).parents("#als>div").index();
-    var b = al[i], v = b[3], k, l;
+    var b = al[i], v = b[5], k, l;
     if ((k = wp(i,0)) < 0 && (l = wp(i,1)) < 0) {
       var up = $(this).hasClass("fa-thumbs-up");
       v[up? 0: 1].splice(-(up? k: l) - 1, 0, +uid);
@@ -2054,77 +2098,133 @@ $(function() {
     $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
       if (rc == '1') findAl(de[0]);
     });
+  }).on("click", ".al-link", function() {
+    var i = $(this).parents("#als>div").index();
+    if (al[i][3] == "0") {
+      uid && findQ();
+    } else {
+      findAl(al[i][3], $(this).text());
+    }
   }).on("click", ".link", function() {
     findDes($(this).text());
   });
 
-  function alvTest(dei, des, i, als, dir) {
+  function alvTest(i, als, dir) {
     var b = al[i];
-    // if (als == des) {
-    //   if (dei < 0) setDes(de[1]);
-    //   return 2;                    // close
-    // }
     if (als) {
       for (var k in al) {          // add, update
-        if (als == al[k][2] && (i != k || dir == b[1])) return 2;
+        if (als == al[k][4] && (i != k || dir == b[1])) return 2;
+      }
+    } else if (b.length === 9) {
+      if (i < 0) {
+        $("#alv").focus();           // add & no al
+        return 1;                    // retry
+      } else if (de[0] && 0 < b[8].length) {
+        return 2;                    // delete & some notes
+      }
+    } 
+    return 0;
+  }
+/*
+  function alvTest(i, als, dir) {
+    var b = al[i];
+    if (als) {
+      for (var k in al) {          // add, update
+        if (als == al[k][4] && (i != k || dir == b[1])) return 2;
       }
     } else if (i < 0) {
       $("#alv").focus();           // add & no al
       return 1;                    // retry
-    } else if (0 < b[7].length) {
+    } else if (de[0] && 0 < b[8].length) {
       return 2;                    // delete & some notes
     }
     return 0;
   }
-
+*/
   $("#al-v .fa-hdd").click(function() {
-    var zzz = $("#al-v").data();
-    var dei = zzz[0], des = getDes();                // de expr index, de expr
-    var   i = zzz[1], als = $("#alv").val().trim();  // al index, al expr
-    var dir = $("#al-v :radio:checked").val();       // de/al direction = 0/1
-    switch (alvTest(dei, des, i, als, dir)) {
-      case 2: $("#al-v").hide();
-      case 1: return;
-    }
-    $("#al-v").hide();
-    if (dei < 0) {
-      $.post('getExprId.php', 's='+ encodeURIComponent(des), function(desi) {
-        if ($.isNumeric(desi)) addDeal(dir, desi, als);
+    $(this).hide();
+    var de_al = $("#al-v").data();               // [다듬을 말 id, 다듬은 말 index]
+    var dei = de_al[0], des = getDes();                // 다듬을 말:    id, 글자열
+    var   i = de_al[1], als = $("#alv").val().trim();  // 다듬은 말: index, 글자열
+    var dir = $("#al-v :radio:checked").val();         // 방향: 0=de/al 1=al/de
+    if (als == "?") {
+      $.post('addDeal_q.php', { dir: dir, des: des }, function(rc) {
+        if ($.isNumeric(rc)) {
+          findAl(rc, getDes());
+        } else {
+          serverError("addDeal_q.php", rc);
+        }
       });
+      return;
+    }
+    if (i == al.length) i = -1;
+    switch (alvTest(i, als, dir)) {
+      case 2: $("#al-v").hide(); return;
+      case 1: $(this).show(); return;
+    }
+    if (dei < 0) {
+      addDeal(dir, dei, des, als);
     } else if (i < 0) {
-      addDeal(dir, dei, als);
+      addDeal(dir, dei, "", als);
     } else {
-      var a = 'a='+ al[i][0];
+      var id = al[i][0];
       if (als) {
-        a += ','+ dir +','+ dei +'&s='+ encodeURIComponent(als);
-        $.post('updateDeal.php', a, function(rc) {
-          if (rc == '1') findAl(dei);
+        var arg = { id:id, dir:dir, de:dei, al: al[i][3], als:als, uid:uid };
+        $.post('updateDeal.php', arg, function(rc) {
+          if (rc == '1') {
+            findAl2(dei);
+          } else {
+            serverError("updateDeal.php", rc);
+          }
         });
       } else {
-        $.post('deleteDeal.php', a, function(rc) {
+        var arg = { id: id, a: dei +","+ al[i][3] };
+        $.post('deleteDeal.php', arg, function(rc) {
           if (rc == '1') {
-            findAl(dei);
+            findAl2(dei);
             showCount([1], "e");
+          } else {
+            serverError("deleteDeal.php", rc);
           }
         });
       }
     }
   });
 
+  function findAl2(dei) {
+    $("#al-v").hide();
+    dei == '0'? findQ(): findAl(dei);
+  }
+
+  function addDeal(dir, dei, des, als) {
+    // var a = 'a='+ dir +','+ dei +','+ uid +'&s='+ encodeURIComponent(als);
+    var a = { dir: dir, dei: dei, des: des, als: als, uid: uid };
+    $.post('addDeal.php', a, function(rc) {
+      if ($.isNumeric(rc)) {
+        findAl(rc, getDes());
+        showCount([1], "e");
+      } else {
+        serverError("addDeal.php", rc);
+      }
+    });
+  }
+/*
   function addDeal(dir, dei, als) {
     var a = 'a='+ dir +','+ dei +','+ uid +'&s='+ encodeURIComponent(als);
     $.post('addDeal.php', a, function(rc) {
       if ($.isNumeric(rc)) {
         findAl(dei, getDes());
         showCount([1], "e");
+      } else {
+        serverError("download.php", rc);
       }
     });
   }
-
+*/
   $("#nt-v .fa-hdd").click(function() {
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
     var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
-    var  b = al[i], c = b[7];
+    var  b = al[i], c = b[8];
     for (var k in c) {
       if (s == c[k][1]) {
         $("#nt-v").hide();
@@ -2195,36 +2295,49 @@ $(function() {
     $("#nt-v").hide();
   });
 
+  // 다듬은 말 입력창을 표시한다(다듬은 말 인덱스, 다듬을 말) 
   function showAlv(i, des) {
     showDev(false);
-    var dir = des? '0': al[i < 0? al.length - 1: i][1];
+    var add = i == al.length;
+    var dir = des? '0': al[add? i - 1: i][1];
     $("#al-v :radio[value='"+ dir +"']").prop('checked', true);
-    $("#al-v").show().data([des? -1: de[0], i]);
-    $("#alv").val(i < 0? '': al[i][2]).focus();
+    $("#al-v").show().data([des? -1: de[0], i]);   // [다듬을 말 id, 다듬은 말 인덱스]
+    var alData = i < 0? "?": (add? "": al[i][4]);  // 다듬은 말
+    var alv = $("#alv").val(alData);
+    if (uid) {
+      if (alData == "?") alv.select();  // 다듬은 말을 모를 때
+      alv.focus();
+    }
     if (des) setDes(des);
+    $("#al-v .fa-hdd").show();
   }
+
+  $("#al-v").keyup(function(e) {
+    var v = $("#alv").val().trim();
+    if (e.keyCode === $.ui.keyCode.ENTER) {
+      if (v != "?") {
+        $(this).find(".fa-hdd").click();
+        return false;  
+      }
+    } else if (v == "?" && -1 < $(this).data()[1]) {
+      $("#alv").val("");
+    }
+  });
 
   function showNtv(i, j) {
     showDev(false);
     $("#al-v").hide();
     $("#nt-v i:first-child").removeClass("fa-arrow-down fa-arrow-up")
                             .addClass(faArrow(i));
-    $("#nt-v .al span").text(al[i][2]);
+    $("#nt-v .al span").text(al[i][4]);
     $("#nt-v").show().data([i, j]);
-    $("#ntv").val(j < 0? '': al[i][7][j][1]).scrollTop(0)
+    $("#ntv").val(j < 0? '': al[i][8][j][1]).scrollTop(0)
              .prop("selectionStart", 0).prop("selectionEnd", 0).focus();
   }
 
   $("#al-v,#nt-v").keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ESCAPE) {
       $(this).find(".fa-times").click();
-      return false;
-    }
-  });
-
-  $("#al-v").keyup(function(e) {
-    if (e.keyCode === $.ui.keyCode.ENTER) {
-      $(this).find(".fa-hdd").click();
       return false;
     }
   });
