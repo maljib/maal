@@ -1725,8 +1725,8 @@ $(function() {
     var h = $(window).height();
     $("#tab1,#tab2,#tab3,#tab4,#viewer").height(h - 76);
     $("#edit").height(h - 109);
-    $("#list tbody").css("max-height", h - 72);
-    $("#editors tbody").css("max-height", h - 70);
+    $("#list tbody").css("max-height", h - 80);
+    $("#editors tbody").css("max-height", h - 73);
     $("#ui-id-1.ui-autocomplete").css("max-height", h - 40);
     $("#ui-id-7.ui-autocomplete").css("max-height", h - 80);
     $("#note-form").is(":visible") && setNoteSize();
