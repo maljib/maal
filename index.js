@@ -1768,6 +1768,11 @@ $(function() {
     $("#alv").prop("readonly", !uid);
   });
 
+  if (location.href.split("?")[1]) {
+    document.title = "깨끗한 우리말 쓰기";
+    $("#arrow").click();
+  }
+
   $("#ex0 .fa-times").click(function() {
     search_arg = "#arg";
     $("#ex,#de-v,#editors").hide();
