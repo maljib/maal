@@ -1888,7 +1888,6 @@ $(function() {
       if ($.isNumeric(dei)) {
         findAl(dei, des);
       } else {
-        // uid && showAlv(-1, des);
         showAlv(-1, des);
         showDev(false);
       }
@@ -1897,7 +1896,9 @@ $(function() {
 
   function setDes(s) {
     var o = $("#de span");
-    if (s) {
+    if (s == "?") {
+      o.html("&nbsp; ? &nbsp;").show();
+    } else if (s) {
       o.text(s).show();
     } else {
       o.text("").hide();
@@ -1980,10 +1981,9 @@ $(function() {
         $("#de span").html("&nbsp; ? &nbsp;").show();
         de = [0,"?"];
         al = a;
-        var s = '';
-        for (var i in a) { // 0=id, 1=0/1, 2=t, 3=al, 4=als, 5=vote, 6=uid, 7=nick, 8=[] // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
-          a[i][6] = a[i][3];
-          s += 
+        var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
+        for (var i in a) {
+          s +=
 '<div><div class="al0">'+
   '<span>&nbsp; <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; </span>'+
   '<i class="al-u"><small>'+ a[i][2] +'</small> &nbsp;<i class="far fa-sm fa-edit"></i></i>'+
@@ -2022,8 +2022,8 @@ $(function() {
 '</div><div class="al"><span class="al-link">&nbsp; ? &nbsp;</span></div></div>';
         } else {
           pushDeIntoExprs();
-          var s = ''; // 0=id, 1=0/1, 2=t, 3=al, 4=als, 5=vote, 6=uid, 7=nick, 8=[]
-          for (var i in a) { // 0=id, 1=0/1, 2=als, 3=vote, 4=uid, 5=nick, 6=t, 7=[]
+          var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
+          for (var i in a) {
             var b = a[i], c = b[8];
             var v = (b[5]? b[5]: ' ').split(' ');
             b[5] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
@@ -2119,28 +2119,13 @@ $(function() {
       if (i < 0) {
         $("#alv").focus();           // add & no al
         return 1;                    // retry
-      } else if (de[0] && 0 < b[8].length) {
+      } else if (0 < b[8].length) {
         return 2;                    // delete & some notes
       }
     } 
     return 0;
   }
-/*
-  function alvTest(i, als, dir) {
-    var b = al[i];
-    if (als) {
-      for (var k in al) {          // add, update
-        if (als == al[k][4] && (i != k || dir == b[1])) return 2;
-      }
-    } else if (i < 0) {
-      $("#alv").focus();           // add & no al
-      return 1;                    // retry
-    } else if (de[0] && 0 < b[8].length) {
-      return 2;                    // delete & some notes
-    }
-    return 0;
-  }
-*/
+
   $("#al-v .fa-hdd").click(function() {
     $(this).hide();
     var de_al = $("#al-v").data();               // [다듬을 말 id, 다듬은 말 index]
@@ -2197,7 +2182,6 @@ $(function() {
   }
 
   function addDeal(dir, dei, des, als) {
-    // var a = 'a='+ dir +','+ dei +','+ uid +'&s='+ encodeURIComponent(als);
     var a = { dir: dir, dei: dei, des: des, als: als, uid: uid };
     $.post('addDeal.php', a, function(rc) {
       if ($.isNumeric(rc)) {
@@ -2208,19 +2192,7 @@ $(function() {
       }
     });
   }
-/*
-  function addDeal(dir, dei, als) {
-    var a = 'a='+ dir +','+ dei +','+ uid +'&s='+ encodeURIComponent(als);
-    $.post('addDeal.php', a, function(rc) {
-      if ($.isNumeric(rc)) {
-        findAl(dei, getDes());
-        showCount([1], "e");
-      } else {
-        serverError("download.php", rc);
-      }
-    });
-  }
-*/
+
   $("#nt-v .fa-hdd").click(function() {
     var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
     var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
@@ -2303,7 +2275,8 @@ $(function() {
     $("#al-v :radio[value='"+ dir +"']").prop('checked', true);
     $("#al-v").show().data([des? -1: de[0], i]);   // [다듬을 말 id, 다듬은 말 인덱스]
     var alData = i < 0? "?": (add? "": al[i][4]);  // 다듬은 말
-    var alv = $("#alv").val(alData);
+    var alv = $("#alv").val(alData)
+                       .attr('placeholder', dir == '0'? "다듬은말": "다듬을 말");
     if (uid) {
       if (alData == "?") alv.select();  // 다듬은 말을 모를 때
       alv.focus();
@@ -2322,6 +2295,9 @@ $(function() {
     } else if (v == "?" && -1 < $(this).data()[1]) {
       $("#alv").val("");
     }
+  }).on("change", ":radio:checked", function() {
+    var dir = $(this).val();
+    $("#alv").attr('placeholder', dir == '0'? "다듬은말": "다듬을 말");
   });
 
   function showNtv(i, j) {
