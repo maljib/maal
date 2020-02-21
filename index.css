@@ -13,7 +13,6 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
              padding:0 5px; font-weight:600; font-size:85%; }
 [data-l]   { cursor:pointer; text-decoration:underline; }
 
-#h1 { margin:0 -7px 0 12px; cursor:pointer; }
 #count1,#count2,#count3,#count5 { vertical-align:-2px; cursor:pointer; margin-left:-2px; }
 #count4                         { cursor:pointer; }
 #count1e,#count2e               { vertical-align:-2px; cursor:pointer; }
@@ -167,9 +166,11 @@ small             { font-size:70%; }
 #search        { z-index:902; top:16px; right:70px; color:white; }
 #ex0 .fa-times { z-index:902; top:16px; right:35px; color:white; }
 
-#h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; }
+#h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; cursor:pointer; }
+#h1        { margin:0 -7px 0 12px; }
+#h1_e      { text-decoration:none; }
 
-#de  { z-index:902; margin:5px 15px 0 15px; }
+#de                { z-index:902; margin:5px 15px 0 15px; }
 #de span, .al span { display:inline-block; }
 
 #als { top:81px; left:0; right:0; overflow:auto; }
