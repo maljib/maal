@@ -174,10 +174,10 @@ small             { font-size:70%; }
 #de span, .al span { display:inline-block; }
 
 #als { top:81px; left:0; right:0; overflow:auto; }
-.al0            { margin-top:2px; }
+.al0            { margin-top:2px; white-space:nowrap; }
 .fa-thumbs-up   { color: blue; }
 .fa-thumbs-down { color: red; }
-.al-u, .al-n             { position:absolute; right:20px; /* z-index:-1; */  }
+.al-n           { position:absolute; right:20px; }
 .al-n small              { vertical-align:4px; }
 .al                      { margin-top:-1px; }
 .link, .al-link          { cursor:pointer; }

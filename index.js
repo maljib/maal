@@ -1989,11 +1989,11 @@ $(function() {
         var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
         for (var i in a) {
           s +=
-'<div><div class="al0">'+
-  '<span>&nbsp; <i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; </span>'+
-  '<i class="al-u"><small>'+ a[i][2] +'</small> &nbsp;<i class="far fa-sm fa-edit"></i></i>'+
-'</div>'+
-'<div class="al"><span class="al-link">'+ a[i][4] +'</span></div></div>';
+'<div><div class="al0">&nbsp; '+
+  '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
+  '<small>'+ a[i][2] +'</small> &nbsp;'+
+  (uid? '<i class="far fa-sm fa-edit"></i>': '') +
+'</div><div class="al"><span class="al-link">'+ a[i][4] +'</span></div></div>';
         }
         $("#als").empty().append(s);
         $("#de,#als,#de-v .fa-times").show();
@@ -2019,11 +2019,10 @@ $(function() {
         }
         al = a;
         if (a[0].length == 4) {
-          s =
-'<div><div class="al0">'+
-  '<span>&nbsp; <i class="fas fa-lg '+ faArrow(0) +'"></i> &nbsp; </span>'+
-  '<i class="al-u"><small>'+ a[0][2] +'</small> &nbsp;'+
-  (uid? '<i class="far fa-sm fa-edit"></i>': ' &nbsp; &nbsp;') +'</i>'+
+          s = '<div><div class="al0">&nbsp; '+
+  '<i class="fas fa-lg '+ faArrow(0) +'"></i> &nbsp; '+
+  '<small>'+ a[0][2] +'</small> &nbsp;'+
+  (uid? '<i class="far fa-sm fa-edit"></i>': '') +
 '</div><div class="al"><span class="al-link">&nbsp; ? &nbsp;</span></div></div>';
         } else {
           pushDeIntoExprs();
@@ -2033,25 +2032,21 @@ $(function() {
             var v = (b[5]? b[5]: ' ').split(' ');
             b[5] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
             s += '<div>'+ 
-'<div class="al0">'+
-  '<span>&nbsp; '+
-    '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
-    '<i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i> '+
-     b[5][0].length +' | '+ -b[5][1].length +
-   ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp; '+
-     (yp(c)? '<i class="far fa-sm fa-comment-alt"></i> &nbsp;': '')+
-  '</span>'+
-  '<i class="al-u"><small>'+ b[2] +'</small> '+
-   (uid == b[6]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[7]) +'</i>'+
-'</div>'+
+'<div class="al0">&nbsp; '+
+  '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
+  '<i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i> '+
+    b[5][0].length +' | '+ -b[5][1].length +
+  ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp; '+
+    (yp(c)? '<i class="far fa-sm fa-comment-alt"></i> &nbsp;': '')+
+    (uid == b[6]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[7]) +
+  ' <small>'+ b[2] +'</small></div>'+
 '<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
               var d = c[j];
-              s += '<div class="aln">'+
-'<div>'+ convertNote(d[1]) +'</div>'+
-' &nbsp;<i class="al-n"><small>'+ d[4] +'</small> '+
-(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3])
-            +'</i></div>';
+              s += '<div class="aln"><div>'+ convertNote(d[1]) +
+'</div> &nbsp;<i class="al-n"><small>'+ d[4] +'</small> '+
+(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3]) +
+'</i></div>';
             }
             s += '</div>';
           }
@@ -2106,7 +2101,7 @@ $(function() {
   }).on("click", ".al-link", function() {
     var i = $(this).parents("#als>div").index();
     if (al[i][3] == "0") {
-      uid && findQ();
+      findQ();
     } else {
       findAl(al[i][3], $(this).text());
     }

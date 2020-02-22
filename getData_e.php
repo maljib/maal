@@ -27,7 +27,7 @@ SELECT n.id, n.data, u.id, u.nick,
        date_format(convert_tz(n.t,'+00:00','+09:00'), '%Y-%m-%d %H:%i'), n.c
   FROM notes n JOIN deals d ON d.id = n.deal
                JOIN users u ON u.id = n.user
- WHERE d.id = $id ORDER BY c
+ WHERE d.id = $id ORDER BY c DESC
 SQL
     );
   }
