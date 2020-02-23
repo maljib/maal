@@ -222,6 +222,8 @@ $(function() {
         setError(o, "비밀번호를 넣으시오.");
         $("#ok").show();
       }
+    } else {
+      $("#ok").show();
     }
   }
 
