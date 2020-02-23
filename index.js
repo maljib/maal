@@ -98,9 +98,10 @@ $(function() {
     }
   });
 
-  $("body").keydown(function(e) {
+  $("body").keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ESCAPE) {
       $(".ui-autocomplete-input").autocomplete("close");
+      return false;
     }
   });
 
@@ -111,7 +112,7 @@ $(function() {
     }
   });
 
-  $("#nick,#name,#mail,#sure").keydown(function(e) {
+  $("#nick,#name,#mail,#sure").keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.SPACE) return false;
   });
 
@@ -207,17 +208,19 @@ $(function() {
       o.val(pass);
       showIf($("#x-ask"), !pass);
       if (pass) {
-        $.post("checkPass.php", o.serialize() +"&id="+ uid, function(rc) {
+        $.post("checkPass.php", { id:uid, pass:pass }, function(rc) {
           switch (rc) {
           case '0': logged_in = true; showUpdate(); break;     // 맞음 - 정보 바꾸기
-          case '1': logged_in = true; enter(); break;          // 맞음 - 들어가기
+          case '1': logged_in = true; enter(); return;         // 맞음 - 들어가기
           case '2': setError(o, "비밀번호가 맞지 않습니다."); break; // 틀림
           case '3': $("#nick").change(); break;                // 없음
-          default:  serverError("checkPass.php", rc);          // 에러
+          default:  serverError("checkPass.php", rc); return;  // 에러
           }
+          $("#ok").show();
         });
       } else {
         setError(o, "비밀번호를 넣으시오.");
+        $("#ok").show();
       }
     }
   }
@@ -232,10 +235,11 @@ $(function() {
 
   // [확인] 버튼 처리
   $("#ok").click(function() {
+    if (!$(this).is(":visible")) return;
+    $(this).hide();
     if ($("#signin").is(":visible")) {
       checkPass();    // 로그인
     } else if (checkName() && checkMail($("#mail")) && checkSure()) {
-      $(this).hide();
       if (uid) {      // 사용자 정보 변경
         var arg = serialize("#nick", nick) + serialize("#name", name);
         var n = $("#nick").val(), s = $("#sure").val();
@@ -258,6 +262,8 @@ $(function() {
           if (rc == 'a') doCancel();
         });
       }
+    } else {
+      $(this).show();
     }
   });
 
@@ -842,7 +848,7 @@ $(function() {
       arg_i = -1;
       arrows();
     }
-  }).keydown(function(e) {
+  }).keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ENTER) {
       var arg = $(this).val().trim().replace(/\s+0*(\d+)$/, "$1");
       $(this).val(arg);
@@ -1266,7 +1272,7 @@ $(function() {
   $("#edit").blur     (function() { isSame(); });
   $("#menu").mouseover(function() { isSame(); });
 
-  $("#edit").keydown(function(event) {
+  $("#edit").keyup(function(event) {
     if (event.ctrlKey || event.metaKey) {
       var key = String.fromCharCode(event.which).toLowerCase();
       if (key == 's' || key == 'z' || key == 'q') { // || key == 'w') {
@@ -1403,12 +1409,12 @@ $(function() {
     return false;
   });
 
-  $("#word>input").keydown(function(e) {
+  $("#word>input").keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ENTER) $(this).blur();
   }).autocomplete({source: "searchWord.php"})
     .blur(function() { newWord(false); });
 
-  $("#editor>input").keydown(function(e) {
+  $("#editor>input").keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ENTER) $(this).blur();
   }).autocomplete({source: "searchUser.php"})
     .blur(function() { newEditor(false); });
@@ -1760,8 +1766,10 @@ $(function() {
   }
 
   $("#arrow").click(function() {
+    document.title = "깨끗한 우리말 쓰기";
     $("#editors,#msg").hide();
-    search_arg = "#dev";
+    var p = "! 아 아* * -* -아*";
+    $(search_arg = "#dev").attr('placeholder', uid? p +" ?": p);
     showCount([1, 2], "e");
     $("#ex").show();
     showDev(false);
@@ -1769,11 +1777,11 @@ $(function() {
   });
 
   if (location.href.split("?")[1]) {
-    document.title = "깨끗한 우리말 쓰기";
     $("#arrow").click();
   }
 
   $("#ex0 .fa-times").click(function() {
+    document.title = "배달말집";
     search_arg = "#arg";
     $("#ex,#de-v,#editors").hide();
   });
@@ -1870,7 +1878,7 @@ $(function() {
         arrows_e();
       }
     }
-  }).keydown(function(e) {
+  }).keyup(function(e) {
     if (e.keyCode === $.ui.keyCode.ENTER) {
       var arg = $(this).val().trim();
       $(this).val(arg);
@@ -1956,28 +1964,28 @@ $(function() {
 
   function convertNote(s) {
     return s? s.replace(/\r\n/g, "\n")
-               .replace(/([\u261e\`])\s*([^.\`]+)\s*([.\`]?)/g, function(s, s1, s2, s3) {
-                 var x = '';
-                 s2.split(/\s*,\s*/).forEach(function(e) {
-                   x += ', <span class="link">'+ e +'</span>';
-                 });
-                 if (s1 == '\`') s1 = '';
-                 if (s3 == '\`') s3 = '';
-                 return s1 + x.substr(2) + s3;
-               })
-               .replace(/#\((.+?)(\|(.+?))?\)/g, function(s,s1,s2,s3) {
-                 var a;
-                 if (s1[0] === "#") {
-                   var c = s1.substring(1);
-                   a = s1 + (s3? "' id='"+ c +"_": "_' id='"+ c);
-                   s1 = "&#x21E7;";
-                 } else {
-                   a = s1 +"' target='_blank";
-                 }
-                 return "<a href='"+ a +"'>"+ (s3? s3: s1) +"</a>";
-               })
-               .replace(/\n/g, "<br>")
-               .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
+              .replace(/([\u261e\`])\s*([^.\`]+)\s*([.\`]?)/g, function(s, s1, s2, s3) {
+                var x = '';
+                s2.split(/\s*,\s*/).forEach(function(e) {
+                  x += ', <span class="link">'+ e +'</span>';
+                });
+                if (s1 == '\`') s1 = '';
+                if (s3 == '\`') s3 = '';
+                return s1 + x.substr(2) + s3;
+              })
+              .replace(/#\((.+?)(\|(.+?))?\)/g, function(s,s1,s2,s3) {
+                var a;
+                if (s1[0] === "#") {
+                  var c = s1.substring(1);
+                  a = s1 + (s3? "' id='"+ c +"_": "_' id='"+ c);
+                  s1 = "&#x21E7;";
+                } else {
+                  a = s1 +"' target='_blank";
+                }
+                return "<a href='"+ a +"'>"+ (s3? s3: s1) +"</a>";
+              })
+              .replace(/\n/g, "<br>")
+              .replace(/\{(.+?)\}/g, "<strong>$1</strong>"): "";
   }
 
   function findQ() {
@@ -1988,11 +1996,9 @@ $(function() {
         al = a;
         var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
         for (var i in a) {
-          s +=
-'<div><div class="al0">&nbsp; '+
-  '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
-  '<small>'+ a[i][2] +'</small> &nbsp;'+
-  (uid? '<i class="far fa-sm fa-edit"></i>': '') +
+          s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
+faArrow(i) +'"></i> &nbsp; <i><small>'+ a[i][2] +'</small></i>'+
+(uid? '&nbsp; <i class="far fa-sm fa-edit"></i>': '') +
 '</div><div class="al"><span class="al-link">'+ a[i][4] +'</span></div></div>';
         }
         $("#als").empty().append(s);
@@ -2019,10 +2025,9 @@ $(function() {
         }
         al = a;
         if (a[0].length == 4) {
-          s = '<div><div class="al0">&nbsp; '+
-  '<i class="fas fa-lg '+ faArrow(0) +'"></i> &nbsp; '+
-  '<small>'+ a[0][2] +'</small> &nbsp;'+
-  (uid? '<i class="far fa-sm fa-edit"></i>': '') +
+          s = '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
+faArrow(0) +'"></i> &nbsp; <small><i>'+ a[0][2] +'</i></small>'+
+(uid? '&nbsp; <i class="far fa-sm fa-edit"></i>': '') +
 '</div><div class="al"><span class="al-link">&nbsp; ? &nbsp;</span></div></div>';
         } else {
           pushDeIntoExprs();
@@ -2031,22 +2036,20 @@ $(function() {
             var b = a[i], c = b[8];
             var v = (b[5]? b[5]: ' ').split(' ');
             b[5] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
-            s += '<div>'+ 
-'<div class="al0">&nbsp; '+
-  '<i class="fas fa-lg '+ faArrow(i) +'"></i> &nbsp; '+
-  '<i class="far fa-sm fa-thumbs-up'+ xp(i,0) +'"></i> '+
-    b[5][0].length +' | '+ -b[5][1].length +
-  ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i> &nbsp; '+
-    (yp(c)? '<i class="far fa-sm fa-comment-alt"></i> &nbsp;': '')+
-    (uid == b[6]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[7]) +
-  ' <small>'+ b[2] +'</small></div>'+
+            s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
+faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
+'"></i> '+ b[5][0].length +' | '+ -b[5][1].length +
+' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i>'+
+(yp(c)? '&nbsp; <i class="far fa-sm fa-comment-alt"></i>': '') +'&nbsp; <i>'+
+(uid == b[6]? '<i class="far fa-sm fa-edit"></i>&nbsp;': b[7]) +
+' <small>'+ b[2] +'</small></i></div>'+
 '<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
               var d = c[j];
-              s += '<div class="aln"><div>'+ convertNote(d[1]) +
-'</div> &nbsp;<i class="al-n"><small>'+ d[4] +'</small> '+
-(d[2] == uid? '&nbsp;<i class="far fa-sm fa-edit"></i>': d[3]) +
-'</i></div>';
+              s +=
+'<div class="aln"><div>'+ convertNote(d[1]) +'</div>&nbsp; <i class="al-n">'+
+(d[2] == uid? '<i class="far fa-sm fa-edit"></i>&nbsp;': d[3]) +
+' <small>'+ d[4] +'</small></i></div>';
             }
             s += '</div>';
           }
@@ -2127,6 +2130,7 @@ $(function() {
   }
 
   $("#al-v .fa-hdd").click(function() {
+    if (!$(this).is(":visible")) return;
     $(this).hide();
     var de_al = $("#al-v").data();               // [다듬을 말 id, 다듬은 말 index]
     var dei = de_al[0], des = getDes();                // 다듬을 말:    id, 글자열
