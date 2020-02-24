@@ -804,9 +804,9 @@ $(function() {
     delay: 300,
     source: function(request, response) {
       var s = request.term.trim();
-      if (s == "!") {          // 열어본 올림맗 찾기
+      if (s == "`") {         // 열어본 올림맗 찾기
         response(words);
-      } else if (s == "!!") {  // 변경된 올림말 찾기
+      } else if (s == "!") {  // 변경된 올림말 찾기
         $.post("recent.php", function(data) {
           response(data);
         }, "json");
@@ -837,18 +837,30 @@ $(function() {
       }
     },
     select: function(e, ui) {
-      push(arg_words, $("#arg").val());
+      var arg = $("#dev").val();
       if (uid) findWord0(ui.item.value);
-      arg_i = -1;
-      arrows();
+      if (arg) {
+        push(arg_words, arg);
+        arg_i = -1;
+        arrows();
+      }
     }
   }).keyup(function(e) {
+    var arg = $(this).val().trim();
     if (e.keyCode === $.ui.keyCode.ENTER) {
-      var arg = $(this).val().trim().replace(/\s+0*(\d+)$/, "$1");
+      var arg = arg.replace(/\s+0*(\d+)$/, "$1");
       $(this).val(arg);
       if (arg && !/[!@#$^&*]/.test(arg)) {
         findWord0(arg);
       }
+    } else if (!arg) {
+      $(this).data("uiAutocomplete").search("`");
+    }
+  }).focus(function() {
+    if ($(this).val().trim()) {
+      this.select();
+    } else {
+      $(this).data("uiAutocomplete").search("`");
     }
   });
 
@@ -1830,9 +1842,9 @@ $(function() {
     delay: 200,
     source: function(request, response) {
       var s = request.term.trim();
-      if (s == "!") {          // 열어본 올림맗 찾기
+      if (s == "`") {          // 열어본 올림맗 찾기
         response($.map(deS, vl));
-      } else if (s == "!!") {  // 변경된 올림말 찾기
+      } else if (s == "!") {  // 변경된 올림말 찾기
         $.post("recent_e.php", function(data) {
           response($.map(data, vl));
         }, "json");
@@ -1862,7 +1874,7 @@ $(function() {
     select: function(e, ui) {
       var arg = $("#dev").val();
       findAl(ui.item.value, ui.item.label);
-      if (arg != "!") {
+      if (arg) {
         push(dev_args, arg);
         dev_i = -1;
         arrows_e();
@@ -1882,13 +1894,13 @@ $(function() {
     } else if (e.keyCode === $.ui.keyCode.ESCAPE) {
       $("#de-v .fa-times").click();
     } else if (!arg) {
-      $(this).data("uiAutocomplete").search("!");
+      $(this).data("uiAutocomplete").search("`");
     }
   }).focus(function() {
     if ($(this).val().trim()) {
       this.select();
     } else {
-      $(this).data("uiAutocomplete").search("!");
+      $(this).data("uiAutocomplete").search("`");
     }
   });
 
@@ -1922,7 +1934,7 @@ $(function() {
   // 좋아요, 싫어요 아이콘을 클릭할 수 있으면 "pointer" 클래스를 추가한다
   function xp(i, j) {  // (row index, 0=좋아요 1=싫어요)
     var b = al[i];
-    return uid && uid != b[5] && b[7][j].indexOf(uid) < 0? " pointer": "";
+    return uid && uid != b[5] && b[7][j].indexOf(uid) < 0? ' class="pointer"': '';
   }
 
   // 다듬은말에 댓글을 쓸 수 있는가?
@@ -1975,7 +1987,7 @@ $(function() {
         var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
         for (var i in a) {
           s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
-faArrow(i) +'"></i> &nbsp; <i><small>'+ a[i][2] +'</small></i>'+
+faArrow(i) +'"></i> &nbsp; <small><i>'+ a[i][2] +'</i></small>'+
 (uid? '&nbsp; <i class="far fa-sm fa-edit"></i>': '') +
 '</div><div class="al"><span class="al-link">'+ a[i][4] +'</span></div></div>';
         }
@@ -2013,11 +2025,12 @@ faArrow(0) +'"></i> &nbsp; <small><i>'+ a[0][2] +'</i></small>'+
           for (var i in a) {
             var b = a[i], c = b[8];
             s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
-faArrow(i) +'"><small></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
-'"></i> '+ b[7][0].length +' | '+ -b[7][1].length +
-' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i></small>&nbsp;'+
-(commentable(c)? ' <i class="far fa-sm fa-comment-alt"></i>': '') +' <i>'+
-(uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[6]) +
+faArrow(i) +'"></i> &nbsp; <small class="vote"><span'+
+xp(i,0) +'><i class="far fa-sm fa-thumbs-up"></i> '+
+b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
+' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal"></i></span></small>&nbsp;'+
+(commentable(c)? ' <i class="far fa-sm fa-comment-alt"></i>': '') +
+' <i>'+ (uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[6]) +
 ' <small>'+ b[2] +'</small></i></div>'+
 '<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
@@ -2031,10 +2044,8 @@ faArrow(i) +'"><small></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
           }
           if (uid) {
             s +=
-'<div class="al0">&nbsp; '+
-  '<i class="fas fa-lg '+ faArrow(al.length - 1) +'"></i> &nbsp; '+
-  '<i class="far fa-sm fa-edit"></i>'+
-'</div>';
+'<div class="al0">&nbsp; <i class="fas fa-lg '+ faArrow(al.length - 1) +
+'"></i> &nbsp; <i class="far fa-sm fa-edit"></i></div>';
           }
         }
         $("#als").empty().append(s);
@@ -2068,8 +2079,8 @@ faArrow(i) +'"><small></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
     showNtv(i, -1);
   }).on("click", ".pointer", function() {
     var b  = al[$(this).parents("#als>div").index()];
-    var u0 = $(this).hasClass("fa-thumbs-up")? 0: 1;  // 0=up     1=down
-    var i0 = b[7][1 - u0].indexOf(uid) < 0? 0: 1;    // 0=insert 1=delete
+    var u0 = $(this).find(".far").hasClass("fa-thumbs-up")? 0: 1; // 0=up 1=down
+    var i0 = b[7][1 - u0].indexOf(uid) < 0? 0: 1;  // 0=insert 1=delete
     $.post('updateVote.php', {deal:b[0], user:uid, u0:u0, i0:i0}, function (rc) {
       if (rc == '1') {
         findAl(de[0]);

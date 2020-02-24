@@ -182,6 +182,7 @@ small             { font-size:70%; }
 .al             { margin-top:-1px; }
 .aln            { margin-top:-2px; }
 .aln>div        { margin-top:-3px; }
+.vote           { vertical-align:4px; }
 .aln .link      { text-decoration:underline; }
 #de>span, .al>span, .aln>div { border: 1px solid #aaaaaa; border-radius: 4px;
                            background:white; padding:0 4px 2px 4px; }
