@@ -37,7 +37,7 @@ ul.ui-autocomplete.ui-menu              { z-index:1000; }
 #t1,#t2,#t3,#t5,#t6,#exit_div { display:none; }
 #exit_div                  { position:absolute; top:8px; right:12px; }
 #enter                     { position:absolute; top:8px; right:80px; }
-#arrow                     { position:absolute; top:9px; right:130px; }
+#arrow                     { position:absolute; top:8px; right:130px; }
 #enter,#exit,#user_info,#download,#arrow { cursor:pointer; }
 
 #user,#q-req,#ask { width:330px; right:0; }
