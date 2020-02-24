@@ -47,7 +47,7 @@ SELECT 1 from DUAL where
   EXISTS (SELECT * FROM texts WHERE user = $id) OR
   EXISTS (SELECT * FROM deals WHERE user = $id) OR
   EXISTS (SELECT * FROM notes WHERE user = $id) OR
-  EXISTS (SELECT * FROM  asks WHERE user = $id)
+  EXISTS (SELECT * FROM asks  WHERE user = $id)
 SQL
   );
 }

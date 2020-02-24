@@ -178,15 +178,15 @@ small             { font-size:70%; }
 .fa-thumbs-up   { color: blue; }
 .fa-thumbs-down { color: red; }
 .al-n           { position:absolute; right:20px; }
-.al-n small              { vertical-align:4px; }
-.al                      { margin-top:-1px; }
-.link, .al-link          { cursor:pointer; }
-.aln .link               { text-decoration:underline; }
+.link, .al-link { cursor:pointer; }
+.al             { margin-top:-1px; }
+.aln            { margin-top:-2px; }
+.aln>div        { margin-top:-3px; }
+.aln .link      { text-decoration:underline; }
 #de>span, .al>span, .aln>div { border: 1px solid #aaaaaa; border-radius: 4px;
                            background:white; padding:0 4px 2px 4px; }
-.aln>div { margin-bottom: -4.8px; }
 #als>div,#de-v,#al-v,#nt-v { left:0; right:0; }
-#als>div          { background-image:linear-gradient(white, #eeeeee); padding:0 15px 0 15px; }
+#als>div          { background-image:linear-gradient(white, #e8e8e8); padding:0 15px 3px 15px; }
 #de-v,#al-v,#nt-v { background-image:linear-gradient(white, #cccccc); }
 
 #de-v           { top:48px; padding:5px 40px 5px 15px; }

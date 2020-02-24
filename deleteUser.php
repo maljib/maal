@@ -7,6 +7,9 @@ $nick = getPost('nick');
 if ($nick) {
   $a = explode(',', $a);
   if (count($a) === 2) {
+    $where = "user=$a[0] OR user=$a[1] AND deal IN (SELECT id FROM deals WHERE user=$a[0])";
+    sqlDelete(   'up', $where);
+    sqlDelete( 'down', $where);
     sqlUpdate('words', "user=$a[1]",     "user=$a[0]");
     sqlUpdate('texts', "user=$a[1],t=t", "user=$a[0]");
     sqlUpdate('deals', "user=$a[1],t=t", "user=$a[0]");
@@ -21,6 +24,8 @@ if ($nick) {
 } else if (hasWork($a)) {
   echo '2';  // 내 글이 있으면 보증인의 승락이 있어야 탈퇴할 수 있다
 } else {
+  sqlDelete(  'up', "user=$a");
+  sqlDelete('down', "user=$a");
   echo sqlDelete('users', "id=$a");  // 내 글이 없으면 즉시 탈퇴 처리 -- 정상이면 '1'
 }
 ?>

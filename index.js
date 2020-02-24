@@ -202,31 +202,6 @@ $(function() {
     check(o, !b, o.val() +" 님은 보증인이 될 수 없습니다.");
   }
 
-  function checkPass() {
-    if (uid) {
-      var o = $("#pass"), pass = o.val().trim();
-      o.val(pass);
-      showIf($("#x-ask"), !pass);
-      if (pass) {
-        $.post("checkPass.php", { id:uid, pass:pass }, function(rc) {
-          switch (rc) {
-          case '0': logged_in = true; showUpdate(); break;     // 맞음 - 정보 바꾸기
-          case '1': logged_in = true; enter(); return;         // 맞음 - 들어가기
-          case '2': setError(o, "비밀번호가 맞지 않습니다."); break; // 틀림
-          case '3': $("#nick").change(); break;                // 없음
-          default:  serverError("checkPass.php", rc); return;  // 에러
-          }
-          $("#ok").show();
-        });
-      } else {
-        setError(o, "비밀번호를 넣으시오.");
-        $("#ok").show();
-      }
-    } else {
-      $("#ok").show();
-    }
-  }
-
   $("#passx").click(function() {
     var arg = $("#nick,#mail").serialize() +"&id=-"+ uid;
     doCancel();
@@ -238,10 +213,29 @@ $(function() {
   // [확인] 버튼 처리
   $("#ok").click(function() {
     if (!$(this).is(":visible")) return;
-    $(this).hide();
-    if ($("#signin").is(":visible")) {
-      checkPass();    // 로그인
+    if ($("#signin").is(":visible")) {    // 로그인
+      if (uid) {
+        var o = $("#pass"), pass = o.val().trim();
+        o.val(pass);
+        showIf($("#x-ask"), !pass);
+        if (pass) {
+          $(this).hide();
+          $.post("checkPass.php", { id:uid, pass:pass }, function(rc) {
+            switch (rc) {
+            case '0': logged_in = true; showUpdate(); break;     // 맞음 - 정보 바꾸기
+            case '1': logged_in = true; enter(); return;         // 맞음 - 들어가기
+            case '2': setError(o, "비밀번호가 맞지 않습니다."); break; // 틀림
+            case '3': $("#nick").change(); break;                // 없음
+            default:  serverError("checkPass.php", rc); return;  // 에러
+            }
+            $("#ok").show();
+          });
+        } else {
+          setError(o, "비밀번호를 넣으시오.");
+        }
+      }
     } else if (checkName() && checkMail($("#mail")) && checkSure()) {
+      $(this).hide();
       if (uid) {      // 사용자 정보 변경
         var arg = serialize("#nick", nick) + serialize("#name", name);
         var n = $("#nick").val(), s = $("#sure").val();
@@ -264,8 +258,6 @@ $(function() {
           if (rc == 'a') doCancel();
         });
       }
-    } else {
-      $(this).show();
     }
   });
 
@@ -1770,17 +1762,13 @@ $(function() {
   $("#arrow").click(function() {
     document.title = "깨끗한 우리말 쓰기";
     $("#editors,#msg").hide();
-    var p = "! 아 아* * -* -아*";
-    $(search_arg = "#dev").attr('placeholder', uid? p +" ?": p);
+    var p = "아 아* * -* -아*";
+    $(search_arg = "#dev").attr('placeholder', uid? "? "+ p: p);
     showCount([1, 2], "e");
     $("#ex").show();
     showDev(false);
     $("#alv").prop("readonly", !uid);
   });
-
-  if (location.href.split("?")[1]) {
-    $("#arrow").click();
-  }
 
   $("#ex0 .fa-times").click(function() {
     document.title = "배달말집";
@@ -1839,7 +1827,7 @@ $(function() {
   function vl(a) { return { value: a[0], label: a[1] }; }
 
   $("#dev").autocomplete({
-    delay: 300,
+    delay: 200,
     source: function(request, response) {
       var s = request.term.trim();
       if (s == "!") {          // 열어본 올림맗 찾기
@@ -1881,8 +1869,8 @@ $(function() {
       }
     }
   }).keyup(function(e) {
+    var arg = $(this).val().trim();
     if (e.keyCode === $.ui.keyCode.ENTER) {
-      var arg = $(this).val().trim();
       $(this).val(arg);
       if (arg && !/[!@$*]/.test(arg)) {
         if (arg == "?") {
@@ -1893,9 +1881,15 @@ $(function() {
       }
     } else if (e.keyCode === $.ui.keyCode.ESCAPE) {
       $("#de-v .fa-times").click();
+    } else if (!arg) {
+      $(this).data("uiAutocomplete").search("!");
     }
   }).focus(function() {
-    this.select();
+    if ($(this).val().trim()) {
+      this.select();
+    } else {
+      $(this).data("uiAutocomplete").search("!");
+    }
   });
 
   function findDes(des) {
@@ -1925,32 +1919,14 @@ $(function() {
     return o.is(":visible")? o.text(): "";
   }
 
-  function xp(i, k) {
+  // 좋아요, 싫어요 아이콘을 클릭할 수 있으면 "pointer" 클래스를 추가한다
+  function xp(i, j) {  // (row index, 0=좋아요 1=싫어요)
     var b = al[i];
-    return uid && uid != b[6] && b[5][k].indexOf(+uid) < 0? " pointer": "";
+    return uid && uid != b[5] && b[7][j].indexOf(uid) < 0? " pointer": "";
   }
 
-  function findBinary(arr, e) {
-    var a = 0, b = arr.length - 1, c, diff;
-    while (a <= b) {
-      if (0 < (diff = e - arr[c = (a + b) >> 1])) {
-        a = c + 1;
-      } else if (diff < 0) {
-        b = c - 1;
-      } else {
-        return c;
-      }
-    }
-    return -a - 1;
-  }
-
-  function wp(i,j) {
-    var v = al[i][5], k = findBinary(v[j], +uid);
-    if (0 <= k) v[j].splice(k, 1);
-    return k;
-  }
-
-  function yp(c) {
+  // 다듬은말에 댓글을 쓸 수 있는가?
+  function commentable(c) {
     if (uid) {
       for (var i in c) {
         if (c[i][2] == uid) return false;
@@ -2033,25 +2009,23 @@ faArrow(0) +'"></i> &nbsp; <small><i>'+ a[0][2] +'</i></small>'+
 '</div><div class="al"><span class="al-link">&nbsp; ? &nbsp;</span></div></div>';
         } else {
           pushDeIntoExprs();
-          var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=vote 6=uid 7=nick 8=[]
+          var s = ''; // 0=id 1=0/1 2=t 3=al 4=als 5=uid 6=nick 7=vote 8=notes
           for (var i in a) {
             var b = a[i], c = b[8];
-            var v = (b[5]? b[5]: ' ').split(' ');
-            b[5] = [JSON.parse('['+ v[0] +']'), JSON.parse('['+ v[1] +']')];
             s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
-faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
-'"></i> '+ b[5][0].length +' | '+ -b[5][1].length +
-' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i>'+
-(yp(c)? '&nbsp; <i class="far fa-sm fa-comment-alt"></i>': '') +'&nbsp; <i>'+
-(uid == b[6]? '<i class="far fa-sm fa-edit"></i>&nbsp;': b[7]) +
+faArrow(i) +'"><small></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
+'"></i> '+ b[7][0].length +' | '+ -b[7][1].length +
+' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal'+ xp(i,1) +'"></i></small>&nbsp;'+
+(commentable(c)? ' <i class="far fa-sm fa-comment-alt"></i>': '') +' <i>'+
+(uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[6]) +
 ' <small>'+ b[2] +'</small></i></div>'+
 '<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
               var d = c[j];
               s +=
-'<div class="aln"><div>'+ convertNote(d[1]) +'</div>&nbsp; <i class="al-n">'+
+'<div class="aln">&nbsp; <i class="al-n">'+
 (d[2] == uid? '<i class="far fa-sm fa-edit"></i>&nbsp;': d[3]) +
-' <small>'+ d[4] +'</small></i></div>';
+' <small>'+ d[4] +'</small></i><div>'+ convertNote(d[1]) +'</div></div>';
             }
             s += '</div>';
           }
@@ -2093,15 +2067,15 @@ faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
     var i = $(this).parents("#als>div").index();
     showNtv(i, -1);
   }).on("click", ".pointer", function() {
-    var i = $(this).parents("#als>div").index();
-    var b = al[i], v = b[5], k, l;
-    if ((k = wp(i,0)) < 0 && (l = wp(i,1)) < 0) {
-      var up = $(this).hasClass("fa-thumbs-up");
-      v[up? 0: 1].splice(-(up? k: l) - 1, 0, +uid);
-    }
-    var s = v[0].join(',') +' '+ v[1].join(',');
-    $.post('updateVote.php', 'a='+ b[0] +'&s='+ s, function (rc) {
-      if (rc == '1') findAl(de[0]);
+    var b  = al[$(this).parents("#als>div").index()];
+    var u0 = $(this).hasClass("fa-thumbs-up")? 0: 1;  // 0=up     1=down
+    var i0 = b[7][1 - u0].indexOf(uid) < 0? 0: 1;    // 0=insert 1=delete
+    $.post('updateVote.php', {deal:b[0], user:uid, u0:u0, i0:i0}, function (rc) {
+      if (rc == '1') {
+        findAl(de[0]);
+      } else {
+        serverError("updateVote.php", rc);
+      }
     });
   }).on("click", ".al-link", function() {
     var i = $(this).parents("#als>div").index();
@@ -2200,19 +2174,18 @@ faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
   }
 
   $("#nt-v .fa-hdd").click(function() {
-    var ij = $("#nt-v").data(), i = ij[0], j = ij[1];
-    var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");
-    var  b = al[i], c = b[8];
+    var ij = $("#nt-v").data(), i = ij[0], j = ij[1];  // 인덱스: i=다듬은말 j=댓글
+    var  s = $("#ntv").val().trim().replace(/\r\n/g, "\n");  // 댓글 텍스트
+    var  b = al[i], c = b[8];  // b=다듬은말 정보, c=댓글 배열 
     for (var k in c) {
       if (s == c[k][1]) {
         $("#nt-v").hide();
-        return;
+        return;  // 같은 댓글이 있으면 종료
       }
     }
-    s = encodeURIComponent(s);
     if (0 <= j) {
       $("#nt-v").hide();
-      $.post('updateNote.php', 'a='+ c[j][0] +'&s='+ s, function(rc) {
+      $.post('updateNote.php', { data: s, id: c[j][0] }, function(rc) {
         if (rc == '1') {
           findAl(de[0]);
           if (!s) showCount([2], "e");
@@ -2220,7 +2193,7 @@ faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
       });
     } else if (s) {
       $("#nt-v").hide();
-      $.post('addNote.php', 'a='+ b[0] +','+ uid +'&s='+ s, function(rc) {
+      $.post('addNote.php', { data: s, deal: b[0], user: uid }, function(rc) {
         if ($.isNumeric(rc)) {
           findAl(de[0]);
           showCount([2], "e");
@@ -2306,6 +2279,7 @@ faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
     $("#alv").attr('placeholder', dir == '0'? "다듬은말": "다듬을 말");
   });
 
+  // 댓글 넣기/수정/삭제 창을 보인다 (다듬은말 인덱스, 댓글 인덱스)
   function showNtv(i, j) {
     showDev(false);
     $("#al-v").hide();
@@ -2323,4 +2297,8 @@ faArrow(i) +'"></i> &nbsp; <i class="far fa-sm fa-thumbs-up'+ xp(i,0) +
       return false;
     }
   });
+
+  if (location.href.split("?")[1]) {
+    $("#arrow").click();
+  }
 });

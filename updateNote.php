@@ -1,10 +1,11 @@
 <?php // updateNote.php
 require_once 'functions.php';
-$w = 'id='.$_POST['a'];
-$s = escapeString($_POST['s']);
-if ($s == '') {
-  echo sqlDelete('notes', $w);
+
+$data  = escapeString($_POST['data']);
+$where = 'id='.$_POST['id'];
+if ($data == '') {
+  echo sqlDelete('notes', $where);
 } else {
-  echo sqlUpdate('notes', "data='$s'", $w);
+  echo sqlUpdate('notes', "data='$data'", $where);
 }
 ?>

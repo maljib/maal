@@ -4,14 +4,14 @@ require_once 'functions.php';
 if ($de = $_POST['a']) {
   $rows = selectRows(<<< SQL
 SELECT d.id, 0 dir, date_format(convert_tz(d.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'),
-       d.al, f.expr, d.vote, u.id, u.nick, d.c
+       d.al, f.expr, u.id, u.nick, d.c
   FROM deals d JOIN exprs e ON e.id = d.de
                JOIN exprs f ON f.id = d.al
                JOIN users u ON u.id = d.user
  WHERE e.id = $de
  UNION
 SELECT d.id, 1 dir, date_format(convert_tz(d.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'),
-       d.de, f.expr, d.vote, u.id, u.nick, d.c
+       d.de, f.expr, u.id, u.nick, d.c
   FROM deals d JOIN exprs e ON e.id = d.al
                JOIN exprs f ON f.id = d.de
                JOIN users u ON u.id = d.user
@@ -22,6 +22,11 @@ SQL
   $n = count($rows);
   for ($i = 0; $i < $n; $i++) {
     $id = $rows[$i][0];
+    $rows[$i][7] = array(selectValues(
+      "SELECT user from up   where deal = $id ORDER BY user"
+    ), selectValues(
+      "SELECT user from down where deal = $id ORDER BY user"
+    ));
     $rows[$i][8] = selectRows(<<< SQL
 SELECT n.id, n.data, u.id, u.nick,
        date_format(convert_tz(n.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'), n.c
