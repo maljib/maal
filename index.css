@@ -189,6 +189,7 @@ small             { font-size:70%; }
 #als>div,#de-v,#al-v,#nt-v { left:0; right:0; }
 #als>div          { background-image:linear-gradient(white, #e8e8e8); padding:0 15px 3px 15px; }
 #de-v,#al-v,#nt-v { background-image:linear-gradient(white, #cccccc); }
+.arrow_grey       { background-color:#eeeeee; }
 
 #de-v           { top:48px; padding:5px 40px 5px 15px; }
 #al-v,#nt-v     { top:81px; padding:2px 20px 5px 15px; }
