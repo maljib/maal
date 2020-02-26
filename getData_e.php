@@ -3,15 +3,15 @@ require_once 'functions.php';
 
 if ($de = $_POST['a']) {
   $rows = selectRows(<<< SQL
-SELECT d.id, 0 dir, date_format(convert_tz(d.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'),
-       d.al, f.expr, u.id, u.nick, d.c
+SELECT d.id, 0 dir, date_format(convert_tz(d.c,'+00:00','+09:00'), '%y-%m-%d %H:%i') c,
+       d.al, f.expr, u.id, u.nick
   FROM deals d JOIN exprs e ON e.id = d.de
                JOIN exprs f ON f.id = d.al
                JOIN users u ON u.id = d.user
  WHERE e.id = $de
  UNION
-SELECT d.id, 1 dir, date_format(convert_tz(d.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'),
-       d.de, f.expr, u.id, u.nick, d.c
+SELECT d.id, 1 dir, date_format(convert_tz(d.c,'+00:00','+09:00'), '%y-%m-%d %H:%i') c,
+       d.de, f.expr, u.id, u.nick
   FROM deals d JOIN exprs e ON e.id = d.al
                JOIN exprs f ON f.id = d.de
                JOIN users u ON u.id = d.user
@@ -29,10 +29,10 @@ SQL
     ));
     $rows[$i][8] = selectRows(<<< SQL
 SELECT n.id, n.data, u.id, u.nick,
-       date_format(convert_tz(n.t,'+00:00','+09:00'), '%y-%m-%d %H:%i'), n.c
+       date_format(convert_tz(n.t,'+00:00','+09:00'), '%y-%m-%d %H:%i') t
   FROM notes n JOIN deals d ON d.id = n.deal
                JOIN users u ON u.id = n.user
- WHERE d.id = $id ORDER BY c DESC
+ WHERE d.id = $id ORDER BY t DESC
 SQL
     );
   }
