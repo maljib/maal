@@ -15,6 +15,7 @@ if (filemtime('p/mal.pdf') < filemtime('p/mal.t')) {
 \usepackage{kotex}
 \usepackage{multicol}
 \usepackage{relsize}
+\usepackage{hyperref}
 
 \setlength\parindent{0mm}
 \setlength{\columnsep}{3mm}
@@ -46,7 +47,10 @@ SQL
       fwrite($fp, '\hspace{2mm}\textbf{'.$de.'} \rightarrow \textbf{'.$al."}\n\n");
     }
     if ($row[2]) {
-      fwrite($fp, $row[2]."\n\n");
+      //$t = $row[2];
+      $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{$2}', trim($row[2]));
+      $t = preg_replace('/#\((.+)\)/', '\url{$1}{$2}', $t);
+      fwrite($fp, $t."\n\n");
     }
   }
   fwrite($fp, <<<'CLOSING'
