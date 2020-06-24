@@ -211,4 +211,4 @@ small             { font-size:70%; }
    border: 1px solid #aaaaaa; border-radius: 10px;
    background:#f0f0f0; cursor:pointer; }
 
-.fa-edit,.fa-times,.fa-hdd,.fa-comment-alt,.fa-search { cursor:pointer; }
+.fa-edit,.fa-times,.fa-hdd,.fa-comment-alt,.fa-search,.fa-file-pdf { cursor:pointer; }
