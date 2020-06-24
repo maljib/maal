@@ -3,8 +3,10 @@ require_once 'functions.php';
 
 $tex = 'p/maljib.tex';
 
-function toPdf() {
-  global $tex;
+while (file_exists($tex)) {
+  sleep(1);
+}
+if (filemtime('p/maljib.pdf') < filemtime('p/maljib.t')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
@@ -72,14 +74,4 @@ CLOSING
   exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
   rename($tex, 'p/_maljib.tex');
 }
-
-while (file_exists($tex)) {
-  sleep(1);
-}
-$time = filemtime('p/maljib.t');
-if (filemtime('p/maljib.pdf') < $time) {
-  toPdf();
-}
-date_default_timezone_set('Asia/Seoul');
-echo date("ymdHi", $time);
 ?>

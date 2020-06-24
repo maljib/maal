@@ -573,13 +573,29 @@ $(function() {
     var o = $(this);
     o.hide();
     $.post("download.php", function(t) {
-      if (t.length === 10) {
+      if (t) {
+        serverError("download.php", t);
+      } else {
         var link = document.createElement("a");
-        link.download = "말집-"+ t;
+        link.setAttribute("target", "_blank");
         link.href = "p/maljib.pdf";
         link.click();
+      }
+      o.show();
+    });
+  });
+
+  $("#pdf").click(function() {
+    var o = $(this);
+    o.hide();
+    $.post("pdf.php", function(t) {
+      if (t) {
+        serverError("pdf.php", t);
       } else {
-        serverError("download.php", t);
+        var link = document.createElement("a");
+        link.setAttribute("target", "_blank");
+        link.href = "p/mal.pdf";
+        link.click();
       }
       o.show();
     });
@@ -2205,7 +2221,9 @@ b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
     } else if (s) {
       $("#nt-v").hide();
       $.post('addNote.php', { data: s, deal: b[0], user: uid }, function(rc) {
-        if ($.isNumeric(rc)) {
+        if (rc) {
+          serverError("addNote.php", rc);
+        } else {
           findAl(de[0]);
           showCount([2], "e");
         }
@@ -2309,7 +2327,7 @@ b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
     }
   });
 
-  if (location.href.split("?")[1]) {
+  if (location.href.split("?")[1] == "1") {
     $("#arrow").click();
   }
 });

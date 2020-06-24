@@ -7,5 +7,6 @@ $aa = explode(',', $_POST['a']);
 foreach ($aa as $a) {
   deleteUnusedExpr($a);
 }
+$rc == 1 and touchMal();
 echo $rc;
 ?>

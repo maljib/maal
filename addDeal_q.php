@@ -1,4 +1,4 @@
-<?php // addDeal.php
+<?php // addDeal_q.php
 require_once 'functions2.php';
 
 $de = getExprId(getPost('des'));

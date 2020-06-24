@@ -120,4 +120,8 @@ function deleteEtc($i) {
 function touchMaljib() {
   touch('p/maljib.t');
 } 
+
+function touchMal() {
+  touch('p/mal.t');
+} 
 ?>

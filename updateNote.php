@@ -4,8 +4,10 @@ require_once 'functions.php';
 $data  = escapeString($_POST['data']);
 $where = 'id='.$_POST['id'];
 if ($data == '') {
-  echo sqlDelete('notes', $where);
+  $rc = sqlDelete('notes', $where);
 } else {
-  echo sqlUpdate('notes', "data='$data'", $where);
+  $rc = sqlUpdate('notes', "data='$data'", $where);
 }
+$rc == 1 and touchMal();
+echo $rc;
 ?>

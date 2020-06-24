@@ -1,4 +1,7 @@
 <?php
+$time = time();
+date_default_timezone_set('Asia/Seoul');
+print_r(date("Y-m-d_H:i", $time)."\n");
 $stack = array("orange", 1, "만화");
 array_push($stack, array("t", 2, "화"));
 

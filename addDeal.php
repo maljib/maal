@@ -8,5 +8,6 @@ $al   = getExprId($_POST['als']);
 $uid  = getPost('uid');
 $id   = sqlInsert('deals', $cols, "$de,$al,$uid");
 is_numeric($id) or die($id);
+touchMal();
 echo $de;
 ?>

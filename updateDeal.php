@@ -14,6 +14,8 @@ if ($de == '0') {
     $set = "user=$uid,";
 }
 $set .= $dir == '0'?  "de=$de,al=$al": "de=$al,al=$de";
-echo sqlUpdate('deals', $set, "id=$id");
+$rc = sqlUpdate('deals', $set, "id=$id");
+$rc == 1 and touchMal();
+echo $rc;
 deleteUnusedExpr($al0)
 ?>

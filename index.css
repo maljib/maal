@@ -159,11 +159,12 @@ small             { font-size:70%; }
 #edit             { padding:0 0 3px 2px; }
 
 #ex, #de-v, #de-l, #de-r, #nt-v, #al-v   { position:absolute; display:none; }
-#search, #als, .fa-hdd, .fa-times        { position:absolute; }
+#search, #pdf, #als, .fa-hdd, .fa-times  { position:absolute; }
 
 #ex     { z-index:902; top:0; bottom:0; left:0; right:0; }
 #ex0    { background:black; margin:0; height:46.5px; padding:0 0 0 12px; }
-#search        { z-index:902; top:16px; right:70px; color:white; }
+#search        { z-index:902; top:16px; right:100px; color:white; }
+#pdf           { z-index:902; top:16px; right:70px; color:white; }
 #ex0 .fa-times { z-index:902; top:16px; right:35px; color:white; }
 
 #h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; cursor:pointer; }
