@@ -31,11 +31,11 @@ PREAMBLE
   );
 
   $rows = selectRows(<<< SQL
-SELECT e1.expr w1, e2.expr w2, n.data
+SELECT e1.expr, e2.expr, n.data, n.t
   FROM deals d JOIN exprs e1 ON d.de = e1.id
                JOIN exprs e2 ON d.al = e2.id
     LEFT OUTER JOIN notes n ON n.deal = d.id
-ORDER BY w1, w2
+ORDER BY e1.expr, e2.expr, n.t
 SQL
   );
   $de = '';
@@ -47,9 +47,12 @@ SQL
       fwrite($fp, '\hspace{2mm}\textbf{'.$de.'} \rightarrow \textbf{'.$al."}\n\n");
     }
     if ($row[2]) {
-      //$t = $row[2];
-      $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{$2}', trim($row[2]));
+      $t = trim($row[2]);
+      $t = preg_replace('/#\{(.+)\}/', '\textbf{$1}', $t);
+      $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{$2}', $t);
       $t = preg_replace('/#\((.+)\)/', '\url{$1}{$2}', $t);
+      $t = preg_replace(array('/%/', '/$/', '/#/', '/&/', '/_/', '/~/', '/\^/'),
+                        array('\%', '\$', '\#', '\&', '\_','\~{}', '\^{}'), $t);
       fwrite($fp, $t."\n\n");
     }
   }
