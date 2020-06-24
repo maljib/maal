@@ -10,13 +10,16 @@ if (filemtime('p/mal.pdf') < filemtime('p/mal.t')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
+
 \documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
 \usepackage{kotex}
 \usepackage{multicol}
 \usepackage{relsize}
 \usepackage{hyperref}
+\usepackage[pdftex]{hyperref}
 
+\hypersetup{ pdftitle = {mal.pdf} }
 \setlength\parindent{0mm}
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
