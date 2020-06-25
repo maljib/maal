@@ -10,7 +10,6 @@ if (filemtime('p/mal.pdf') < filemtime('p/mal.t')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
-
 \documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
 \usepackage{kotex}
@@ -52,8 +51,8 @@ SQL
     if ($row[2]) {
       $t = trim($row[2]);
       $t = preg_replace('/#\{(.+)\}/', '\textbf{$1}', $t);
-      $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{$2}', $t);
-      $t = preg_replace('/#\((.+)\)/', '\url{$1}{$2}', $t);
+      $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{\underline{$2}}', $t);
+    $t = preg_replace('/#\((.+)\)/', '\underline{\url{$1}}', $t);
       $t = preg_replace(array('/%/', '/$/', '/#/', '/&/', '/_/', '/~/', '/\^/'),
                         array('\%', '\$', '\#', '\&', '\_','\~{}', '\^{}'), $t);
       fwrite($fp, $t."\n\n");

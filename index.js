@@ -1796,6 +1796,7 @@ $(function() {
     $("#ex").show();
     showDev(false);
     $("#alv").prop("readonly", !uid);
+    $(window).resize();
   });
 
   $("#ex0 .fa-times").click(function() {
