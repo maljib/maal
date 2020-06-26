@@ -2,11 +2,12 @@
 require_once 'functions.php';
 
 $tex = 'p/mal.tex';
+$pdf = 'p/mal.pdf';
 
 while (file_exists($tex)) {
   sleep(1);
 }
-if (filemtime('p/mal.pdf') < filemtime('p/mal.t')) {
+if (!file_exists($pdf) || filemtime($pdf) < filemtime('p/mal.t')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
@@ -16,9 +17,8 @@ if (filemtime('p/mal.pdf') < filemtime('p/mal.t')) {
 \usepackage{multicol}
 \usepackage{relsize}
 \usepackage{hyperref}
-\usepackage[pdftex]{hyperref}
+\usepackage{textcomp}
 
-\hypersetup{ pdftitle = {mal.pdf} }
 \setlength\parindent{0mm}
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
@@ -46,7 +46,7 @@ SQL
     if ($de != $row[0] || $al != $row[1]) {
       $de = $row[0];
       $al = $row[1];
-      fwrite($fp, '\hspace{2mm}\textbf{'.$de.'} \rightarrow \textbf{'.$al."}\n\n");
+      fwrite($fp, '\hspace{2mm}\textbf{'.$de.'} \textrightarrow{} \textbf{'.$al."}\n\n");
     }
     if ($row[2]) {
       $t = trim($row[2]);

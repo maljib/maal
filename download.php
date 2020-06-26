@@ -2,11 +2,12 @@
 require_once 'functions.php';
 
 $tex = 'p/maljib.tex';
+$pdf = 'p/maljib.pdf';
 
 while (file_exists($tex)) {
   sleep(1);
 }
-if (filemtime('p/maljib.pdf') < filemtime('p/maljib.t')) {
+if (!file_exists($pdf) || filemtime($pdf) < filemtime('p/maljib.t')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
