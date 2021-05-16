@@ -1,4 +1,4 @@
 test `uname` == "Darwin" && lib=Library/TeX || lib=usr
 /$lib/texbin/pdflatex -interaction=nonstopmode -output-directory=$2 $1
-gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${1}_.pdf $1.pdf
-mv ${1}_.pdf $1.pdf
+#gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dNOPAUSE -dQUIET -dBATCH -sOutputFile=${1}_.pdf $1.pdf
+#mv ${1}_.pdf $1.pdf
