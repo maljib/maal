@@ -2,10 +2,12 @@
 # Mac 개발환경 설치
 1. https://sourceforge.net/projects/xampp/files/XAMPP%20Mac%20OS%20X/5.6.40/ 에서 ...installer.dmg 파일을 찾아 내려받아 설치한다.
 2. ~/Applications/XAMPP/xamppfiles/htdocs 폴더에서 다음 명령을 실행한다:
+```  
 composer require phpmailer/phpmailer
 git clone git@github.com:maljib/maal.git
 mkdir maal/p
 chmod 777 maal/p
+```
 3. XAMPP - Manage Servers - MySQL Database - Configure - Open Conf File - Yes
 4. my.cnf 파일 "myisam_sort_buffer_size = 8M" 줄 밑에 다음 2줄을 추가하고 저장한다:
 character-set-server = utf8
