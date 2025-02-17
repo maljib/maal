@@ -11,11 +11,9 @@ function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts =
   // $mail = new PHPMailer\PHPMailer\PHPMailer;
   $mail = new PHPMailer(true);
   // $mail->SMTPDebug = 3;
-  $mail->SMTPDebug = 1;
   $mail->CharSet = 'UTF-8';
   $mail->Host = 'smtp.naver.com';  // 'smtp.gmail.com';
   $mail->Port = '465'; // 587;
-  $mail->IsHTML(true);  //  NEW
   $mail->isSMTP();
   $mail->SMTPSecure = 'ssl'; // PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
   // $mail->SMTPSecure = 'tls';
