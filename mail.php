@@ -11,18 +11,20 @@ function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts =
   // $mail = new PHPMailer\PHPMailer\PHPMailer;
   $mail = new PHPMailer(true);
   // $mail->SMTPDebug = 3;
+  $mail->SMTPDebug = 1;
   $mail->CharSet = 'UTF-8';
-  $mail->Host = 'smtp.gmail.com';
-  $mail->Port = 587;
+  $mail->Host = 'smtp.naver.com';  // 'smtp.gmail.com';
+  $mail->Port = '465'; // 587;
+  $mail->IsHTML(true);  //  NEW
   $mail->isSMTP();
-  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+  $mail->SMTPSecure = 'ssl'; // PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
   // $mail->SMTPSecure = 'tls';
   $mail->SMTPAuth = true;
-  $mail->Username = 'maljib.org@gmail.com';
-  $mail->Password = 'rlatjddms';
+  $mail->Username = 'maljib_org@naver.com'; // 'maljib.org@gmail.com';
+  $mail->Password = 'RlaTjdDms'; // 'rlatjddms';
 
   $maljib  = '배달말집';
-  $maljiba = 'maljib.org@gmail.com';
+  $maljiba = 'maljib_org@naver.com'; //'maljib.org@gmail.com';
   $mail->setFrom($maljiba, $maljib);
   if (is_array($to)) {
     foreach ($to as $i => $name) {
