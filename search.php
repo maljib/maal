@@ -9,7 +9,7 @@ if ($w = getPost('v')) {    // where clause
   $w = "w.word LIKE '%".escapeString($w)."%' AND";  // l이 들어있는 올림말
 } else {
   if ($w = getPost('w')) {  // where clause
-    if ($w{0} === '-') {
+    if ($w[0] === '-') {
       $d = ' DESC';         // 역순
       $w = substr($w,1);
     }
@@ -19,7 +19,7 @@ if ($w = getPost('v')) {    // where clause
   }
   if ($x = getPost('x')) {
     $j = "JOIN users u ON u.nick='".escapeString(substr($x,1))."' AND u.id=";
-    $x = $x{0};   // @ # $ ^ & --> a e m 1 2
+    $x = $x[0];   // @ # $ ^ & --> a e m 1 2
     if ($x == 'm' || $x == 'e') {  // 적바림 또는 다른 사람이 적은 자취
       $j = 'JOIN texts e ON w.id=e.word AND e.i='.
            ($x == 'm'? '1': '0 AND w.user<>e.user')." $j e.user";

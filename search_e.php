@@ -8,7 +8,7 @@ if ($w = getPost('v')) {    // 이 들어있는 올림말
   $w = "WHERE e.expr LIKE '%".escapeString($w)."%'"; 
 } else {
   if ($w = getPost('w')) {  // where clause
-    if ($w{0} === '-') {
+    if (isset($w[0]) && $w[0] === '-') {
       $d = ' DESC';         // 역순
       $w = substr($w,1);
     }
@@ -17,7 +17,7 @@ if ($w = getPost('v')) {    // 이 들어있는 올림말
     }
   }
   if ($x = getPost('x')) {
-    $j = $x{0} == 'a'? 'JOIN users u ON u.id = d.user':
+    $j = $x[0] == 'a'? 'JOIN users u ON u.id = d.user':
                        'JOIN notes n ON d.id = n.deal'.
                       ' JOIN users u ON u.id = n.user';
     $u = "u.nick = '".escapeString(substr($x,1))."'";

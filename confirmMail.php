@@ -6,9 +6,9 @@ $nick = getPost('nick');
 $mail = getPost('mail');
 if ($nick && $mail) {
   $id = getPost('id');
-  if ($id && $id{0} == '-') {          // 비밀번호 변경
+  if ($id && isset($id[0]) && $id[0] == '-') {          // 비밀번호 변경
     sendConfirm('비밀번호를 바꾸', 'index1', substr($id, 1), $nick);
-  } else if ($id && $id{0} == '@') {   // 본인 확인 후 이메일 변경
+  } else if ($id && $id[0] == '@') {   // 본인 확인 후 이메일 변경
     getMailUser($mail = getPost('a-mail')) and die('16');
     $data = mess($mail)."\t".mess(getPost('phone'))."\t".getPost('askt');
     sendConfirm("이 전자우편 주소로 바꾸", 'askMail', substr($id, 1), $data);  
@@ -42,7 +42,7 @@ a { text-decoration:none; background-color:#efefef;
 </style>
 </head>
 <body>
-$nick 님께,<br><br>배달말집입니다.<br>${msg}시려면
+$nick 님께,<br><br>배달말집입니다.<br>{$msg}시려면
 <a href="http://$host/maal/$next.php?i=$i"><strong>확인</strong></a>을 누르십시오.
 </body>
 </html>
