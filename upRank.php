@@ -6,7 +6,7 @@ $nick = getPost('nick');
 if ($a && $nick) {
   $a = explode(',', $a);
   if (count($a) === 2) {
-    echo sqlUpdate('users', 'rank=1', "id=$a[0]");
+    echo sqlUpdate('users', 'user_rank=1', "id=$a[0]");
     sendMail3($a[0], '보증 승낙', $nick.' 님이 보증했습니다.');
   } else {
     sendMail3($a[0], '보증 거절', $nick.' 님이 보증을 거절했습니다.');  

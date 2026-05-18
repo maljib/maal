@@ -9,7 +9,7 @@ function getNickId($nick) {
 function getSureId($id, $sure) {
   if ($sure) {
     $sure = escapeString($sure);
-    $row = selectRow("SELECT id, pass, rank FROM users WHERE nick = '$sure'");
+    $row = selectRow("SELECT id, pass, user_rank FROM users WHERE nick = '$sure'");
     return $row && $row[1] && ($id == $row[0] || 0 < $row[2])? $row[0]: '0';
   }
   return selectValue("SELECT pass FROM users WHERE id = $id")? $id: '0';
@@ -26,11 +26,11 @@ function setNickSure($nick, $sure, $id) {
     $sid = $id;
     if ($nick !== $sure) {
       $s = escapeString($sure);
-      $row = selectRow("SELECT id, rank FROM users WHERE nick = '$s'");
+      $row = selectRow("SELECT id, user_rank FROM users WHERE nick = '$s'");
       if (!$row || $row[1] < 1) die('8');  // 보증인 아이디 에러
       $sid = $row[0];  
     }
-    $set = cat($set, 'sure='.($sid == $id? 'NULL': "$sid,rank=0"));
+    $set = cat($set, 'sure='.($sid == $id? 'NULL': "$sid,user_rank=0"));
   }
   return $set;
 }
@@ -56,7 +56,7 @@ function isQuittable($id) {
   // 내가 다른 사람의 보증인이면 탈퇴할 수 없다
   if (0 < selectValue("SELECT count(*) FROM users WHERE sure = $id")) return false;
   // 다른 사람이 내 보증인이면 탈퇴할 수 있다
-  $row = selectRow("SELECT rank, sure FROM users WHERE id = $id");
+  $row = selectRow("SELECT user_rank, sure FROM users WHERE id = $id");
   if ($row[0] == '1' && $row[1]) return true;
   // 내가 쓴 글이 없으면 탈퇴할 수 있다
   return !hasWork($id);

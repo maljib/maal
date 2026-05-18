@@ -18,7 +18,7 @@ if ($nick) {
     sendMail3($a[0], "탈퇴 승낙", $_POST['nick']." 님이 탈퇴를 승낙했습니다.");
     echo sqlDelete('users', "id=$a[0]");
   } else {
-    echo sqlUpdate('users', 'rank=1', "id=$a[0]");
+    echo sqlUpdate('users', 'user_rank=1', "id=$a[0]");
     sendMail3($a[0], "탈퇴 거절", $_POST['nick']." 님이 탈퇴를 거절했습니다.");
   }
 } else if (hasWork($a)) {

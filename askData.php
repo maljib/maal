@@ -3,7 +3,7 @@ require_once 'functions.php';
 
 if (selectValue('SELECT user FROM master') == getPost('id')) {
   $rows = selectRows(<<< SQL
-SELECT a.id,u.id, nick,name, u.mail,
+SELECT a.id,u.id, nick,user_name, u.mail,
        convert_tz(a.t,'+00:00','+09:00'), phone, a.mail, askt
   FROM asks a JOIN users u ON a.user = u.id
  ORDER BY t

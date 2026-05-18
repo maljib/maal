@@ -9,13 +9,13 @@ if (preg_match('/@\w+\./', $nick)) {
 }
 $nick = escapeString($nick);
 $row  = selectRow(<<< SQL
-SELECT u.id, u.name, u.mail, u.rank, s.nick, u.nick
+SELECT u.id, u.user_name, u.mail, u.user_rank, s.nick, u.nick
   FROM users u LEFT OUTER JOIN users s ON u.sure = s.id
  WHERE u.$column = '$nick'
 SQL
 ) or die($column == 'mail'? '{"id":"0"}': '{}');
 if ($row[3] < 0) {
-  sqlUpdate('users', 'rank=1', "id=$row[0]");
+  sqlUpdate('users', 'user_rank=1', "id=$row[0]");
   $row[3] = '1';
 }
 echo json_encode(array('id'=>$row[0],'name'=>$row[1],'mail'=>mess($row[2]),
