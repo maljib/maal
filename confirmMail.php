@@ -43,7 +43,7 @@ a { text-decoration:none; background-color:#efefef;
 </head>
 <body>
 $nick 님께,<br><br>배달말집입니다.<br>{$msg}시려면
-<a href="http://$host/maal/$next.php?i=$i"><strong>확인</strong></a>을 누르십시오.
+<a href="https://$host/$next.php?i=$i"><strong>확인</strong></a>을 누르십시오.
 </body>
 </html>
 END_OF_TEXT;
