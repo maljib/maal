@@ -9,8 +9,13 @@ $connection->connect_error and die($connection->connect_error);
 // Sql을 실행한다
 function sql($query) {
   global $connection;
-  $result = $connection->query($query) or die($connection->error);
-  return $result;
+  try {
+    return $connection->query($query);
+  } catch (mysqli_sql_exception $e) {
+    error_log("SQL Error: " . $e->getMessage());
+    error_log("Failed SQL: " . $query);
+    throw $e;
+  }
 }
 
 function selectRows($s) {
@@ -41,23 +46,41 @@ function selectValue($s) {
 
 function sqlInsert($table, $columns, $values) {
   global $connection;
-  $connection->query("INSERT INTO $table($columns) VALUES($values)")
-              or die($connection->error);
-  return $connection->insert_id;
+  $sql = "INSERT INTO $table($columns) VALUES($values)";
+  try {
+    $connection->query($sql);
+    return $connection->insert_id;
+  } catch (mysqli_sql_exception $e) {
+    error_log("SQL Error: " . $e->getMessage());
+    error_log("Failed SQL: " . $sql);
+    throw $e;
+  }
 }
 
 function sqlUpdate($table, $set, $where) {
   global $connection;
-  $connection->query("UPDATE $table SET $set WHERE $where")
-              or die($connection->error);
-  return $connection->affected_rows;
+  $sql = "UPDATE $table SET $set WHERE $where";
+  try {
+    $connection->query($sql);
+    return $connection->affected_rows;
+  } catch (mysqli_sql_exception $e) {
+    error_log("SQL Error: " . $e->getMessage());
+    error_log("Failed SQL: " . $sql);
+    throw $e;
+  }
 }
 
 function sqlDelete($table, $where) {
   global $connection;
-  $connection->query("DELETE FROM $table WHERE $where")
-              or die($connection->error);
-  return $connection->affected_rows;
+  $sql = "DELETE FROM $table WHERE $where";
+  try {
+    $connection->query($sql);
+    return $connection->affected_rows;
+  } catch (mysqli_sql_exception $e) {
+    error_log("SQL Error: " . $e->getMessage());
+    error_log("Failed SQL: " . $sql);
+    throw $e;
+  }  
 }
 
 // 특수 글자 등을 escape 처리하여 ASCII 글자열로 변환한다
