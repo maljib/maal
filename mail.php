@@ -5,47 +5,47 @@ use PHPMailer\PHPMailer\Exception;
 
 require_once 'functions.php';
 require_once '../vendor/autoload.php';
-
-function sendMail($to, $toa, $subject, $body, $re = false, $rea = false, $atts = false, $isHTML = false) {
-  $isHTML = $isHTML || preg_match('/^.*<html.*<\/html>\s*$/s', $body);
-  // $mail = new PHPMailer\PHPMailer\PHPMailer;
-  $mail = new PHPMailer(true);
-  // $mail->SMTPDebug = 3;
-  $mail->CharSet = 'UTF-8';
-  $mail->Host = 'smtp.naver.com';  // 'smtp.gmail.com';
-  $mail->Port = '465'; // 587;
-  $mail->isSMTP();
-  $mail->SMTPSecure = 'ssl'; // PHPMailer::ENCRYPTION_STARTTLS;         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-  // $mail->SMTPSecure = 'tls';
-  $mail->SMTPAuth = true;
-  $mail->Username = 'maljib_org@naver.com'; // 'maljib.org@gmail.com';
-  $mail->Password = 'RlaTjdDms'; // 'rlatjddms';
-
-  $maljib  = '배달말집';
-  $maljiba = 'maljib_org@naver.com'; //'maljib.org@gmail.com';
-  $mail->setFrom($maljiba, $maljib);
-  if (is_array($to)) {
-    foreach ($to as $i => $name) {
-      $mail->addAddress($toa[$i], $name);
+Dotenv\Dotenv::createImmutable(__DIR__ . "/..")->load();
+function sendMail($to, $to_addr, $subject, $body, $re = false, $re_addr = false, $atts = false, $isHTML = false) {
+  try {
+    $mail = new PHPMailer(true);
+    $mail->isSMTP();
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->CharSet    = PHPMailer::CHARSET_UTF8;
+    $mail->Port       = 587;
+    $mail->SMTPAuth   = true;
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->Username   = $_ENV['MAIL_USER'];
+    $mail->Password   = $_ENV['MAIL_PASS'];
+    // $mail->SMTPDebug = 3;
+    $maljib  = '배달말집';
+    $mail->setFrom($mail->Username, $maljib);
+    if (is_array($to)) {
+      foreach ($to as $i => $name) {
+        $mail->addAddress($to_addr[$i], $name);
+      }
+    } else {
+      $mail->addAddress($to_addr, $to);
     }
-  } else {
-    $mail->addAddress($toa, $to);
-  }
-  if ($re) {
-    $mail->addReplyTo($rea, $re);
-    $mail->addCC($rea, $re);
-  } else {
-    $mail->addReplyTo($maljiba, $maljib);
-  }
-  if ($atts) {
-    foreach ($atts as $att) {
-      $mail->addStringAttachment(base64_decode($att['data']), $att['name']);
+    if ($re) {
+      $mail->addReplyTo($re_addr, $re);
+      $mail->addCC($re_addr, $re);
+    } else {
+      $mail->addReplyTo($mail->Username, $maljib);
     }
+    if ($atts) {
+      foreach ($atts as $att) {
+        $mail->addStringAttachment(base64_decode($att['data']), $att['name']);
+      }
+    }
+    $isHTML = $isHTML || preg_match('/^.*<html.*<\/html>\s*$/s', $body);
+    $mail->isHTML($isHTML);
+    $mail->Subject = $subject;
+    $mail->Body    = $body;
+    $mail->send();
+  } catch (Exception $e) {
+    die("전자우편을 보낼 수 없습니다. 오류: {$mail->ErrorInfo}");
   }
-  $mail->isHTML($isHTML);
-  $mail->Subject = $subject;
-  $mail->Body    = $body;
-  $mail->send() or die("전자우편을 보낼 수 없습니다.");
 }
 
 function sendMail4($nick, $mail, $subject, $text) {

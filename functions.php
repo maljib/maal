@@ -1,11 +1,9 @@
 <?php // functions.php
+require_once '../vendor/autoload.php';
+Dotenv\Dotenv::createImmutable(__DIR__ . "/..")->load();
 
-$dbhost  = 'localhost';
-$dbuser  = 'scott';
-$dbpass  = 'tiger';
-$dbname  = 'wordlist';
-
-$connection = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+$connection = new mysqli('localhost',
+                  $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
 $connection->connect_error and die($connection->connect_error);
 
 // Sql을 실행한다
