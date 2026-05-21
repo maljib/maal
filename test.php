@@ -21,5 +21,19 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
 }
 print_r($as);
 
+function mb($a) {
+  foreach (str_split($a) as $c) {
+    print_r($c.' '.mb_ord($c)."\n");
+  }
+}
+
+mb("ㄱ가ㅎ하");
+
+
+
 //phpinfo();
+// https://gemini.google.com/app/06ef96356ed427c7   Free LAMP Server
 ?>
+
+
+
