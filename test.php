@@ -23,8 +23,8 @@ print_r($as);
 
 function mb($a) {
     print_r(array($a, mb_ord($a)));
-  }
 }
+
 
 mb("ㄱ");
 
