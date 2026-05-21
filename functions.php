@@ -139,10 +139,10 @@ function deleteEtc($i) {
 }
 
 function touchMaljib() {
-  touch('p/maljib.t');
+  touch('p/maljib.touched');
 } 
 
 function touchMal() {
-  touch('p/mal.t');
+  touch('p/mal.touched');
 } 
 ?>

@@ -10,12 +10,12 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id   INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  nick VARCHAR(60)  NOT NULL UNIQUE,  -- 아이디
-  pass BINARY(32)   NOT NULL,         -- 비밀번호 해시 값
-  name VARCHAR(60)  NOT NULL,         -- 이름
-  mail VARCHAR(100) NOT NULL,         -- 이메일 주소
-  rank TINYINT NOT NULL DEFAULT 0,    -- 등급
-  sure INT UNSIGNED NULL,             -- 보증인
+  nick VARCHAR(60)  NOT NULL UNIQUE,    -- 아이디
+  pass BINARY(32)   NOT NULL,           -- 비밀번호 해시 값
+  user_name VARCHAR(60)  NOT NULL,      -- 이름
+  mail VARCHAR(100) NOT NULL,           -- 이메일 주소
+  user_rank TINYINT NOT NULL DEFAULT 0, -- 등급
+  sure INT UNSIGNED NULL,               -- 보증인
   FOREIGN KEY(sure) REFERENCES users(id) ON UPDATE CASCADE
 );
 
@@ -34,15 +34,15 @@ CREATE TABLE asks (
   t    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   user INT UNSIGNED NOT NULL,
   mail VARCHAR(100) NOT NULL, -- 이메일 주소
-  phone VARCHAR(20)  NULL, -- 전화번호
-  askt VARCHAR(5000) NULL, -- 전화번호
+  phone VARCHAR(20)  NULL,    -- 전화번호
+  askt VARCHAR(5000) NULL,    -- 메시지 내용
   FOREIGN KEY(user) REFERENCES users(id) ON UPDATE CASCADE
 );
 
 CREATE TABLE etc (
   id   INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   user INT UNSIGNED NOT NULL,
-  data VARCHAR(5000) NOT NULL  -- nick name mail sure
+  data VARCHAR(5000) NOT NULL  -- nick user_name mail sure
 );
 
 CREATE TABLE words (
@@ -59,7 +59,7 @@ CREATE TABLE texts (
   t    DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   user INT UNSIGNED   NOT NULL,  -- 갈무리한 이
   word INT UNSIGNED   NOT NULL,  -- 낱말
-  data VARCHAR(15000) NOT NULL,  -- 풀이/적바림
+  data VARCHAR(15000) NOT NULL,  -- 풀이/적바림 내용
   FOREIGN KEY(word) REFERENCES words(id) ON UPDATE CASCADE,
   FOREIGN KEY(user) REFERENCES users(id) ON UPDATE CASCADE
 );
@@ -116,6 +116,3 @@ CREATE TABLE notes (
   FOREIGN KEY(deal) REFERENCES deals(id) ON UPDATE CASCADE,
   FOREIGN KEY(user) REFERENCES users(id) ON UPDATE CASCADE
 );
-
--- mysql -h localhost -u scott -p <..\..\htdocs\maal\wordlist.sql
--- mysqldump -h localhost -u scott -p --databases wordlist >wordlist_backup.sql

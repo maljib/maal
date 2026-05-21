@@ -2,12 +2,12 @@
 require_once 'functions.php';
 
 $tex = 'p/maljib.tex';
-$pdf = 'p/maljib.pdf';
+$tex_ = 'p/maljib_.tex';
 
 while (file_exists($tex)) {
   sleep(1);
 }
-if (!file_exists($pdf) || filemtime($pdf) < filemtime('p/maljib.t')) {
+if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/maljib.touched')) {
   $fp = fopen($tex, 'w');
   if (!$fp) return;
   fwrite($fp, <<<'PREAMBLE'
@@ -73,6 +73,6 @@ CLOSING
   fclose($fp);
   $cwd = getcwd();
   exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
-  rename($tex, 'p/_maljib.tex');
+  rename($tex, $tex_);
 }
 ?>
