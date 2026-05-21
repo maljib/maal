@@ -23,7 +23,8 @@ print_r($as);
 
 function mb($a) {
   foreach (str_split($a) as $c) {
-    print_r($c.' '.mb_ord($c)."\n");
+    $aa = array($c, mb_ord($c));
+    print_r($aa);
   }
 }
 
