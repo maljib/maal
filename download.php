@@ -5,13 +5,16 @@ function getSortKey($str) {
   if ($str === '') {
     return ['', 0, ''];
   }
-  $jamoList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
-              'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
   $firstChar = mb_substr($str, 0, 1, 'UTF-8');
-  if (in_array($firstChar, $jamoList)) {
+  $codePoint = mb_ord($firstChar, 'UTF-8');
+  if (0x1100 <= $codePoint && $codePoint <= 0x11FF ||
+      0x3131 <= $codePoint && $codePoint <= 0x318E ||
+      0xA960 <= $codePoint && $codePoint <= 0xA97C ||
+      0xD7B0 <= $codePoint && $codePoint <= 0xD7FB) {
     return [$firstChar, 0, $str];
   }
-  $codePoint = mb_ord($firstChar, 'UTF-8');
+  $jamoList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
+              'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
   if (0xAC00 <= $codePoint && $codePoint <= 0xD7A3) {
     return [$jamoList[(int) (($codePoint - 0xAC00) / 588)], 1, $str];
   }
