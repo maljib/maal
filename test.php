@@ -22,13 +22,11 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
 print_r($as);
 
 function mb($a) {
-  foreach (str_split($a) as $c) {
-    $aa = array($c, mb_ord($c));
-    print_r($aa);
+    print_r(array($a, mb_ord($a)));
   }
 }
 
-mb("ㄱ가ㅎ하");
+mb("ㄱ");
 
 
 
