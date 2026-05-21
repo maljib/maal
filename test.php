@@ -21,41 +21,59 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
 }
 print_r($as);
 
-$collator = Collator::create('ko_KR');
 
-$xxx = ["사람", "ㅅ변격", "감사", "나무", "ㄴ", "ㄱ값", "가을"];
+
+
+$items = ['ㅏ', 'ㄾ', '감', 'ㄴ', '가', 'ㄱ', '나', 'ㄷ', 'ㅣ', 'ㄳ', 'ㅄ', 'ㄲ'];
+
+$collator = new Collator('ko_KR');
+$collator->sort($items);
+
+print(implode(", ", $items));
+print_r($items); 
+// Result: [ㄱ, 가, 감, ㄲ, ㄴ, 나, ㄷ, ㅄ, ㅏ, ㅣ, ㄳ, ㄾ]
+
 function getSortKey($str) {
   if ($str === '') {
     return ['', 0, ''];
   }
-  $firstChar = mb_substr($str, 0, 1, 'UTF-8');
-  $codePoint = mb_ord($firstChar, 'UTF-8');
-  if (0x1100 <= $codePoint && $codePoint <= 0x11FF ||
-      0x3131 <= $codePoint && $codePoint <= 0x318E ||
-      0xA960 <= $codePoint && $codePoint <= 0xA97C ||
-      0xD7B0 <= $codePoint && $codePoint <= 0xD7FB) {
-    return [$firstChar, 0, $str];
+  
+  $first_char = mb_substr($str, 0, 1, 'UTF-8');
+  $code_point = mb_ord($first_char, 'UTF-8');
+  
+  // If the first character is a standalone Jamo
+  if (0x3131 <= $code_point && $code_point <= 0x3163) {
+    return [$first_char, 0, $str];
   }
-  $jamoList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
-              'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
-  if (0xAC00 <= $codePoint && $codePoint <= 0xD7A3) {
-    return [$jamoList[(int) (($codePoint - 0xAC00) / 588)], 1, $str];
+
+  // If the first character is a Hangul syllable
+  if (0xAC00 <= $code_point && $code_point <= 0xD7A3) {
+    $choseong_ㅣist = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
+                        'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+    return [$choseong_ㅣist[(int) (($code_point - 0xAC00) / 588)], 1, $str];
   }
-  return [$firstChar, 2, $str];
+  
+  // Otherwise
+  return [$first_char, 2, $str];
 }
 
-usort($xxx, function($a, $b) use($collator) {
-  $keyA = getSortKey($a);
-  $keyB = getSortKey($b);
-  if ($keyA[0] !== $keyB[0]) {
-    return $collator->compare($keyA[0], $keyB[0]);
+$compare = function($a, $b) {
+  $key_a = getSortKey($a);
+  $key_b = getSortKey($b);
+  if ($key_a[0] !== $key_b[0]) {
+    return $key_a[0] <=> $key_b[0];;
   }
-  if ($keyA[1] !== $keyB[1]) {
-    return $collator->compare($keyA[1], $keyB[1]);
+  if ($key_a[1] !== $key_b[1]) {
+    return $key_a[1] <=> $key_b[1];
   }
-  return $collator->compare($keyA[2], $keyB[2]);
-});
-print_r($xxx);
+  return $key_a[2] <=> $key_b[2];
+};
+
+usort($items, $compare);
+
+print(implode(", ", $items));
+// Result: [ㄱ, 가, 감, ㄲ, ㄳ, ㄴ, 나, ㄷ, ㄾ, ㅄ, ㅏ, ㅣ]
+
 
 //phpinfo();
 // https://gemini.google.com/app/06ef96356ed427c7   Free LAMP Server
