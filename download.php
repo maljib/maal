@@ -7,10 +7,7 @@ function getSortKey($str) {
   }
   $firstChar = mb_substr($str, 0, 1, 'UTF-8');
   $codePoint = mb_ord($firstChar, 'UTF-8');
-  if (0x1100 <= $codePoint && $codePoint <= 0x11FF ||
-      0x3131 <= $codePoint && $codePoint <= 0x318E ||
-      0xA960 <= $codePoint && $codePoint <= 0xA97C ||
-      0xD7B0 <= $codePoint && $codePoint <= 0xD7FB) {
+  if (0x3131 <= $codePoint && $codePoint <= 0x3163) {
     return [$firstChar, 0, $str];
   }
   $jamoList = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
@@ -21,7 +18,19 @@ function getSortKey($str) {
   return [$firstChar, 2, $str];
 }
 
-$collator = Collator::create('ko_KR');
+function compareMixed($a, $b) {
+  $key_a = getSortKey($a);
+  $key_b = getSortKey($b);
+  if ($key_a[0] !== $key_b[0]) {
+    return strcmp($key_a[0], $key_b[0]);
+  }
+  if ($key_a[1] !== $key_b[1]) {
+    return $key_a[1] <=> $key_b[1];
+  }
+  return strcmp($key_a[2], $key_b[2]);
+}
+
+//$collator = Collator::create('ko_KR');
 
 $tex = 'p/maljib.tex';
 $tex_ = 'p/maljib_.tex';
@@ -58,7 +67,7 @@ SELECT w.word, e.data
  WHERE w.id = wt.wid AND e.id = wt.id
  ORDER BY w.word
 SQL
-  );
+  );/*
   usort($rows, function($a, $b) use($collator) {
     $compareMixed = function($a, $b) use($collator) {
       $keyA = getSortKey($a);
@@ -74,6 +83,11 @@ SQL
     $x = &$a[0]; if ($x[0] == '-') $x = substr($x, 1);
     $y = &$b[0]; if ($y[0] == '-') $y = substr($y, 1);
     return $compareMixed($x, $y);
+  });*/
+  usort($rows, function($a, $b) {
+    $x = &$a[0]; if ($x[0] == '-') $x = substr($x, 1);
+    $y = &$b[0]; if ($y[0] == '-') $y = substr($y, 1);
+    return compareMixed($x, $y);
   });
   foreach ($rows as $row) {
     $s = preg_replace('/0*(\d+)$/', '\$^{$1}\$', $row[0]);
