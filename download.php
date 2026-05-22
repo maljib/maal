@@ -1,34 +1,31 @@
 <?php
 require_once 'functions.php';
 
+$collator = new Collator('root');
+$collator->setStrength(Collator::PRIMARY);
+
 function getSortKey($str) {
   if ($str === '') {
     return ['', 0, ''];
   }
+  
   $first_char = mb_substr($str, 0, 1, 'UTF-8');
   $code_point = mb_ord($first_char, 'UTF-8');
+  
+  // Standalone Jamo
   if (0x3131 <= $code_point && $code_point <= 0x3163) {
     return [$first_char, 0, $str];
   }
 
+  // Hangul Syllables
   if (0xAC00 <= $code_point && $code_point <= 0xD7A3) {
-    $choseong_ㅣist = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
-                        'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
-    return [$choseong_ㅣist[(int) (($code_point - 0xAC00) / 588)], 1, $str];
+    $choseong_list = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
+                      'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+    return [$choseong_list[(int) (($code_point - 0xAC00) / 588)], 1, $str];
   }
-  return [$first_char, 2, $str];
-}
-
-function compareMixed($a, $b) {
-  $key_a = getSortKey($a);
-  $key_b = getSortKey($b);
-  if ($key_a[0] !== $key_b[0]) {
-    return $key_a[0] <=> $key_b[0];;
-  }
-  if ($key_a[1] !== $key_b[1]) {
-    return $key_a[1] <=> $key_b[1];
-  }
-  return $key_a[2] <=> $key_b[2];
+  
+  // Non-Hangul Characters (Using Hangul Filler to position them after 'ㅣ')
+  return ["\u{3164}", 2, $str];
 }
 
 $tex = 'p/maljib.tex';
@@ -67,10 +64,27 @@ SELECT w.word, e.data
  ORDER BY w.word
 SQL
   );
-  usort($rows, function($a, $b) {
+  usort($rows, function($a, $b) use ($collator) {
+    $compare = function($a, $b) use ($collator) {
+      $key_a = getSortKey($a);
+      $key_b = getSortKey($b);
+
+      if ($key_a[0] !== $key_b[0]) {
+        return $key_a[0] <=> $key_b[0];
+      }
+      if ($key_a[1] === 2) {
+        return $collator->compare($key_a[2], $key_b[2]);
+        // return strcasecmp($key_a[2], $key_b[2]);
+      }
+      if ($key_a[1] !== $key_b[1]) {
+        return $key_a[1] <=> $key_b[1];
+      }
+      return $key_a[2] <=> $key_b[2];
+    };
+
     $x = &$a[0]; if ($x[0] == '-') $x = substr($x, 1);
     $y = &$b[0]; if ($y[0] == '-') $y = substr($y, 1);
-    return compareMixed($x, $y);
+    return $compare($x, $y);
   });
   foreach ($rows as $row) {
     $s = preg_replace('/0*(\d+)$/', '\$^{$1}\$', $row[0]);

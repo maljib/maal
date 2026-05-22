@@ -22,16 +22,9 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
 print_r($as);
 
 
-
-
-$items = ['ㅏ', 'ㄾ', '감', 'ㄴ', '가', 'ㄱ', '나', 'ㄷ', 'ㅣ', 'ㄳ', 'ㅄ', 'ㄲ'];
-
-$collator = new Collator('ko_KR');
+$collator = new Collator('root');
+$collator->setStrength(Collator::PRIMARY);
 $collator->sort($items);
-
-print(implode(", ", $items));
-print_r($items); 
-// Result: [ㄱ, 가, 감, ㄲ, ㄴ, 나, ㄷ, ㅄ, ㅏ, ㅣ, ㄳ, ㄾ]
 
 function getSortKey($str) {
   if ($str === '') {
@@ -41,27 +34,32 @@ function getSortKey($str) {
   $first_char = mb_substr($str, 0, 1, 'UTF-8');
   $code_point = mb_ord($first_char, 'UTF-8');
   
-  // If the first character is a standalone Jamo
+  // Standalone Jamo
   if (0x3131 <= $code_point && $code_point <= 0x3163) {
     return [$first_char, 0, $str];
   }
 
-  // If the first character is a Hangul syllable
+  // Hangul Syllables
   if (0xAC00 <= $code_point && $code_point <= 0xD7A3) {
-    $choseong_ㅣist = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
-                        'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
-    return [$choseong_ㅣist[(int) (($code_point - 0xAC00) / 588)], 1, $str];
+    $choseong_list = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ',
+                      'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+    return [$choseong_list[(int) (($code_point - 0xAC00) / 588)], 1, $str];
   }
   
-  // Otherwise
-  return [$first_char, 2, $str];
+  // Non-Hangul Characters (Using Hangul Filler to position them after 'ㅣ')
+  return ["\u{3164}", 2, $str];
 }
 
-$compare = function($a, $b) {
+$compare = function($a, $b) use ($collator) {
   $key_a = getSortKey($a);
   $key_b = getSortKey($b);
+
   if ($key_a[0] !== $key_b[0]) {
-    return $key_a[0] <=> $key_b[0];;
+    return $key_a[0] <=> $key_b[0];
+  }
+  if ($key_a[1] === 2) {
+    return $collator->compare($key_a[2], $key_b[2]);
+    // return strcasecmp($key_a[2], $key_b[2]);
   }
   if ($key_a[1] !== $key_b[1]) {
     return $key_a[1] <=> $key_b[1];
@@ -69,15 +67,9 @@ $compare = function($a, $b) {
   return $key_a[2] <=> $key_b[2];
 };
 
+$items = ['ㅏ', 'ㄾ', '감', 'P', 'a', 'ㄴ', 'x', '가', 
+          'ㄱ', '나', 'ㄷ', 'orange', 'Apple', 'ㅣ', 'ㄳ', 'ㅄ', 'ㄲ'];;
+print(implode(", ", $items)."\n");
 usort($items, $compare);
-
-print(implode(", ", $items));
-// Result: [ㄱ, 가, 감, ㄲ, ㄳ, ㄴ, 나, ㄷ, ㄾ, ㅄ, ㅏ, ㅣ]
-
-
-//phpinfo();
-// https://gemini.google.com/app/06ef96356ed427c7   Free LAMP Server
+print(implode(", ", $items)."\n");
 ?>
-
-
-
