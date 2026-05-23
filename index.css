@@ -170,7 +170,7 @@ small             { font-size:70%; }
 #h1, #h1_e { font-size:2em; font-weight:bold; color:#f1f3f1; cursor:pointer; }
 #h1        { margin:0 -7px 0 12px; }
 #h1_e      { text-decoration:none; }
-#h1_f      { text-decoration:none; font-weight:bold; color:#f1f3f1; cursor:pointer; }
+#h1_f      { text-decoration:none; font-size:2em; font-weight:bold; color:#f1f3f1; cursor:pointer; }
 #de                { z-index:902; margin:5px 15px 0 15px; }
 #de span, .al span { display:inline-block; }
 
