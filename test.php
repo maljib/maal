@@ -20,7 +20,7 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
   $as[$i][] = array($i, $i+1);
 }
 print_r($as);
-print("\n");
+print("<br>");
 
 $collator = new Collator('root');
 $collator->setStrength(Collator::PRIMARY);
@@ -65,11 +65,11 @@ $compare = function($a, $b) use ($collator) {
 
 $list = ['ㅣ', 'x', 'ㅏ', '달', 'ㄾ', '감', 'P', 'a', 'ㄴ', '가', 'ㄱ',
            'à', '나', 'ㄷ', 'orange', 'Apple', 'ㄳ', 'ㅄ', 'Á', 'ㄲ'];
-print(implode(", ", $list)."\n");
+print(implode(", ", $list)."<br>");
 
 $collator->sort($list);
-print(implode(", ", $list)."\n");
+print(implode(", ", $list)."<br>");
 
 usort($list, $compare);
-print(implode(", ", $list)."\n");
+print(implode(", ", $list)."<br>");
 ?>
