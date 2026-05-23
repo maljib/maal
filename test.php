@@ -65,11 +65,11 @@ $compare = function($a, $b) use ($collator) {
 
 $list = ['ㅣ', 'x', 'ㅏ', '달', 'ㄾ', '감', 'P', 'a', 'ㄴ', '가', 'ㄱ',
            'à', '나', 'ㄷ', 'orange', 'Apple', 'ㄳ', 'ㅄ', 'Á', 'ㄲ'];
-print(implode(", ", $list)."<br>");
+print(implode(", ", $list)." - 원본<br>");
 
 $collator->sort($list);
-print(implode(", ", $list)."<br>");
+print(implode(", ", $list). " - collator 정렬<br>");
 
 usort($list, $compare);
-print(implode(", ", $list)."<br>");
+print(implode(", ", $list)." - 사용자 정의 정렬<br>");
 ?>
