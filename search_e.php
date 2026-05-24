@@ -37,6 +37,3 @@ SELECT e.id, e.expr
 SQL
 ));
 ?>
-
-
-GROUP BY e.id, e.expr ORDER BY MAX(d.c)
