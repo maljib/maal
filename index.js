@@ -2063,7 +2063,7 @@ b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
             s +=
 '<div class="al0">&nbsp; <i class="fas fa-lg '+ faArrow(al.length - 1) +
 '"></i> &nbsp; <i class="far fa-sm fa-edit" title="다듬' +
-(al[0][1] == 0? '은':'을') + ' 말 추가"></i></div>';
+(al[0][1] == 0? '은':'을 ') + '말 추가"></i></div>';
           }
         }
         $("#als").empty().append(s);
