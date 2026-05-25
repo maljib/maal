@@ -2046,15 +2046,15 @@ faArrow(i) +'"></i> &nbsp; <small class="vote"><span'+
 xp(i,0) +'><i class="far fa-sm fa-thumbs-up" title="좋아요"></i> '+
 b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
 ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal" title="싫어요"></i></span></small>&nbsp;'+
-(commentable(c)? ' <i class="far fa-sm fa-comment-alt" title="댓글"></i>': '') +
-' <i>'+ (uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit"></i>': b[6]) +
+(commentable(c)? ' <i class="far fa-sm fa-comment-alt" title="댓글 쓰기"></i>': '') +
+' <i>'+ (uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit" title="수정"></i>': b[6]) +
 ' <small>'+ b[2] +'</small></i></div>'+
 '<div class="al"><span class="al-link">'+ b[4] +'</span></div>';
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
               var d = c[j];
               s +=
 '<div class="aln"><div>'+ convertNote(d[1]) +'</div>&nbsp; <i class="al-n">'+
-(d[2] == uid? '<i class="far fa-sm fa-edit"></i>&nbsp;': d[3]) +
+(d[2] == uid? '<i class="far fa-sm fa-edit" title="수정"></i>&nbsp;': d[3]) +
 ' <small>'+ d[4] +'</small></i></div>';
             }
             s += '</div>';
@@ -2062,7 +2062,8 @@ b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
           if (uid) {
             s +=
 '<div class="al0">&nbsp; <i class="fas fa-lg '+ faArrow(al.length - 1) +
-'"></i> &nbsp; <i class="far fa-sm fa-edit"></i></div>';
+'"></i> &nbsp; <i class="far fa-sm fa-edit" title="다듬' +
+(al[0][1] == 0? '은':'는') + ' 말 추가"></i></div>';
           }
         }
         $("#als").empty().append(s);
