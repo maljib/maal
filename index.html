@@ -14,15 +14,15 @@
   <script src="diff_match_patch.js"></script>
   <script src="jquery.pretty-text-diff.min.js"></script>
   <link rel="stylesheet" href="index.css?v=51">
-  <script src="index.js?v=54"></script>
+  <script src="index.js?v=55"></script>
 </head>
 <body>
-  <span id="h1">배달말집</span>&nbsp;
-  <i id="count1" class="yellow"></i>
-  <i id="count2" class="green"></i>
-  <i id="count3" class="white"></i>
-  <i id="count4" class="yellow"></i>
-  <i id="count5" class="white"></i>
+  <span id="h1" title="겨살이 보기">배달말집</span>&nbsp;
+  <i id="count1" class="yellow" title="올림말 수"></i>
+  <i id="count2" class="green" title="자취 수"></i>
+  <i id="count3" class="white" title="적바림 수"></i>
+  <i id="count4" class="yellow title="></i>
+  <i id="count5" class="white" title=""></i>
   <input name="arg" id="arg" placeholder="올림말" class="padn ui-widget ui-corner-all">
   <span id="arg-l">&#x25c0;</span>
   <span id="arg-r">&#x25b6;</span>
@@ -32,7 +32,7 @@
       <li><a id="t1" href="#tab1" class="b-yellow"></a></li>
       <li><a id="t2" href="#tab2" class="b-green">자취</a></li>
       <li><a id="t3" href="#tab3">적바림</a></li>
-      <li><a id="t4" href="#tab4">?</a></li>
+      <li><a id="t4" href="#tab4" title="도움말">?</a></li>
       <li><a id="t5" href="#tab5"></a></li>
       <li><a id="t6" href="#viewer"></a></li>
     </ul>
@@ -167,7 +167,7 @@
     <i id="arrow" class="fas fa-arrow-left fa-lg" title="말다듬기"></i>
     <div id="exit_div">
       <i id="download" class="far fa-file-pdf fa-lg" title="책 만들기"></i>&nbsp;
-      <i id="user_info" class="fas fa-user-edit fa-lg" title="사용자 정보"></i>&nbsp;
+      <i id="user_info" class="fas fa-user-edit fa-lg"></i>&nbsp;
       <i id="exit" class="fas fa-sign-out-alt fa-lg" title="나가기"></i>
     </div>
 
@@ -312,9 +312,9 @@
 
   <div id="ex" class="arrow_grey">
     <div id="ex0">
-      <a href="2" target="_blank" id="h1_e">말다듬기</a> &nbsp;
-      <i id="count1e" class="yellow"></i> &nbsp;
-      <i id="count2e" class="white"></i> &nbsp;
+      <span id="h1_e">말다듬기</span> &nbsp;
+      <i id="count1e" class="yellow" title="올림말 수"></i> &nbsp;
+      <i id="count2e" class="white" title="적바림 수"></i> &nbsp;
       <i id="search" class="fas fa-search fa-lg" title="찾기></i>
       <i id="pdf" class="far fa-file-pdf fa-lg" title="책 만들기"></i>
       <a href="2" target="_blank" class="fa fa-question fa-lg" id="help2" title="도움말"></a>

@@ -1788,7 +1788,7 @@ $(function() {
   }
 
   $("#arrow").click(function() {
-    document.title = "깨끗한 우리말 쓰기";
+    document.title = "말다듬기";
     $("#editors,#msg").hide();
     var p = "아 아* * -* -아*";
     $(search_arg = "#dev").attr('placeholder', uid? "? "+ p: p);

@@ -26,7 +26,7 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/mal.touched')) {
 \def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
 
 \begin{document}
-{\centering\LARGE\bf깨끗한 우리말 쓰기\par}
+{\centering\LARGE\bf말다듬기\par}
 \begin{multicols}{2}
 
 PREAMBLE
