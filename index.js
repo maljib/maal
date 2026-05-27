@@ -1509,7 +1509,7 @@ $(function() {
   $("#count4").data({ s:"#count4", x:"^", a:"b-yellow", t:"올림" });
   $("#count5").data({ s:"#count5", x:"&", a:"b-yellow", t:"버림" });
   $("#count1e").data({ s:"#count1e", x:"@", a:"b-yellow", t:"다듬은말" });
-  $("#count2e").data({ s:"#count2e", x:"$", a:"b-white", t:"적바림" });
+  $("#count2e").data({ s:"#count2e", x:"$", a:"b-white", t:"댓글" });
 
   $("#count1,#count2,#count3,#count4,#count5,#count1e,#count2e").click(function() {
     var o = $(this), data = o.data();
