@@ -172,6 +172,7 @@ small             { font-size:70%; }
 #h1        { margin:0 -7px 0 12px; cursor:pointer; }
 #help2     { text-decoration:none; }
 #de                { z-index:902; margin:5px 15px 0 15px; }
+#de span           { color:yellow }
 #de span, .al span { display:inline-block; }
 
 #als { top:81px; left:0; right:0; overflow:auto; }
