@@ -31,7 +31,7 @@ if ($w = getPost('v')) {    // 이 들어있는 올림말
   }
 }
 echo json_encode(selectRows(<<< SQL
-SELECT e.id, e.expr
+SELECT DISTINCT e.id, e.expr
   FROM exprs e JOIN deals d ON e.id IN (d.de, d.al) $j
     $w $o$d LIMIT 200
 SQL

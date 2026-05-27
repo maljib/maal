@@ -2044,7 +2044,7 @@ faArrow(0) +'"></i> &nbsp; <small><i>'+ a[0][2] +'</i></small>'+
             s += '<div><div class="al0">&nbsp; <i class="fas fa-lg '+
 faArrow(i) +'"></i> &nbsp; <small class="vote"><span'+
 xp(i,0) +'><i class="far fa-sm fa-thumbs-up" title="좋아요"></i> '+
-b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ -b[7][1].length +
+b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ b[7][1].length +
 ' <i class="far fa-sm fa-thumbs-down fa-flip-horizontal" title="싫어요"></i></span></small>&nbsp;'+
 (commentable(c)? ' <i class="far fa-sm fa-comment-alt" title="댓글 쓰기"></i>': '') +
 ' <i>'+ (uid == b[5]? '&nbsp;<i class="far fa-sm fa-edit" title="수정"></i>': b[6]) +
