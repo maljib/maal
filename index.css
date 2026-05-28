@@ -131,10 +131,10 @@ table,th,td              { margin:0; border-collapse:collapse; }
 .green        { color:#bfc; }
 .white        { color:white; }
 
-.b-white      { background-color:white; }
-.b_grey       { background-color:#eeeeee; }
-.b-yellow,del { background-color:#ffa; }
-.b-green, ins { background-color:#bfc; }
+.b-white                 { background-color:white; }
+.b-gray                  { background-color:#eeeeee; }
+.b-yellow, del, #de>span { background-color:#ffa; }
+.b-green,  ins           { background-color:#bfc; }
 
 .pointer      { cursor:pointer; }
 del,ins       { text-decoration:none; }
@@ -172,7 +172,6 @@ small             { font-size:70%; }
 #h1        { margin:0 -7px 0 12px; cursor:pointer; }
 #help2     { text-decoration:none; }
 #de                { z-index:902; margin:5px 15px 0 15px; }
-#de span           { color:yellow }
 #de span, .al span { display:inline-block; }
 
 #als { top:81px; left:0; right:0; overflow:auto; }
@@ -187,7 +186,8 @@ small             { font-size:70%; }
 .vote           { vertical-align:4px; }
 .aln .link      { text-decoration:underline; }
 #de>span, .al>span, .aln>div { border: 1px solid #aaaaaa; border-radius: 4px;
-                           background:white; padding:0 4px 2px 4px; }
+                               padding:0 4px 2px 4px; }
+.al>span, .aln>div { background:white; }
 #als>div,#de-v,#al-v,#nt-v { left:0; right:0; }
 #als>div          { background-image:linear-gradient(white, #e8e8e8); padding:0 15px 3px 15px; }
 #de-v,#al-v,#nt-v { background-image:linear-gradient(white, #cccccc); }

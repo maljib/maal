@@ -1573,9 +1573,9 @@ $(function() {
     }
     $(search_arg).val($(this).data()[0]).autocomplete("search");
   }).on("mouseenter", "tr", function() {
-    this.classList.add("b_grey");
+    this.classList.add("b-gray");
   }).on("mouseleave", "tr", function() {
-    this.classList.remove("b_grey");
+    this.classList.remove("b-gray");
   });
 
   function setListCheckbox(b) {
@@ -1702,9 +1702,9 @@ $(function() {
     this.remove();
     setNoteSize();
   }).on("mouseenter", "li", function() {
-    this.classList.add("b_grey");
+    this.classList.add("b-gray");
   }).on("mouseleave", "li", function() {
-    this.classList.remove("b_grey");
+    this.classList.remove("b-gray");
   });
 
   $("#list tbody").on("click", "td", function() {
