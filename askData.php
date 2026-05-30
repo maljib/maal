@@ -11,8 +11,8 @@ SQL
   );
   forEach ($rows as &$a) {
     $nickName = $a[2].($a[2] === $a[3]? '': '('.$a[3].')'); 
-    $a = array($a[0].'_'.$a[1],   $nickName, mess($a[4]),
-          substr($a[5], 2, 14), mess($a[6]), mess($a[7]), $a[8]);
+    $a = [$a[0].'_'.$a[1],   $nickName, mess($a[4]),
+          substr($a[5], 2, 14), mess($a[6]), mess($a[7]), $a[8]];
   }  // askId_userId, 등록(아이디 이름, 메일), 입력(time, 전화, 메일, 물음글)
   echo json_encode($rows);
 } else {

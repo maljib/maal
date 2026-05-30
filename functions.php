@@ -20,14 +20,14 @@ function sql($query) {
 
 function selectRows($s) {
   $result = sql($s);
-  for ($rows = array(); $row = $result->fetch_row(); $rows[] = $row);
+  for ($rows = []; $row = $result->fetch_row(); $rows[] = $row);
   $result->close();
   return $rows;
 }
 
 function selectValues($s) {
   $result = sql($s);
-  for ($values = array(); $row = $result->fetch_row(); $values[] = $row[0]);
+  for ($values = []; $row = $result->fetch_row(); $values[] = $row[0]);
   $result->close();
   return $values;
 }

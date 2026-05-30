@@ -47,9 +47,9 @@ SQL
   foreach ($rows as $row) {
     $s = preg_replace('/0*(\d+)$/', '\$^{$1}\$', $row[0]);
     $t = preg_replace('/{(.+?)}/', "\x01".'$1'."\x02", trim($row[1]));
-    $t = preg_replace(array('/{/', '/}/', '/#/', '/\$/', '/≈/u'),  // , '/☛/u'
-                      array('\{', '\}', '\#', '\\\$', '$\approx$'), $t); // , '☞'
-    $t = preg_replace(array('/</', '/>/'), array('$<$', '$>$'), $t);
+    $t = preg_replace(['/{/', '/}/', '/#/', '/\$/', '/≈/u'],  // , '/☛/u'
+                      ['\{', '\}', '\#', '\\\$', '$\approx$'], $t); // , '☞'
+    $t = preg_replace(['/</', '/>/'], ['$<$', '$>$'], $t);
     $t = preg_replace('/([〕①-⑳㉑-㉟㊱-㊿])\s*(\(.+?\))\s*/u', '$1\textit{$2}', $t);
     $t = preg_replace('/\x01(.+?)\x02/', '\textbf{$1}', $t);
     $t = preg_replace('/(\p{Hangul})0*(\d+)/u', '$1\$^{$2}\$', $t);

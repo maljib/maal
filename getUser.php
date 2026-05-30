@@ -18,7 +18,7 @@ if ($row[3] < 0) {
   sqlUpdate('users', 'user_rank=1', "id=$row[0]");
   $row[3] = '1';
 }
-echo json_encode(array('id'=>$row[0],'name'=>$row[1],'mail'=>mess($row[2]),
-                       'rank'=>$row[3],'sure'=>($row[4]? $row[4]: $row[5]),
-                       'nick'=>$row[5]));
+echo json_encode(['id'=>$row[0],'name'=>$row[1],'mail'=>mess($row[2]),
+                  'rank'=>$row[3],'sure'=>($row[4]? $row[4]: $row[5]),
+                  'nick'=>$row[5]]);
 ?>

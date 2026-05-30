@@ -2,31 +2,24 @@
 $time = time();
 date_default_timezone_set('Asia/Seoul');
 print_r(date("Y-m-d_H:i", $time)."\n");
-$stack = array("orange", 1, "만화");
-array_push($stack, array("t", 2, "화"));
+$stack = ["orange", 1, "만화"];
+array_push($stack, ["t", 2, "화"]);
 
-$s = array("orange", 1, "만화");
-$s[] = array("o", 0, "만");
+$s = ["orange", 1, "만화"];
+$s[] = ["o", 0, "만"];
 
 print_r($stack);
 print_r($s);
 
-$as = array(
-  array(1,2,3),
-  array(4,5,6),
-  array(7,8,9)
-);
+$as = [
+  [1,2,3],
+  [4,5,6],
+  [7,8,9]
+];
 for ($c = count($as), $i = 0; $i < $c; $i++) {
-  $as[$i][] = array($i, $i+1);
+  $as[$i][] = [$i, $i+1];
 }
 print_r($as);
-print("<br>");
-
-$password = "9521gh";
-$hash = password_hash($password, PASSWORD_DEFAULT);
-print($password . " => " . $hash . "\n");
-print("<br>");
-print(password_verify($password, $hash)? "OK\n": "NO\n");
 print("<br>");
 
 require_once 'compare.php';
