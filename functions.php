@@ -101,19 +101,6 @@ function getGet($index) {
   return isset($_GET[$index])? $_GET[$index]: '';
 }
 
-// 비밀번호의 해시 값을 구한다 (비밀번호)
-function getHash($password) {
-  // $salt = random_bytes(16); 
-  $salt = mcrypt_create_iv(16, MCRYPT_DEV_URANDOM);
-  return hash_pbkdf2("sha256", $password, $salt, 1000, 16, true).$salt;
-}
-
-// 비밀번호의 해시 값을 검사한다 (비밀번호, 해시 값)
-function checkPass($password, $hash) {
-  return hash_pbkdf2("sha256", $password, substr($hash, 16), 1000, 16, true)
-         === substr($hash, 0, 16);
-}
-
 function mess($s) {
   if ($s && is_string($s)) {
     $a = str_split($s);

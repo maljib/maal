@@ -22,6 +22,13 @@ for ($c = count($as), $i = 0; $i < $c; $i++) {
 print_r($as);
 print("<br>");
 
+$password = "9521gh";
+$hash = password_hash($password, PASSWORD_DEFAULT);
+print($password . " => " . $hash . "\n");
+print("<br>");
+print(password_verify($password, $hash)? "OK\n": "NO\n");
+print("<br>");
+
 require_once 'compare.php';
 
 $list =  ['ㅣ', 'x', 'ㅏ', '달', 'ㄾ', '감', 'P', 'a', 'ㄴ', '가', 'ㄱ',

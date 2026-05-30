@@ -11,7 +11,8 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id   INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   nick VARCHAR(60)  NOT NULL UNIQUE,    -- 아이디
-  pass BINARY(32)   NOT NULL,           -- 비밀번호 해시 값
+  pass BINARY(32)   NOT NULL,           -- 비밀번호 해시 값 (구버전 호환용)
+  passwd VARCHAR(255) NULL,             -- 비밀번호 해시 값
   user_name VARCHAR(60)  NOT NULL,      -- 이름
   mail VARCHAR(100) NOT NULL,           -- 이메일 주소
   user_rank TINYINT NOT NULL DEFAULT 0, -- 등급

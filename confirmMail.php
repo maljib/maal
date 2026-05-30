@@ -30,6 +30,7 @@ function sendConfirm($msg, $next, $id, $data) {
   $data = escapeString($data);
   $i = sqlInsert('etc', 'user,data', "$id,'$data'") or die('etc 데이터 기록 에러');
   $host = $_SERVER['SERVER_NAME'];
+  $protocol = $host === 'localhost'? 'http' : 'https';
   $text = <<<END_OF_TEXT
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,7 +44,7 @@ a { text-decoration:none; background-color:#efefef;
 </head>
 <body>
 $nick 님께,<br><br>배달말집입니다.<br>{$msg}시려면
-<a href="https://$host/$next.php?i=$i"><strong>확인</strong></a>을 누르십시오.
+<a href="$protocol://$host/$next.php?i=$i"><strong>확인</strong></a>을 누르십시오.
 </body>
 </html>
 END_OF_TEXT;
