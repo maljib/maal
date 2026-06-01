@@ -74,7 +74,7 @@ CLOSING
   );
   fclose($fp);
   $cwd = getcwd();
-  exec("$cwd/pdfx $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
+  exec("$cwd/pdfx.sh $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
   rename($tex, $tex_);
 }
 ?>
