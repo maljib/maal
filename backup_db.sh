@@ -6,6 +6,9 @@ BACKUP_FILE="$BACKUP_DIR/${DB_NAME}_$(date +%Y%m%d).sql.gz"
 TIME=$(date "+%Y-%m-%d %H:%M:%S")
 
 if [ ! -z $1 ] || [ ! -f $BACKUP_FILE ]; then
+    if [ ! -z $1 ]; then
+        BACKUP_FILE="$BACKUP_DIR/${DB_NAME}_$(date "+%Y%m%d_%H%M%S").sql.gz"
+    fi
     ssh -i $HOME/.ssh/maljib.key ubuntu@maljib.freeddns.org \
     "sudo mysqldump -u root --single-transaction $DB_NAME | gzip" > $BACKUP_FILE
     if [ $? -eq 0 ]; then

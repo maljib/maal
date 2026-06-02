@@ -14,7 +14,7 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/maljib.touched')) {
   fwrite($fp, <<<'PREAMBLE'
 \documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
-\usepackage{kotex}
+\usepackage{luatexko}
 \usepackage{multicol}
 \usepackage{relsize}
 
@@ -74,7 +74,7 @@ CLOSING
   );
   fclose($fp);
   $cwd = getcwd();
-  exec("$cwd/pdfx.sh $cwd/p/maljib $cwd/p 2>&1 >/dev/null");
+  exec("$cwd/pdfx.sh $cwd/p/maljib $cwd/p > /dev/null 2>&1");
   rename($tex, $tex_);
 }
 ?>

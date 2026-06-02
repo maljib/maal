@@ -13,7 +13,7 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/mal.touched')) {
   fwrite($fp, <<<'PREAMBLE'
 \documentclass[a4paper,10pt]{article}
 \usepackage[top=20mm, bottom=20mm, left=20mm, right=20mm]{geometry}
-\usepackage{kotex}
+\usepackage{luatexko}
 \usepackage{multicol}
 \usepackage{relsize}
 \usepackage{hyperref}
@@ -53,8 +53,8 @@ SQL
       $t = preg_replace('/#\{(.+)\}/', '\textbf{$1}', $t);
       $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{\underline{$2}}', $t);
     $t = preg_replace('/#\((.+)\)/', '\underline{\url{$1}}', $t);
-      $t = preg_replace(['/%/', '/$/', '/#/', '/&/', '/_/', '/~/', '/\^/'],
-                        ['\%', '\$', '\#', '\&', '\_','\~{}', '\^{}'], $t);
+      $t = preg_replace(['/%/', '/\$/', '/#/', '/&/', '/_/', '/~/', '/\^/'],
+                        ['\%', '\\\$', '\#', '\&', '\_','\~{}', '\^{}'], $t);
       fwrite($fp, $t."\n\n");
     }
   }
@@ -66,7 +66,7 @@ CLOSING
   );
   fclose($fp);
   $cwd = getcwd();
-  exec("$cwd/pdfx.sh $cwd/p/mal $cwd/p 2>&1 >/dev/null");
+  exec("$cwd/pdfx.sh $cwd/p/mal $cwd/p > /dev/null 2>&1");
   rename($tex, $tex_);
 }
 ?>
