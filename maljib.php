@@ -18,6 +18,10 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/maljib.touched')) {
 \usepackage{multicol}
 \usepackage{relsize}
 
+\setmainhangulfont{Noto Serif CJK KR}[Script=Hangul]
+\setsanshangulfont{Noto Sans CJK KR}[Script=Hangul]
+\setmainhanjafont{Noto Serif CJK KR}
+
 \setlength\parindent{2mm}
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
@@ -73,8 +77,7 @@ SQL
 CLOSING
   );
   fclose($fp);
-  $cwd = getcwd();
-  exec("$cwd/pdfx.sh $cwd/p/maljib $cwd/p > /dev/null 2>&1");
+  exec("./pdfx.sh p/maljib p > /dev/null 2>&1");
   rename($tex, $tex_);
 }
 ?>

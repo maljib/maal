@@ -1,7 +1,9 @@
 #!/bin/bash
 if [ "$(uname)" == "Darwin" ]; then
+    export TEXMFVAR="/Applications/XAMPP/xamppfiles/htdocs/.texlive"
     /Library/TeX/texbin/lualatex --interaction=nonstopmode --output-directory=$2 $1
 else
+    export TEXMFVAR="/var/www/.texlive"
     /usr/bin/lualatex --interaction=nonstopmode --output-directory=$2 $1
 fi
 

@@ -19,6 +19,10 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/mal.touched')) {
 \usepackage{hyperref}
 \usepackage{textcomp}
 
+\setmainhangulfont{Noto Serif CJK KR}[Script=Hangul]
+\setsanshangulfont{Noto Sans CJK KR}[Script=Hangul]
+\setmainhanjafont{Noto Serif CJK KR}
+
 \setlength\parindent{0mm}
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
@@ -65,8 +69,7 @@ SQL
 CLOSING
   );
   fclose($fp);
-  $cwd = getcwd();
-  exec("$cwd/pdfx.sh $cwd/p/mal $cwd/p > /dev/null 2>&1");
+  exec("./pdfx.sh p/mal p > /dev/null 2>&1");
   rename($tex, $tex_);
 }
 ?>

@@ -572,9 +572,9 @@ $(function() {
   $("#download").click(function() {
     var o = $(this);
     o.hide();
-    $.post("download.php", function(t) {
+    $.post("maljib.php", function(t) {
       if (t) {
-        serverError("download.php", t);
+        serverError("maljib.php", t);
       } else {
         var link = document.createElement("a");
         link.setAttribute("target", "_blank");
@@ -588,9 +588,9 @@ $(function() {
   $("#pdf").click(function() {
     var o = $(this);
     o.hide();
-    $.post("pdf.php", function(t) {
+    $.post("mal.php", function(t) {
       if (t) {
-        serverError("pdf.php", t);
+        serverError("mal.php", t);
       } else {
         var link = document.createElement("a");
         link.setAttribute("target", "_blank");
