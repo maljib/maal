@@ -27,7 +27,6 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/mal.touched')) {
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
 \setlength{\fboxsep}{0.3mm}
-\def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
 
 \begin{document}
 {\centering\LARGE\bf말다듬기\par}
@@ -38,9 +37,10 @@ PREAMBLE
 
   $rows = selectRows(<<< SQL
 SELECT e1.expr, e2.expr, n.data, n.t
-  FROM deals d JOIN exprs e1 ON d.de = e1.id
-               JOIN exprs e2 ON d.al = e2.id
-    LEFT OUTER JOIN notes n ON n.deal = d.id
+FROM deals d
+JOIN exprs e1 ON d.de = e1.id
+JOIN exprs e2 ON d.al = e2.id
+LEFT OUTER JOIN notes n ON n.deal = d.id
 ORDER BY e1.expr, e2.expr, n.t
 SQL
   );

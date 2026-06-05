@@ -26,8 +26,8 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/maljib.touched')) {
 \setlength{\columnsep}{3mm}
 \setlength{\columnseprule}{0.2mm}
 \setlength{\fboxsep}{0.3mm}
-\def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
-\def\maalnb#1{ {\relscale{0.85}#1} }
+\def\pumsa#1{ \fbox{\relscale{0.85}\textbf{#1}} }
+\def\iut#1{ {\relscale{0.85}#1} }
 
 \begin{document}
 {\centering\LARGE\bf배 달 말 집\par}
@@ -38,9 +38,9 @@ PREAMBLE
 
   $rows = selectRows(<<< SQL
 SELECT w.word, e.data
-  FROM words w, texts e, wt
- WHERE w.id = wt.wid AND e.id = wt.id
- ORDER BY w.word
+FROM words w, texts e, wt
+WHERE w.id = wt.wid AND e.id = wt.id
+ORDER BY w.word
 SQL
   );
   usort($rows, function($a, $b) {
@@ -68,8 +68,8 @@ SQL
                           '$1\newline\textbf{$2}\hspace{.5mm}: ', $u[0]);
     }, $t);
     $t = preg_replace('/\s*(【)/u', '\newline$1', $t);  // 〔|
-    $t = preg_replace('/\s*〔(.+?)〕\s*/', '\maalps{$1}', $t);
-    $t = preg_replace('/\s*(\[.+?\])\s*/', '\maalnb{$1}', $t);
+    $t = preg_replace('/\s*〔(.+?)〕\s*/', '\pumsa{$1}', $t);
+    $t = preg_replace('/\s*(\[.+?\])\s*/', '\iut{$1}', $t);
     fwrite($fp, '\textbf{'."$s} $t\n\n");
   }
   fwrite($fp, <<<'CLOSING'

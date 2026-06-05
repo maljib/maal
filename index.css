@@ -7,8 +7,14 @@ img  { border:none; vertical-align:middle; cursor:pointer; }
 
 .maal-word { font-weight:bold; }
 .maal-text { font-family:batang; }
-.maal-ps   { border:1px solid black; border-radius:4px;
-             padding:0 2px; margin:0 8px 0 10px; font-weight:600; font-size:85%; }
+.pumsa   { border:1px solid black; border-radius:4px;
+      padding:2px; margin:0 8px 0 10px; font-weight:600; font-size:85%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 1em;
+}
+.iut     {  padding:0; margin:0 2px 0 4px; font-size:85%; }
 .maal-box  { border:1px solid black; border-radius:4px;
              padding:0 5px; font-weight:600; font-size:85%; }
 [data-l]   { cursor:pointer; text-decoration:underline; }

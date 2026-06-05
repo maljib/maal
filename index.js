@@ -749,7 +749,8 @@ $(function() {
     .replace(/(〔|【)/g, "<br>$1")
     .replace(/\s*(¶|☛)\s*/g, " $1")
     .replace(/{(.+?)}/g, "<b>$1</b>")
-    .replace(/〔(.+?)〕/g, "<span class='maal-ps'>$1</span>") + "</span>";  // 씨가름
+    .replace(/\s*〔(.+?)〕\s*/g, "<span class='pumsa'>$1</span>")  // 씨가름
+    .replace(/\s*(\[.+?\])\s*/g, "<span class='iut'>$1</span>") + "</span>";
   }
 
   function convertText(s) {
