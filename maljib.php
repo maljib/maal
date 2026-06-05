@@ -27,6 +27,7 @@ if (!file_exists($tex_) || filemtime($tex_) < filemtime('p/maljib.touched')) {
 \setlength{\columnseprule}{0.2mm}
 \setlength{\fboxsep}{0.3mm}
 \def\maalps#1{ \fbox{\relscale{0.85}\textbf{#1}} }
+\def\maalnb#1{ {\relscale{0.85}#1} }
 
 \begin{document}
 {\centering\LARGE\bf배 달 말 집\par}
@@ -68,6 +69,7 @@ SQL
     }, $t);
     $t = preg_replace('/\s*(【)/u', '\newline$1', $t);  // 〔|
     $t = preg_replace('/\s*〔(.+?)〕\s*/', '\maalps{$1}', $t);
+    $t = preg_replace('/\s*(\[.+?\])\s*/', '\maalnb{$1}', $t);
     fwrite($fp, '\textbf{'."$s} $t\n\n");
   }
   fwrite($fp, <<<'CLOSING'
