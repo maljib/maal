@@ -432,7 +432,7 @@ $(function() {
     $("#enter,#msg").hide();  // [들어가기] 버튼을 숨기고
     $("#exit_div").show();    // [(이름)]과 [나가기] 버튼을 보여준다
     $("#user_info").attr("title", nick);
-    $("#arg").show();         // 올림말 입력 창을 보여준다
+    $("#arg").show().focus(); // 올림말 입력 창을 보여준다
     arrows();
     closeDialog();            // 팝업 창을 닫는다
     showCount([1, 2, 3, 4, 5]);
