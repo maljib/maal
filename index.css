@@ -62,8 +62,8 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #passx       { margin: 0 10px 0 210px; }
 #quit        { margin: 0 10px 0 280px; }
 
-#q-req,#ask             { top: 0; }
-#q-req > div: last-child { padding: 0 5px 10px 10px; }
+#q-req, #ask            { top: 0; }
+#q-req > div:last-child { padding: 0 5px 10px 10px; }
 
 #tab1,#tab2,#tab3,#tab4,#tab5,#viewer { height: 100%; padding: 0; }
 #tab1,#tab2,#tab3,#tab4,#edit,#viewer { width: 100%; overflow-y: auto; }
@@ -79,12 +79,12 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #menu span                    { cursor: pointer; }
 #menu                         { position: relative; background-color: #f0f0f0; }
 #menu li                      { padding: 0 5px 0 5px; border: 1px solid transparent; }
-#menu li: hover                { background-color: #f0f0f0; border: 1px solid #aaaaaa; }
+#menu li:hover                { background-color: #f0f0f0; border: 1px solid #aaaaaa; }
 #menu,#s0,#s2,#s3,#s4,#s5,#s6 { padding: 2px 0 2px 0; }
 #s0                           { margin-left: 5px; }
 
 #m2 li,#m3 li,#m4 li,#m5 li,#m6 li { text-align: right; }
-#m2>: last-child li                 { width: 53px; }
+#m2 > :last-child li                 { width: 53px; }
 
 #m0 li li { text-align: left; }
 #m2 li li { width: 88px; }
@@ -95,12 +95,12 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #list thead img { margin-top: -5px; }
 #list thead td  { padding: 0 0 2px 0; text-align: center; }
 #list tbody     { overflow-x: hidden; overflow-y: auto; display: block; }
-#list tbody td: nth-child(4n+1)       { text-align: right; border-right: 0;
+#list tbody td:nth-child(4n+1)       { text-align: right; border-right: 0;
                                        min-width: 70px; width: 100px; }
-#list tbody td: nth-child(4n+2)       { border-left: 0; }
-#list tbody td: nth-child(4n+3)       { min-width: 55px; width: 75px; }
-#list tbody td: nth-child(4n)         { min-width: 70px; width: 100px}
-#list tbody td: not(: nth-child(4n+2)) { cursor: ns-resize; }
+#list tbody td:nth-child(4n+2)       { border-left: 0; }
+#list tbody td:nth-child(4n+3)       { min-width: 55px; width: 75px; }
+#list tbody td:nth-child(4n)         { min-width: 70px; width: 100px}
+#list tbody td:not(:nth-child(4n+2)) { cursor: ns-resize; }
 
 #note-form div { padding: 2px 0; text-align: center; }
 #atts          { list-style: none; margin: 0; padding: 2px 0 2px 5px; font-size: 90%; }
@@ -112,14 +112,14 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #editors thead td                 { padding: 0; }
 #editors tbody        { overflow-x: hidden; overflow-y: auto; display: block; }
 #editors tbody tr                 { cursor: pointer; }
-#editors tbody td: nth-child(2n+1) { text-align: right; width: 80px;
+#editors tbody td:nth-child(2n+1) { text-align: right; width: 80px;
                                     padding: 2px 1px 0 5px; border-right: 0; }
-#editors tbody td: nth-child(2n)   { padding: 0 8px 2px 2px; border-left: 0; }
+#editors tbody td:nth-child(2n)   { padding: 0 8px 2px 2px; border-left: 0; }
 
 #toSure, #ans, #list { top: 0; left: 0; }
 #toSure thead td, #ans td { text-align: center; }
-#toSure td: nth-child(4n+2), #toSure td: nth-child(4n) { text-align: right; }
-#toSure td: nth-child(4n+1) input, #toSure td: nth-child(4n) { cursor: pointer; }
+#toSure td:nth-child(4n+2), #toSure td:nth-child(4n) { text-align: right; }
+#toSure td:nth-child(4n+1) input, #toSure td:nth-child(4n) { cursor: pointer; }
 #toSure td, #ans td { padding: 2px 5px 2px 5px; }
 
 #x-ask   { cursor: pointer; position: absolute; top: 2px; right: 105px;
