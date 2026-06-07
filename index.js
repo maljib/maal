@@ -1526,10 +1526,10 @@ $(function() {
           sum += parseInt(a[1]);
         }
         o.text(sum);
-        $("#editors thead td").removeClass().addClass(data.a);
-        $("#editors span").text(data.t);
-        $("#editors").show()
-                 .position({ my:"right top", at:"right+8 bottom+1.5", of:data.s });
+        $("#editors thead tr").removeClass().addClass(data.a);
+        $("#e_header").html(data.t + " &nbsp; &nbsp;");
+        $("#editors").show().position({ my:"right top",
+                                        at:"right+8 bottom+1.5", of:data.s });
   
       } else {
         $("#editors").hide();
@@ -1552,6 +1552,7 @@ $(function() {
           row.data([a[3]]);
           o.append(row);
         }
+        $("#editors").hide();
         $("#list").show().focus();
       }, 'json');
     }
