@@ -142,10 +142,11 @@ table,th,td              { margin: 0; border-collapse: collapse; }
 .green        { color: #bfc; }
 .white        { color: white; }
 
-.b-white                 { background-color: white; }
-.b-gray                  { background-color: #eeeeee; }
-.b-yellow, del, #de>span { background-color: #ffa; }
-.b-green,  ins           { background-color: #bfc; }
+.b-white            { background-color: white; }
+.b-gray             { background-color: #eeeeee; }
+.b-yellow, #de>span { background-color: #ffa; }
+.b-green,  ins      { background-color: #bfc; }
+del                 { background-color: #fcc; text-decoration: line-through; }
 
 .pointer      { cursor: pointer; }
 del,ins       { text-decoration: none; }
