@@ -1518,7 +1518,7 @@ $(function() {
       var len = array.length;
       if (len) {
         $("#de-v").hide();
-        var tbody = $("#editors tbody").empty(), sum = 0;
+        var tbody = $("#e_body tbody").empty(), sum = 0;
         for (var i = 0; i < len; i++) {
           var a = array[i];
           tbody.append($("<tr>").data([data.x + a[0]])
@@ -1526,8 +1526,8 @@ $(function() {
           sum += parseInt(a[1]);
         }
         o.text(sum);
-        $("#editors thead tr").removeClass().addClass(data.a);
-        $("#e_header").html(data.t + " &nbsp; &nbsp;");
+        $("#e_header_row").removeClass().addClass(data.a);
+        $("#e_header").text(data.t);
         $("#editors").show().position({ my:"right top",
                                         at:"right+8 bottom+1.5", of:data.s });
   
@@ -1569,7 +1569,7 @@ $(function() {
     }
   });
 
-  $("#editors>tbody").on("click", "tr", function() {
+  $("#e_body tbody").on("click", "tr", function() {
     if (search_arg == '#dev') {
       showDev(true);
     }
@@ -1756,7 +1756,7 @@ $(function() {
     $("#tab1,#tab2,#tab3,#tab4,#viewer").height(h - 76);
     $("#edit").height(h - 109);
     $("#list tbody").css("max-height", h - 80);
-    $("#editors tbody").css("max-height", h - 73);
+    $("#e_body").css("max-height", h - 73);
     $("#ui-id-1.ui-autocomplete").css("max-height", h - 40);
     $("#ui-id-7.ui-autocomplete").css("max-height", h - 80);
     $("#note-form").is(":visible") && setNoteSize();

@@ -8,14 +8,11 @@
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/themes/smoothness/jquery-ui.min.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/jquery-ui.min.js"></script>
-  <!--link rel="stylesheet" href="../lib/jquery-ui.min.css">
-  <script src="../lib/jquery.min.js"></script>
-  <script src="../lib/jquery-ui.min.js"></script-->
   <script src="https://kit.fontawesome.com/4e34d504b6.js"></script>
   <script src="diff_match_patch.js"></script>
   <script src="jquery.pretty-text-diff.min.js"></script>
-  <link rel="stylesheet" href="index.css?v=87">
-  <script src="index.js?v=81"></script>
+  <link rel="stylesheet" href="index.css?v=91">
+  <script src="index.js?v=87"></script>
 </head>
 <body>
   <span id="h1">배달말집</span>&nbsp;
@@ -291,15 +288,15 @@
     <div class="x-close">&#10006;</div>
   </div>
 
-  <table id="editors">
-    <thead>
-      <tr>
-        <th id="e_header"></th>
-        <th><span class="x-close">&#10006;</span></th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div id="editors">
+    <div id="e_header_row">
+      <span id="e_header"></span> &nbsp; &nbsp;
+      <span class="x-close">&#10006;</span>
+    </div>
+    <div id="e_body">
+      <table><tbody></tbody></table>
+    </div>
+  </div>
 
   <div id="note-form" class="padn">
     <div>전자우편 &nbsp;

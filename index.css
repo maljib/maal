@@ -109,12 +109,12 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #note          { padding: 0 5px; margin: 0 0 -5px; }
 #askt          { padding: 0 5px; margin: 3px 5px 5px 18px; width: 89%; height: 80px; }
 
-#editors tbody { overflow-x: hidden; overflow-y: auto; display: block; }
-#editors tbody tr { cursor: pointer; }
-#editors th { text-align: center; padding: 0; border-right: 0; border-left: 0; }   
-#editors td:nth-child(2n+1) { text-align: right;
-                              padding: 2px 1px 0 5px; border-right: 0; }
-#editors td:nth-child(2n)   { padding: 0 8px 2px 2px; border-left: 0; }
+#e_header_row { text-align: center; padding: 0; font-weight: bold;}
+#e_body { overflow-x: hidden; overflow-y: auto; display: block; }
+#e_body td:first-child { text-align: right;
+                         padding: 2px 1px 0 5px; border-right: 0; }
+#e_body td:last-child  { padding: 0 8px 2px 2px; border-left: 0; }
+#e_body tr { cursor: pointer; }
 
 #toSure, #ans, #list { top: 0; left: 0; }
 #toSure thead td, #ans td { text-align: center; }
