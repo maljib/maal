@@ -42,8 +42,7 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #tabs>ul      { padding: .1em .2em; }
 #tabs>ul>li>a { padding: .15em .4em; }
 
-#t2,#t3                       { cursor: default; }
-#t4                           { cursor: pointer; }
+#t1,#t2,#t3,#t4               { cursor: pointer; }
 #t1,#t2,#t3,#t5,#t6,#exit_div { display: none; }
 #exit_div                  { position: absolute; top: 8px; right: 12px; }
 #enter                     { position: absolute; top: 8px; right: 80px; }
@@ -67,7 +66,7 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #tab1,#tab2,#tab3,#tab4,#tab5,#viewer { height: 100%; padding: 0; }
 #tab1,#tab2,#tab3,#tab4,#edit,#viewer { width: 100%; overflow-y: auto; }
 
-#tabs .ui-accordion-header  { cursor: default; padding: 0 8px; text-align: left; }
+#tabs .ui-accordion-header  { cursor: pointer; padding: 0 8px; text-align: left; }
 #tabs .ui-accordion-content { padding: 0; }
 
 #word         { top: 78px; }

@@ -18,6 +18,7 @@ $(function() {
   var de = [], al = [];
   var deS = localStorage && localStorage.deS && JSON? JSON.parse(localStorage.deS): [];
   var dev_args = [], dev_i = -1;
+  var old_word = "", to_open_board = false;
 
   showIf($("#download"), ("download" in document.createElement("a")));
  
@@ -1311,8 +1312,32 @@ $(function() {
     }
   });
 
-  $("#t1,#t2,#t3").click(function() {
+  $("#t1,#t2,#t3,#t4").click(function() {
+    var is_board = $("#t3").text() === "알림판";
     $(this).removeAttr("title");
+    $("#t1,#t2,#t3,#t4").css("cursor", "pointer");
+    if (this.id == "t4") {
+      if (to_open_board  && !is_board) {
+        $(this).dblclick();
+      }
+      if (is_board || !uid) {
+        this.style.cursor = "default";
+      }
+      old_word = "";
+      to_open_board = true;
+    } else if (this.id == "t1" && !is_board 
+              && expl[0] && expl[0][0] && expl[0][0].uid == uid) {
+      if (old_word == this.innerText) {
+        $(this).dblclick();
+      }
+      old_word = this.innerText;
+      to_open_board = false;
+    } else {
+      this.style.cursor = "default";
+      old_word = "";
+      to_open_board = false;
+    }
+    return false;
   });
 
   $("#t1").dblclick(function() {
