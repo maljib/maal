@@ -30,10 +30,9 @@ img  { border: none; vertical-align: middle; cursor: pointer; }
 #help            { vertical-align: -2px; cursor: pointer; text-decoration: none; }
 #arg-l,#arg-r    { position: absolute; display: none; cursor: pointer;
                    background-color: transparent; top: 12px; z-index: 250; }
-#arg-l           { right: 153px; }
-#arg-r           { right: 4px; }
-#arg             { top: 10px; right: 5px; width: 160px; vertical-align: middle; }
-#dummy           { top: 50px; right: 9px; position: absolute; z-index: -1; }
+#arg-l { right: 153px; }
+#arg-r { right: 4px; }
+#arg   { top: 10px; right: 5px; width: 160px; vertical-align: middle; }
 
 .ui-autocomplete,.ui-autocomplete-input { text-align: center; }
 .ui-autocomplete                        { overflow-y: auto; overflow-x: hidden; }
@@ -124,7 +123,8 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 
 #x-ask   { cursor: pointer; position: absolute; top: 2px; right: 105px;
            font-size: 120%; font-weight: 900; display: none; padding: 0 0 0 6px; }
-.x-close { cursor: pointer; position: absolute; top: 2px; right: 8px; }
+.x-close { cursor: pointer; position: absolute; top: 4px; right: 8px; }
+#x-close { cursor: pointer; position: absolute;  right: 4px; }
 .a-head  { position: absolute; text-align: left; top: 2px; right: 0; font-size: 90%;
            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .a-cmd   { position: absolute; text-align: right; top: 0.5px; right: 0; display: none; }
@@ -155,7 +155,7 @@ del,ins       { text-decoration: none; }
        display: none; top: 0; right: 0; z-index: 950;
        padding: 10px; max-width: 100%; }
 
-.x-close           { z-index: 300; }
+.x-close, #x-close { z-index: 300; }
 .padn              { z-index: 200; }
 #enter,#exit_div   { z-index: 200; }
 #list,#toSure,#ans { z-index: 250; }

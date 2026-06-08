@@ -1562,7 +1562,7 @@ $(function() {
   $("#ans     .x-close").click(function() { $("#ans").hide(); });
   $("#toSure  .x-close").click(function() { $("#toSure").hide(); });
   $("#list    .x-close").click(function() { $("#list").hide(); });
-  $("#editors .x-close").click(function() { 
+  $("#editors #x-close").click(function() { 
     $("#editors").hide();
     if ($("#ex").is(":visible") && !$("#de-v").is(":visible")) {
       showDev(false);

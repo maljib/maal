@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/themes/smoothness/jquery-ui.min.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/jquery-ui.min.js"></script>
-  <script src="https://kit.fontawesome.com/4e34d504b6.js"></script>
-  <script src="diff_match_patch.js"></script>
-  <script src="jquery.pretty-text-diff.min.js"></script>
-  <link rel="stylesheet" href="index.css?v=95">
-  <script src="index.js?v=87"></script>
+  <link rel="stylesheet" href="index.css?v=01">
+  <script src="//kit.fontawesome.com/4e34d504b6.js" async></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.14.1/jquery-ui.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js" defer></script>
+  <script src="jquery.pretty-text-diff.min.js" defer></script>
+  <script src="index.js?v=88" defer></script>
 </head>
 <body>
   <span id="h1">배달말집</span>&nbsp;
@@ -23,9 +23,9 @@
   <i id="count5" class="white"></i>
   <input type="text" name="arg" id="arg" placeholder="올림말"
         class="padn ui-widget ui-corner-all">
-  <span id="arg-l">&#x25c0;</span>
-  <span id="arg-r">&#x25b6;</span>
-  <button id="dummy"></button>
+  <span id="arg-l">◀</span>
+  <span id="arg-r">▶</span>
+
   <div id="tabs">
     <ul>
       <li><a id="t1" href="#tab1" class="b-yellow"></a></li>
@@ -42,15 +42,15 @@
     <div id="tab4"></div>
     <div id="tab5">
       <div id="menu" class="ui-menu ui-widget ui-corner-top">
-        <span id="s0">&nbsp;<b>&#x25ce;</b> </span>
+        <span id="s0">&nbsp;<b>◎</b> </span>
         <span id="s2">&nbsp;씨 </span>
-        <span data-a="&#x25ef;" title="뜻갈래">&nbsp;&#x25ef; </span>
-        <span data-a="&#xb6;" title="쓰임">&nbsp;&#xb6; </span>
+        <span data-a="◯" title="뜻갈래">&nbsp;◯ </span>
+        <span data-a="¶" title="쓰임">&nbsp;¶ </span>
         <span id="s3">&nbsp;이</span><span id="s4">웃 </span>
         <span data-a="☞" title="가보시오">&nbsp;☛ </span>
         <span id="s5">&nbsp;··· </span>
         <span id="s6">&nbsp;【 】 </span>
-        <!--span data-a="&#x25a3;" title="그림&#xb7;사진">&nbsp;&#x25a3;&nbsp;</span-->
+        <!--span data-a="▣" title="그림·사진">&nbsp;▣;&nbsp;</span-->
 
         <ul id="m0" class="padn">
           <li id="view">보기</li>
@@ -86,7 +86,7 @@
           <li data-a="〔매김〕">매김씨</li>
           <li data-a="〔어찌〕">어찌씨</li>
           <li data-a="〔느낌〕">느낌씨</li>
-          <li>끝&#xb7;가지
+          <li>끝·가지
             <ul>
               <li data-a="〔토〕">토씨</li>
               <li data-a="〔씨끝〕">씨끝</li>
@@ -100,9 +100,9 @@
           <li data-a="<">본딧말 &lt;</li>
           <li data-a=">">준말 &gt;</li>
           <li data-a="=">한뜻말 =</li>
-          <li data-a="&#x2248;">비슷한말 &#x2248;</li>
-          <li data-a="&#x2194;">맞선말 &#x2194;</li>
-          <li data-a="&#x2192;">다듬은말 &#x2192;</li>
+          <li data-a="≈">비슷한말 ≈</li>
+          <li data-a="↔">맞선말 ↔</li>
+          <li data-a="→">다듬은말 →</li>
         </ul>
         <ul id="m4" class="padn">
           <li data-a="[큰]">큰말</li>
@@ -175,7 +175,7 @@
       <div>
         <span id="x-ask" title="비밀번호를 모를 때 전자우편 주소 바꾸기">@</span>
         <span id="ok" class="b-shade">&nbsp;확인&nbsp;</span>
-        <span class="x-close">&#10006;</span>
+        <span class="x-close">❌</span>
       </div>
       <hr>
       <label>아이디:</label>
@@ -207,7 +207,7 @@
       <div id="q-title">탈퇴 요청</div>
       <div>
         <span class="b-shade">&nbsp;확인&nbsp;</span>
-        <span class="x-close">&#10006;</span>
+        <span class="x-close">❌</span>
       </div>
       <hr>
       <div><span id="q-sure"></span>
@@ -219,7 +219,7 @@
       <div id="a-title">전자우편 주소 바꾸기</div>
       <div>
         <span class="b-shade">&nbsp;확인&nbsp;</span>
-        <span class="x-close">&#10006;</span>
+        <span class="x-close">❌</span>
       </div>
       <hr>
       <label>전자우편:</label>
@@ -237,7 +237,7 @@
         <tr>
           <td colspan="3">
 전자우편 주소 바꾸기 &nbsp; <span class="b-shade">&nbsp;확인&nbsp;</span>
-<div class="x-close">&#10006;</div>
+<div class="x-close">❌</div>
           </td>
         </tr>
       </thead>
@@ -249,7 +249,7 @@
         <tr>
           <td colspan="4">
 요청 다루기 &nbsp; <span class="b-shade">&nbsp;확인&nbsp;</span>
-<div class="x-close">&#10006;</div>
+<div class="x-close">❌</div>
           </td>
         </tr>
       </thead>
@@ -264,7 +264,7 @@
 <sup></sup></i> &nbsp; 모두<input type="checkbox">&nbsp;
 <!--span id="open-note"><img src='glyphicons-11-envelope.png'><sup></sup></span-->
 <i id="open-note" class="far fa-envelope fa-lg"><sup></sup></i> &nbsp;
-<div class="x-close">&#10006;</div>
+<div class="x-close">❌</div>
           </td>
         </tr>
       </thead>
@@ -277,7 +277,7 @@
     <span class="b-shade">&nbsp;바꿈&nbsp;</span>&nbsp;<br>
     <input type="text" name="word" required placeholder="새 올림말"
           class="text ui-widget ui-corner-all">
-    <div class="x-close">&#10006;</div>
+    <div class="x-close">❌</div> <!-- ✖ -->
   </div>
 
   <div id="editor" class="padn">
@@ -285,13 +285,13 @@
     <span class="b-shade">&nbsp;바꿈&nbsp;</span> &nbsp;<br>
     <input type="text" name="editor" required placeholder="다음 살피는이"
           class="text ui-widget ui-corner-all">
-    <div class="x-close">&#10006;</div>
+    <div class="x-close">❌</div>
   </div>
 
   <div id="editors">
     <div id="e_header_row">
       <span id="e_header"></span> &nbsp; &nbsp; &nbsp;
-      <span class="x-close">&#10006;</span>
+      <span id="x-close">❌</span>
     </div>
     <div id="e_body">
       <table><tbody></tbody></table>
@@ -301,7 +301,7 @@
   <div id="note-form" class="padn">
     <div>전자우편 &nbsp;
       <span id="send-note" class="b-shade">&nbsp;보내기&nbsp;</span>
-      <span class="x-close">&#10006;</span></div>
+      <span class="x-close">❌</span></div>
     <input type="text" name="subj" id="subj" placeholder="제목"
                          class="text ui-widget ui-corner-top">
     <ul id="atts"></ul>
@@ -317,7 +317,7 @@
       <i id="count2e" class="white"></i> &nbsp;
       <i id="search" class="fas fa-search fa-lg" title="찾기"></i>
       <i id="pdf" class="far fa-file-pdf fa-lg" title="책 만들기"></i>
-      <a href="2" target="_blank" class="fa fa-question fa-lg" id="help2" title="도움말"></a>
+      <a id="help2" href="2" target="_blank" class="fa fa-question fa-lg" title="도움말"></a>
       <i class="fas fa-lg fa-times"></i>
     </div>
 
@@ -349,16 +349,16 @@
         <span>◯</span>
         <span>{ }</span>
         <span>``</span>
-        <span>&#x261e;</span>
+        <span>☞</span>
         <span>#(</span>
       </div>
-    </div><!--span>&#x261b</span-->
+    </div><!--span>☛</span-->
   </div>
 
   <div id="de-v">
     <input type="text" name="dev" id="dev" class="ui-widget ui-corner-all">
-    <div id="de-l">&#x25c0;</div>
-    <div id="de-r">&#x25b6;</div>
+    <div id="de-l">◀</div>
+    <div id="de-r">▶</div>
     <i class="fas fa-lg fa-times"></i>
   </div>
 </body>
