@@ -1063,7 +1063,7 @@ $(function() {
 
   function viewIt(t, nick, data, toTab) {
     accordion($("#viewer"), "<div> "+ nick +" <small>"+ t +
-      "</small><span class='a-cmd'>&#10006; &nbsp; </span></div>"+
+      "</small><span class='a-cmd'>❌ &nbsp; </span></div>"+
       "<div><div class='a-data'>"+ (word == "?"? convertText: html)(data) +
       "</div></div>", false, 0);
     $("#t6").click();
