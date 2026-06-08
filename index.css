@@ -121,13 +121,14 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #toSure td:nth-child(4n+1) input, #toSure td:nth-child(4n) { cursor: pointer; }
 #toSure td, #ans td { padding: 2px 5px 2px 5px; }
 
-#x-ask   { cursor: pointer; position: absolute; top: 2px; right: 105px;
-           font-size: 120%; font-weight: 900; display: none; padding: 0 0 0 6px; }
-.x-close { cursor: pointer; position: absolute; top: 4px; right: 8px; }
-#x-close { cursor: pointer; position: absolute;  right: 4px; }
+#x-ask, .x-close, #x-close, .a-cmd { cursor: pointer; position: absolute; }
+#x-ask   { top: 2px; right: 105px; padding: 0 0 0 6px;
+           font-size: 120%; font-weight: 900; display: none; }
+.x-close { top: 4px; right: 8px; }
+#x-close { right: 4px; }
 .a-head  { position: absolute; text-align: left; top: 2px; right: 0; font-size: 90%;
            white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-.a-cmd   { position: absolute; text-align: right; top: 0.5px; right: 0; display: none; }
+.a-cmd   { text-align: right; top: 0.5px; right: 0; display: none; }
 
 .a-view,.a-edit,.a-accept
    { cursor: pointer; border-radius: 5px; border: 1px solid #aaaaaa; margin-left: 1px; }
