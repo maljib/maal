@@ -43,6 +43,7 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #tabs>ul>li>a { padding: .15em .4em; }
 
 #t1,#t2,#t3,#t4               { cursor: pointer; }
+#t4                           { font-weight: bold; }
 #t1,#t2,#t3,#t5,#t6,#exit_div { display: none; }
 #exit_div                  { position: absolute; top: 8px; right: 12px; }
 #enter                     { position: absolute; top: 8px; right: 80px; }
