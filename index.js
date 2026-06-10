@@ -764,7 +764,7 @@ $(function() {
                  if (s1[0] === "#") {
                    var c = s1.substring(1);
                    a = s1 + (s3? "' id='"+ c +"_": "_' id='"+ c);
-                   s1 = "&#x21E7;";
+                   s1 = "⇧";
                  } else {
                    a = s1 +"' target='_blank";
                  }
@@ -2012,7 +2012,7 @@ $(function() {
                 if (s1[0] === "#") {
                   var c = s1.substring(1);
                   a = s1 + (s3? "' id='"+ c +"_": "_' id='"+ c);
-                  s1 = "&#x21E7;";
+                  s1 = "⇧";
                 } else {
                   a = s1 +"' target='_blank";
                 }
