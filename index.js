@@ -920,10 +920,10 @@ $(function() {
       }
 
       function fill(t, sNick, sTell, data, i, h) {
-        var owner  = w.uid == uid;
-        var editor = owner || is_editor && w.tell == '1';
+        var is_owner  = w.uid == uid;
+        var editor = is_owner || is_editor && w.tell == '1';
         if (sTell) {
-          if (owner)  sNick = "<span id='w-nick'>"+ sNick +"</span>";
+          if (is_owner)  sNick = "<span id='w-nick'>"+ sNick +"</span>";
           if (editor) sTell = "<span id='w-tell'>"+ sTell +"</span>";
         }
         var bar = "<div><span>"+ sNick +" <small>"+ t +"</small> "+ sTell +"</span>"+
@@ -1563,7 +1563,7 @@ $(function() {
     return false;
   });
   
-  $("#h1").hover(function() {
+  $("#h1").click(function() {
     if ($("#exit").is(":visible")) {
       $.post("getUsers.php", function(array) {
         var o = $("#list tbody").empty().data([false, false, true, false]);

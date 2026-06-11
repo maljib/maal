@@ -24,8 +24,8 @@ img  { border: none; vertical-align: middle; cursor: pointer; }
             padding: 0 5px; font-weight: 600; font-size: 85%; }
 [data-l]   { cursor: pointer; text-decoration: underline; }
 
-#count1, #count3, #count5 { cursor: pointer; vertical-align: -2px; }
-#count2, #count4          { cursor: pointer; }
+#count1, #count3, #count5 { cursor: default; vertical-align: -2px; }
+#count2, #count4          { cursor: default; }
 #count1e, #count2e        { cursor: pointer; vertical-align: -2px; }
 #help            { vertical-align: -2px; cursor: pointer; text-decoration: none; }
 #arg-l,#arg-r    { position: absolute; display: none; cursor: pointer;
@@ -67,8 +67,11 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #tab1,#tab2,#tab3,#tab4,#tab5,#viewer { height: 100%; padding: 0; }
 #tab1,#tab2,#tab3,#tab4,#edit,#viewer { width: 100%; overflow-y: auto; }
 
-#tabs .ui-accordion-header  { cursor: pointer; padding: 0 8px; text-align: left; }
+#tabs .ui-accordion-header  { padding: 0 8px; text-align: left; }
 #tabs .ui-accordion-content { padding: 0; }
+#tab1 .ui-accordion-header { cursor: default; }
+#tab2 .ui-accordion-header, #tab3 .ui-accordion-header { cursor: pointer; }
+
 
 #word         { top: 78px; }
 #editor       { top: 105px; }
@@ -135,8 +138,8 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 
 .b-shade,#w-nick,#w-tell { cursor: pointer; background-color: #efefef;
                                 border-radius: 5px; }
-table,th,td,.b-shade     { border: 1px solid #aaaaaa; }
-table,th,td              { margin: 0; border-collapse: collapse; }
+table, th, td, .b-shade  { border: 1px solid #aaaaaa; }
+table, th, td            { margin: 0; border-collapse: collapse; }
 
 .red          { color: red; }
 .yellow       { color: #ff8; }
