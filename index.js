@@ -2063,9 +2063,9 @@ b[7][0].length +'</span> | <span'+ xp(i,1) +'>'+ b[7][1].length +
             for (var j in c) {  // 0=id, 1=data, 2=uid, 3=nick, 4=t 
               var d = c[j];
               s +=
-'<div class="aln"><div>'+ convertNote(d[1]) +'</div>&nbsp; <i class="al-n">'+
-(d[2] == uid? '<i class="far fa-sm fa-edit" title="수정"></i>&nbsp;': d[3]) +
-' <small>'+ d[4] +'</small></i></div>';
+'<div class="aln"><div>'+ convertNote(d[1]) +'</div><span class="al-n">'+
+(d[2] == uid? '<i class="far fa-sm fa-edit" title="수정"></i>&nbsp;': '<i>'+ d[3]) +
+' <small>'+ d[4] +'</small></i></span></div>';
             }
             s += '</div>';
           }
