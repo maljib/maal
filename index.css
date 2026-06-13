@@ -48,7 +48,7 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #exit_div                  { position: absolute; top: 8px; right: 12px; }
 #enter                     { position: absolute; top: 8px; right: 80px; }
 #arrow                     { position: absolute; top: 8px; right: 130px; }
-#enter,#exit,#user_info,#download,#arrow { cursor: pointer; }
+#enter,#exit,#user_info,#maljib,#arrow { cursor: pointer; }
 
 #user,#q-req,#ask { width: 330px; right: 0; }
 #title,#q-title,#a-title { margin: 5px 0 -5px 85px; }
@@ -175,12 +175,12 @@ small             { font-size: 70%; }
 #edit             { padding: 0 0 3px 2px; }
 
 #ex, #de-v, #de-l, #de-r, #nt-v, #al-v   { position: absolute; display: none; }
-#help2, #search, #pdf, #als, .fa-hdd, .fa-times  { position: absolute; }
+#help2, #search, #mal, #als, .fa-hdd, .fa-times  { position: absolute; }
 
 #ex     { z-index: 902; top: 0; bottom: 0; left: 0; right: 0; }
 #ex0    { background: black; margin: 0; height: 46.5px; padding: 0 0 0 12px; }
 #search        { z-index: 902; top: 16px; right: 100px; color: white; }
-#pdf           { z-index: 902; top: 16px; right: 70px; color: white; }
+#mal           { z-index: 902; top: 16px; right: 70px; color: white; }
 #help2         { z-index: 902; top: 16px; right: 40px; color: white; }
 #ex0 .fa-times { z-index: 902; top: 16px; right: 10px; color: white; }
 

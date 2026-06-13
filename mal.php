@@ -56,7 +56,7 @@ SQL
       $t = trim($row[2]);
       $t = preg_replace('/#\{(.+)\}/', '\textbf{$1}', $t);
       $t = preg_replace('/#\((.+)\|(.+)\)/', '\href{$1}{\underline{$2}}', $t);
-    $t = preg_replace('/#\((.+)\)/', '\underline{\url{$1}}', $t);
+      $t = preg_replace('/#\((.+)\)/', '\underline{\url{$1}}', $t);
       $t = preg_replace(['/%/', '/\$/', '/#/', '/&/', '/_/', '/~/', '/\^/'],
                         ['\%', '\\\$', '\#', '\&', '\_','\~{}', '\^{}'], $t);
       fwrite($fp, $t."\n\n");

@@ -20,8 +20,6 @@ $(function() {
   var dev_args = [], dev_i = -1;
   var old_word = "", to_open_board = false;
 
-  showIf($("#download"), ("download" in document.createElement("a")));
- 
   function info(s) {
     $("#msg").html(s).draggable({ cursor:"move" }).show()
              .click(function() { $(this).hide(); });
@@ -570,32 +568,16 @@ $(function() {
     return false;
   });
 
-  $("#download").click(function() {
-    var o = $(this);
+  $("#mal,#maljib").click(function() {
+    var o = $(this), id = this.id;
     o.hide();
-    $.post("maljib.php", function(t) {
+    $.post(id +".php", function(t) {
       if (t) {
-        serverError("maljib.php", t);
+        serverError(id +".php", t);
       } else {
         var link = document.createElement("a");
         link.setAttribute("target", "_blank");
-        link.href = "p/maljib.pdf";
-        link.click();
-      }
-      o.show();
-    });
-  });
-
-  $("#pdf").click(function() {
-    var o = $(this);
-    o.hide();
-    $.post("mal.php", function(t) {
-      if (t) {
-        serverError("mal.php", t);
-      } else {
-        var link = document.createElement("a");
-        link.setAttribute("target", "_blank");
-        link.href = "p/mal.pdf";
+        link.href = "p/"+ id +".pdf";
         link.click();
       }
       o.show();
@@ -944,9 +926,10 @@ $(function() {
         return s.replace('<', '⧼').replace('>', '⧽');
       }
 
+      // 자취나 적바림을 출력한다 (출력할 곳, 0=자취 1=적바림)
       function fills(o, i) {
         o.empty();
-        var w_id = i === 0? ","+ w.id: "";
+        var w_id = i? "": ","+ w.id;
         $.post("getData.php", "arg="+ w.wid + w_id, function(array) {
           var tx = $(i? "#t3": "#t2");
           var len = array.length;
@@ -960,8 +943,8 @@ $(function() {
               var b = bb(a.data);
               var h = word == "?" && i == 0? "":
                 "<span class='a-head'>"+ b.trim().split('\n', 1)[0] +"</span>";
-              data += fill(a.t, a.nick, "",
-                           i? convertText(a.data): diff(bb(w.data), b), i, h);
+              data += fill(a.t, a.nick, "", i ? convertText(a.data):
+                                                diff(bb(w.data), b), i, h);
             }
             var isForum = i && word === "?";
             accordion(o, data, true, j < 0? 0: j, isForum);

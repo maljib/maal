@@ -4,7 +4,7 @@ require_once 'functions.php';
 $a = [];
 if ($arg = getPost('arg')) {
   $arg  = explode(',', $arg);
-  $i    = count($arg) === 2? "0 AND e.id <> $arg[1]": '1';
+  $i    = count($arg) === 2? "0 AND e.id <> $arg[1]": '1';  // 자취: 적바림
   $rows = selectRows(<<< SQL
 SELECT u.id, u.nick, e.id, convert_tz(t,'+00:00','+09:00'), e.data
 FROM texts e

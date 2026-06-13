@@ -9,7 +9,7 @@ SELECT u.id, nick, e.id, convert_tz(t,'+00:00','+09:00'), data, w.id, tell
 FROM words w
 JOIN texts e ON w.id = e.word$user
 JOIN users u ON u.id = e.user
-WHERE w.word = '$arg' AND i = 0 ORDER BY e.id DESC LIMIT 1
+WHERE w.word = '$arg' AND i = 0 ORDER BY t DESC LIMIT 1
 SQL
 ) ?? [0, '', 0, '', '', 0, 0];
 echo json_encode(['uid'=>$row[0], 'nick'=>$row[1], 'id'=>$row[2],
