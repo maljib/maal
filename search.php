@@ -41,8 +41,8 @@ if ($w = getPost('v')) {    // where clause
 }
 echo json_encode(selectValues(<<< SQL
 SELECT $s
-  FROM words w $j
- WHERE $w w.word<>'?' $o$d LIMIT 200
+FROM words w $j
+WHERE $w w.word<>'?' $o$d LIMIT 200
 SQL
 ));
 ?>
