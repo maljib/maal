@@ -837,7 +837,7 @@ $(function() {
       }
     },
     select: function(e, ui) {
-      var arg = $("#dev").val();
+      var arg = $("#arg").val();
       if (uid) findWord0(ui.item.value);
       if (arg) {
         push(arg_words, arg);
