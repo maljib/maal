@@ -621,7 +621,7 @@ $(function() {
   var CIRCLED = /[】:〕①-⑳㉑-㉟㊱-㊿]/g;
   function num(s) {
     var n = 0, maal = false;
-    return s.replace(CIRCLED, function(u,i,s) {
+    return s.replace(CIRCLED, function(u, i, s) {
       switch (u) {
       case "〕": n = 0; maal = false; break;
       case "】": n = 0; maal = true;  break;

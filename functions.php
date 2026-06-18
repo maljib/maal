@@ -1,6 +1,6 @@
 <?php // functions.php
 require_once '../vendor/autoload.php';
-Dotenv\Dotenv::createImmutable(__DIR__ . "/..")->load();
+Dotenv\Dotenv::createImmutable("..")->load();
 
 $connection = new mysqli('localhost',
                   $_ENV['DB_USER'], $_ENV['DB_PASS'], $_ENV['DB_NAME']);
