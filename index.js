@@ -763,7 +763,7 @@ $(function() {
   }
 
   function tellName(t) {
-    return "<i>"+ ["더살핌","올림","버림"][t] +"&nbsp;</i>";
+    return "<i>"+ ["살핌","올림","버림"][t] +"&nbsp;</i>";
   }
 
   function accordion(o, data, collapse, n, isForum) {

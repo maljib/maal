@@ -50,7 +50,7 @@ CREATE TABLE words (
   id   INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   word VARCHAR(100) NOT NULL UNIQUE,  -- 낱말
   user INT UNSIGNED NOT NULL,         -- 교열자
-  tell TINYINT NOT NULL DEFAULT 0,    -- 0=더살핌 1=올림 2=버림
+  tell TINYINT NOT NULL DEFAULT 0,    -- 0=살핌 1=올림 2=버림
   FOREIGN KEY(user) REFERENCES users(id) ON UPDATE CASCADE
 );
 
