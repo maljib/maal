@@ -71,7 +71,6 @@ ul.ui-autocomplete.ui-menu              { z-index: 1000; }
 #tab1 .ui-accordion-header { cursor: default; }
 #tab2 .ui-accordion-header, #tab3 .ui-accordion-header { cursor: pointer; }
 
-
 #word         { top: 78px; }
 #editor       { top: 105px; }
 #word,#editor { left: 0; border: 1px solid #aaaaaa; padding: 10px; text-align: center; }

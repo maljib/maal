@@ -768,8 +768,7 @@ $(function() {
 
   function accordion(o, data, collapse, n, isForum) {
     o.empty().accordion({ animate: false, icons:false,
-                      collapsible: collapse,
-                      heightStyle: 'content' });
+                          collapsible: collapse, heightStyle: 'content' });
     o.append(data).accordion("refresh");
     if (isForum) {
       o.accordion("option", "active", false);
@@ -838,7 +837,9 @@ $(function() {
     },
     select: function(e, ui) {
       var arg = $("#arg").val();
-      if (uid) findWord0(ui.item.value);
+      if (uid) {
+        findWord0(ui.item.value);
+      }
       if (arg) {
         push(arg_words, arg);
         arg_i = -1;
@@ -901,6 +902,7 @@ $(function() {
         edit(0,-1);
       }
 
+      // 아코디온 한 줄 만들기 (때, 아이디, 판단, 내용, 0=자취 1=적바림, 헤더)
       function fill(t, sNick, sTell, data, i, h) {
         var is_owner  = w.uid == uid;
         var editor = is_owner || is_editor && w.tell == '1';
@@ -908,8 +910,8 @@ $(function() {
           if (is_owner)  sNick = "<span id='w-nick'>"+ sNick +"</span>";
           if (editor) sTell = "<span id='w-tell'>"+ sTell +"</span>";
         }
-        var bar = "<div><span>"+ sNick +" <small>"+ t +"</small> "+ sTell +"</span>"+
-                  (h? h: "") +"<span class='a-cmd'>";
+        var bar = "<div><span>"+ sNick +" <small>"+ t +"</small> "+ sTell
+                      +"</span>"+ (h? h: "") +"<span class='a-cmd'>";
         if (i === 0) {
           if (editor) {
             bar += "<span class='a-accept b-yellow'>&nbsp;올림&nbsp;</span>";
@@ -917,9 +919,9 @@ $(function() {
           bar += "<span class='a-view b-green'>&nbsp;보기&nbsp;</span>";
         }
         return bar +"<span class='a-edit b-"+
-               (i === 1? "white": (editor? "yellow": "green")) +
-               "'>&nbsp;손질&nbsp;</span> &nbsp;</span></div><div><div class='a-data'>"+
-               data +"</div></div>";
+                  (i === 1? "white": (editor? "yellow": "green")) +
+                  "'>&nbsp;손질&nbsp;</span> &nbsp;</span></div>"+
+                  "<div><div class='a-data'>"+ data +"</div></div>";
       }
 
       function bb(s) {
@@ -1400,8 +1402,8 @@ $(function() {
 
   $("#tab2").on("click", ".a-view", function() {  // 보기
     var o = $(this).parent().parent();
-    var i = o.index()/2;
-    var e = expl[0][i+1];
+    var i = o.index() / 2;
+    var e = expl[0][i + 1];
     viewIt(e.t, e.nick, e.data, "#t2");
     o.parent().accordion("option", "active", i);
   }).on("click", ".a-accept", function() {        // 올림
